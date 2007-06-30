@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- Aaron Zeckoski (aaronz@vt.edu) -->
+<beans>
+
+   <!-- Bring in the HBM related beans beans -->
+   <import resource="hibernate-hbms.xml" />
+
+   <!-- Bring in the hibernate related beans -->
+   <import resource="spring-hibernate.xml" />
+
+
+   <!-- Public beans -->
+   <bean id="org.sakaiproject.hierarchy.Hierarchy" 
+         class="org.sakaiproject.hierarchy.impl.HierarchyImpl" init-method="init">
+      <property name="dao" ref="org.sakaiproject.hierarchy.dao.HierarchyDao" />
+   </bean>
+
+
+   <!-- Private beans -->
+
+
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- Aaron Zeckoski (aaronz@vt.edu) -->
+<beans>
+
+   <!-- dao beans -->
+   <bean id="org.sakaiproject.hierarchy.dao.impl.HierarchyDaoTarget" 
+         class="org.sakaiproject.hierarchy.dao.impl.HierarchyDaoImpl">
+      <property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
+      <property name="persistentClasses">
+         <list>
+            <value>org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode</value>
+         </list>
+      </property>
+   </bean>
+
+   <!-- This wraps our DAO so that the transactions are managed -->
+   <bean id="org.sakaiproject.hierarchy.dao.HierarchyDao" 
+         class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+      <property name="transactionManager">
+         <ref bean="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
+      </property>
+      <property name="target">
+         <ref bean="org.sakaiproject.hierarchy.dao.impl.HierarchyDaoTarget" />
+      </property>
+      <property name="transactionAttributes">
+         <props>
+            <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+            <prop key="count*">PROPAGATION_REQUIRED,readOnly</prop>
+            <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+            <prop key="*">PROPAGATION_REQUIRED</prop>
+            <!--           <prop key="*">PROPAGATION_REQUIRED,+java.lang.RuntimeException</prop>-->
+         </props>
+      </property>
+   </bean>
+
+</beans>
