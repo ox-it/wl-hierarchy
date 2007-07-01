@@ -38,58 +38,13 @@
       <!-- Various Sakai dependencies -->
       <dependency>
          <groupId>sakaiproject</groupId>
-         <artifactId>sakai-authz-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-component-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-entity-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-entity-util</artifactId>
-         <version>${sakai.version}</version>
-         <properties>
-            <war.bundle>true</war.bundle>
-         </properties>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-event-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-site-api</artifactId>
+         <artifactId>sakai-entitybroker-api</artifactId>
          <version>${sakai.version}</version>
       </dependency>
 
       <dependency>
          <groupId>sakaiproject</groupId>
          <artifactId>sakai-tool-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-user-api</artifactId>
-         <version>${sakai.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>sakaiproject</groupId>
-         <artifactId>sakai-util-api</artifactId>
          <version>${sakai.version}</version>
       </dependency>
 
@@ -192,7 +147,14 @@
             <resource>
                <directory>${basedir}/../pack/src/webapp/WEB-INF</directory>
                <includes>
-                  <include>spring.xml</include>
+                  <include>spring-hibernate.xml</include>
+               </includes>
+            </resource>
+            <resource>
+               <directory>${basedir}/../dao/src/test</directory>
+               <includes>
+                  <include>hibernate-test.xml</include>
+                  <include>hibernate.properties</include>
                </includes>
             </resource>
          </resources>

@@ -27,7 +27,7 @@ public interface HierarchyNodeReader {
      * @param hierarchyId a unique string which identifies this hierarchy
      * @return the {@link HierarchyNode} representing the root of the hierarchy
      */
-    public HierarchyNode getRootLevelNode(String hierarchyId);
+    public HierarchyNode getRootNode(String hierarchyId);
 
     /**
      * Get a node based on the unique id

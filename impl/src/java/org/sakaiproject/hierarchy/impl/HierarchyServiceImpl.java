@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
-import org.sakaiproject.user.api.UserDirectoryService;
+import org.sakaiproject.tool.api.SessionManager;
 
 /**
  * The default implementation of the Hierarchy interface
@@ -38,10 +38,12 @@ public class HierarchyServiceImpl implements HierarchyService {
         this.dao = dao;
     }
 
-    private UserDirectoryService userDirectoryService;
-    public void setUserDirectoryService(UserDirectoryService userDirectoryService) {
-        this.userDirectoryService = userDirectoryService;
+    private SessionManager sessionManager;
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
+
+
 
     public void init() {
         log.info("init");
@@ -66,7 +68,7 @@ public class HierarchyServiceImpl implements HierarchyService {
 
 
 
-    public HierarchyNode getRootLevelNode(String hierarchyId) {
+    public HierarchyNode getRootNode(String hierarchyId) {
         // TODO Auto-generated method stub
         return null;
     }
