@@ -16,13 +16,11 @@ import java.util.Set;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
- * This interface provides methods to get hierarchical data into sakai
- * for use in determining the structure above sites/groups related to
- * adminstration and access to data and control of permissions
+ * This interface provides methods to get hierarchical node data from the hierarchy
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public interface HierarchyProvider {
+public interface HierarchyNodeReader {
 
     /**
      * Get the hierarchy root node
