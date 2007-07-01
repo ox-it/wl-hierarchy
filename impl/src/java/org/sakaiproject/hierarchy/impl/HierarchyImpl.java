@@ -58,4 +58,25 @@ public class HierarchyImpl implements Hierarchy {
         return null;
     }
 
+
+
+    public void createHierarchy(String hierarchyId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void destroyHierarchy(String hierarchyId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    
+    
+
+
 }

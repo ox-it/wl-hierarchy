@@ -11,12 +11,37 @@
 
 package org.sakaiproject.hierarchy;
 
+import org.sakaiproject.hierarchy.model.HierarchyNode;
+
 
 /**
  * This service interface defines the capabilities of the hierarchy system
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public interface Hierarchy extends HierarchyProvider {
+public interface Hierarchy extends HierarchyProvider, HierarchyNodeManager {
+
+    /**
+     * Creates a new hierarchy with the unique id specified, exception if this id is already used
+     * @param hierarchyId a unique id which defines the hierarchy
+     */
+    public void createHierarchy(String hierarchyId);
+
+    /**
+     * Sets the root node of this hierarchy, note that although a hierarchy might have multiple
+     * nodes at the top of the hierarchy, it always has a primary node which is considering the
+     * "entry point" into the hierarchy<br/>
+     * The first node added to a hierarchy becomes the root node by default
+     * @param hierarchyId a unique id which defines the hierarchy
+     * @param nodeId a unique id for a hierarchy node
+     * @return the object representing the node which is now the root node
+     */
+    public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId);
+
+    /**
+     * Completely and permanantly destroy a hierarchy and all related nodes
+     * @param hierarchyId a unique id which defines the hierarchy
+     */
+    public void destroyHierarchy(String hierarchyId);
 
 }
