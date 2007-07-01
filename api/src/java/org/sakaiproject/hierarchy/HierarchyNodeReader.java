@@ -16,7 +16,7 @@ import java.util.Set;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
- * This interface provides methods to get hierarchical node data from the hierarchy
+ * Allows user to get hierarchical node data from the hierarchy
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */

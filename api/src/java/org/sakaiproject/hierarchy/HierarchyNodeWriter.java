@@ -16,7 +16,7 @@ import java.util.Set;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
- * This defines all node managing (updating) methods
+ * Allows user to control nodes (create, update, remove)
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
