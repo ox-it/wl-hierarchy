@@ -43,22 +43,6 @@ public class HierarchyImpl implements Hierarchy {
     }
 
 
-    public HierarchyNode getRootLevelNode(String hierarchyId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
 
     public void createHierarchy(String hierarchyId) {
         // TODO Auto-generated method stub
@@ -75,8 +59,48 @@ public class HierarchyImpl implements Hierarchy {
 
     }
 
-    
-    
 
+
+    public HierarchyNode getRootLevelNode(String hierarchyId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public HierarchyNode getNodeById(String nodeId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+
+    public HierarchyNode addNode(String hierarchyId, String parentNodeId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public HierarchyNode updateChildren(String nodeId, Set<String> childNodeIds) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public HierarchyNode updateParents(String nodeId, Set<String> parentNodeIds) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void removeNode(String nodeId) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

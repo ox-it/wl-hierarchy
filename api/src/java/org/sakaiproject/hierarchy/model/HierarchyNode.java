@@ -14,6 +14,8 @@
 
 package org.sakaiproject.hierarchy.model;
 
+import java.util.Set;
+
 /**
  * This pea represents a node in a hierarchy 
  * (in academics a department or college would probably be represented by a node)
@@ -27,42 +29,29 @@ public class HierarchyNode {
      */
     public String id;
     /**
-     * an array containing all parents for this node
+     * a set of all direct parents for this node,
+     * the ids of parent nodes that touch this node directly
      */
-    public String[] parentNodeIds;
+    public Set<String> directParentNodeIds;
     /**
-     * an array containing all children for this node
+     * a set of all direct children for this node,
+     * the ids of child nodes that touch this node directly
      */
-    public String[] childNodeIds;
+    public Set<String> directChildNodeIds;
+    /**
+     * a set of all parents for this node
+     */
+    public Set<String> parentNodeIds;
+    /**
+     * a set of all children for this node
+     */
+    public Set<String> childNodeIds;
+
 
 
     /**
      * Empty constructor
      */
     public HierarchyNode() {}
-
-    /**
-     * Leaf Constructor
-     */
-    public HierarchyNode(String id, String parentNodeId) {
-        this.id = id;
-    }
-
-    /**
-     * Basic constructor
-     */
-    public HierarchyNode(String id, String[] childNodeIds) {
-        this.id = id;
-        this.childNodeIds = childNodeIds;
-    }
-
-    /**
-     * Full constructor
-     */
-    public HierarchyNode(String id, String[] parentNodeIds, String[] childNodeIds) {
-        this.id = id;
-        this.parentNodeIds = parentNodeIds;
-        this.childNodeIds = childNodeIds;
-    }
 
 }

@@ -30,6 +30,13 @@ public interface HierarchyNodeReader {
     public HierarchyNode getRootLevelNode(String hierarchyId);
 
     /**
+     * Get a node based on the unique id
+     * @param nodeId a unique id for a hierarchy node
+     * @return the {@link HierarchyNode} representing this node or null if it does not exist
+     */
+    public HierarchyNode getNodeById(String nodeId);
+
+    /**
      * Get all the parent nodes for a specific node all the way to the root node, 
      * returns empty set if this is the root node
      * 
