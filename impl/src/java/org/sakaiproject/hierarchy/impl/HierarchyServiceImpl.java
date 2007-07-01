@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
+import org.sakaiproject.user.api.UserDirectoryService;
 
 /**
  * The default implementation of the Hierarchy interface
@@ -37,6 +38,10 @@ public class HierarchyServiceImpl implements HierarchyService {
         this.dao = dao;
     }
 
+    private UserDirectoryService userDirectoryService;
+    public void setUserDirectoryService(UserDirectoryService userDirectoryService) {
+        this.userDirectoryService = userDirectoryService;
+    }
 
     public void init() {
         log.info("init");
