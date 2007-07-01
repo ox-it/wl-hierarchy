@@ -35,7 +35,7 @@ public class HierarchyNodeMetaData {
      */
     private Boolean isRootNode;
     /**
-     * the userId of the owner of the associated node
+     * the userId of the owner (creator) of the associated node
      */
     private String ownerId;
     /**

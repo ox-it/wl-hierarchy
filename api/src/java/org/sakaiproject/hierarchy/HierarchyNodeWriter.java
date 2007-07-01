@@ -61,4 +61,13 @@ public interface HierarchyNodeWriter {
      */
     public void removeNode(String nodeId);
 
+    /**
+     * Save meta data on a node
+     * @param nodeId a unique id for a hierarchy node
+     * @param title the title of the node
+     * @param description a description for this node
+     * @return the object representing the updated node
+     */
+    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description);
+
 }

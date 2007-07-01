@@ -9,6 +9,7 @@
 		<property name="mappingResources">
 			<list>
                <value>org/sakaiproject/hierarchy/dao/hbm/HierarchyPersistentNode.hbm.xml</value>
+               <value>org/sakaiproject/hierarchy/dao/hbm/HierarchyNodeMetaData.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

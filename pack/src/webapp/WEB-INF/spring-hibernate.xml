@@ -11,6 +11,7 @@
       <property name="persistentClasses">
          <list>
             <value>org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode</value>
+            <value>org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData</value>
          </list>
       </property>
    </bean>

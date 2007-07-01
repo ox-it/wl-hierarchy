@@ -103,4 +103,9 @@ public class HierarchyServiceImpl implements HierarchyService {
 
     }
 
+    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

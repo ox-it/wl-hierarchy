@@ -20,4 +20,18 @@ package org.sakaiproject.hierarchy;
  */
 public interface HierarchyProvider extends HierarchyNodeReader {
 
+    public static final String HIERARCHY_PERM_NODE_UPDATE = "perm_node_update";
+    public static final String HIERARCHY_PERM_NODE_REMOVE = "perm_node_remove";
+
+    /**
+     * Determine if a user has a specific hierarchy permission at a specific hierarchy node
+     * <br/>The actual permissions this should handle are shown at the top of this class
+     * 
+     * @param userId the internal user id (not username)
+     * @param nodeId a unique id for a hierarchy node
+     * @param hierarchyPermConstant a HIERARCHY_PERM_NODE constant
+     * @return true if the user has this permission, false otherwise
+     */
+    public boolean checkUserNodePerm(String userId, String nodeId, String hierarchyPermConstant);
+
 }
