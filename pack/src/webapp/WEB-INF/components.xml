@@ -12,8 +12,8 @@
 
 
    <!-- Public beans -->
-   <bean id="org.sakaiproject.hierarchy.Hierarchy" 
-         class="org.sakaiproject.hierarchy.impl.HierarchyImpl" init-method="init">
+   <bean id="org.sakaiproject.hierarchy.HierarchyService" 
+         class="org.sakaiproject.hierarchy.impl.HierarchyServiceImpl" init-method="init">
       <property name="dao" ref="org.sakaiproject.hierarchy.dao.HierarchyDao" />
    </bean>
 

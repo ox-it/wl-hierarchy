@@ -19,7 +19,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.sakaiproject.hierarchy.Hierarchy;
+import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
@@ -28,9 +28,9 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public class HierarchyImpl implements Hierarchy {
+public class HierarchyServiceImpl implements HierarchyService {
 
-    private static Log log = LogFactory.getLog(HierarchyImpl.class);
+    private static Log log = LogFactory.getLog(HierarchyServiceImpl.class);
 
     private HierarchyDao dao;
     public void setDao(HierarchyDao dao) {

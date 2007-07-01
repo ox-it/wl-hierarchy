@@ -29,6 +29,18 @@ public class HierarchyNode {
      */
     public String id;
     /**
+     * The assigned unique id for the hierarchy this node is in
+     */
+    public String hierarchyId;
+    /**
+     * the title of this node
+     */
+    public String title;
+    /**
+     * the description for this node 
+     */
+    public String description;
+    /**
      * a set of all direct parents for this node,
      * the ids of parent nodes that touch this node directly
      */
