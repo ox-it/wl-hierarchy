@@ -23,16 +23,6 @@ public class HierarchyPersistentNode {
      */
     private Long id;
     /**
-     * The name of this hierarchy node (human readable identifier)
-     */
-    private String name;
-    /**
-     * the ability to support multiple hierarchies is included in this
-     * system, this will be the unique hierarchyId, the default hierarchy
-     * id is 0 (used if hierarchy ID is unspecified)
-     */
-    private String hierarchyId;
-    /**
      * this is this parent directly above this node which defines a one-way
      * path to the root node with no branches,
      * the root node will have no direct parentId
@@ -68,30 +58,9 @@ public class HierarchyPersistentNode {
     }
 
     /**
-     * Minimal constructor
-     */
-    public HierarchyPersistentNode(String name, String hierarchyId) {
-        this.name = name;
-        this.hierarchyId = hierarchyId;
-    }
-
-    /**
-     * Root constructor
-     */
-    public HierarchyPersistentNode(Long id, String name, String hierarchyId, String directChildIds, String childIds) {
-        this.id = id;
-        this.name = name;
-        this.hierarchyId = hierarchyId;
-        this.directChildIds = directChildIds;
-        this.childIds = childIds;
-    }
-
-    /**
      * Leaf constructor
      */
-    public HierarchyPersistentNode(String name, String hierarchyId, String directParentIds, String parentIds) {
-        this.name = name;
-        this.hierarchyId = hierarchyId;
+    public HierarchyPersistentNode(String directParentIds, String parentIds) {
         this.directParentIds = directParentIds;
         this.parentIds = parentIds;
     }
@@ -99,9 +68,7 @@ public class HierarchyPersistentNode {
     /**
      * Full constructor
      */
-    public HierarchyPersistentNode(String name, String hierarchyId, String directParentIds, String parentIds, String directChildIds, String childIds) {
-        this.name = name;
-        this.hierarchyId = hierarchyId;
+    public HierarchyPersistentNode(String directParentIds, String parentIds, String directChildIds, String childIds) {
         this.directParentIds = directParentIds;
         this.parentIds = parentIds;
         this.directChildIds = directChildIds;
@@ -113,36 +80,12 @@ public class HierarchyPersistentNode {
      * Getters and Setters
      */
 
-    public String getChildIds() {
-        return childIds;
-    }
-
-    public void setChildIds(String childIds) {
-        this.childIds = childIds;
-    }
-
-    public String getHierarchyId() {
-        return hierarchyId;
-    }
-
-    public void setHierarchyId(String hierarchyId) {
-        this.hierarchyId = hierarchyId;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getParentIds() {
@@ -167,6 +110,14 @@ public class HierarchyPersistentNode {
 
     public void setDirectParentIds(String directParentIds) {
         this.directParentIds = directParentIds;
+    }
+
+    public String getChildIds() {
+        return childIds;
+    }
+
+    public void setChildIds(String childIds) {
+        this.childIds = childIds;
     }
 
 }

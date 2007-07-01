@@ -43,19 +43,17 @@ public class HierarchyImpl implements Hierarchy {
     }
 
 
+    public HierarchyNode getRootLevelNode(String hierarchyId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
         // TODO Auto-generated method stub
         return null;
     }
 
-
     public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public HierarchyNode getRootLevelNode() {
         // TODO Auto-generated method stub
         return null;
     }

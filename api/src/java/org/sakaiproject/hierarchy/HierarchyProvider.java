@@ -26,10 +26,10 @@ public interface HierarchyProvider {
 
     /**
      * Get the hierarchy root node
-     * 
+     * @param hierarchyId a unique string which identifies this hierarchy
      * @return the {@link HierarchyNode} representing the root of the hierarchy
      */
-    public HierarchyNode getRootLevelNode();
+    public HierarchyNode getRootLevelNode(String hierarchyId);
 
     /**
      * Get all the parent nodes for a specific node all the way to the root node, 

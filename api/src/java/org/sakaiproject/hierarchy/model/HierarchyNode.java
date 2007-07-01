@@ -27,15 +27,6 @@ public class HierarchyNode {
      */
     public String id;
     /**
-     * The name of this hierarchy node (may be null)<br/>
-     * e.g. Department of Computer Science
-     */
-    public String name;
-    /**
-     * the primary parent for this node (null if this is the root node)
-     */
-    public String parentNodeId;
-    /**
      * an array containing all parents for this node
      */
     public String[] parentNodeIds;
@@ -53,29 +44,23 @@ public class HierarchyNode {
     /**
      * Leaf Constructor
      */
-    public HierarchyNode(String id, String name, String parentNodeId) {
+    public HierarchyNode(String id, String parentNodeId) {
         this.id = id;
-        this.name = name;
-        this.parentNodeId = parentNodeId;
     }
 
     /**
      * Basic constructor
      */
-    public HierarchyNode(String id, String name, String parentNodeId, String[] childNodeIds) {
+    public HierarchyNode(String id, String[] childNodeIds) {
         this.id = id;
-        this.name = name;
-        this.parentNodeId = parentNodeId;
         this.childNodeIds = childNodeIds;
     }
 
     /**
      * Full constructor
      */
-    public HierarchyNode(String id, String name, String parentNodeId, String[] parentNodeIds, String[] childNodeIds) {
+    public HierarchyNode(String id, String[] parentNodeIds, String[] childNodeIds) {
         this.id = id;
-        this.name = name;
-        this.parentNodeId = parentNodeId;
         this.parentNodeIds = parentNodeIds;
         this.childNodeIds = childNodeIds;
     }
