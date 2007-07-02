@@ -4,8 +4,9 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
-		<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
 		<config>pack/src/webapp/WEB-INF/components.xml</config>
+		<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
+		<config>impl/src/test/hibernate-test.xml</config>
 		<config>pack/src/webapp/WEB-INF/hibernate-hbms.xml</config>
 	</configs>
 	<configSets>
@@ -16,6 +17,17 @@
 			<configs>
 				<config>pack/src/webapp/WEB-INF/components.xml</config>
 				<config>pack/src/webapp/WEB-INF/hibernate-hbms.xml</config>
+				<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>hierarchy test</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>true</incomplete>
+			<configs>
+				<config>/entity-broker/pack/src/webapp/WEB-INF/components.xml</config>
+				<config>impl/src/test/hibernate-test.xml</config>
+				<config>pack/src/webapp/WEB-INF/components.xml</config>
 				<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
 			</configs>
 		</configSet>

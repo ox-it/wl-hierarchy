@@ -11,10 +11,9 @@
 
 package org.sakaiproject.hierarchy.impl.test;
 
-import junit.framework.Assert;
-
 import org.easymock.MockControl;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
+import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.impl.HierarchyServiceImpl;
 import org.sakaiproject.hierarchy.impl.test.data.TestDataPreload;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
@@ -31,11 +30,11 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     protected HierarchyServiceImpl hierarchyService;
 
     private HierarchyDao dao;
-
-    private TestDataPreload tdp = new TestDataPreload();
+    private TestDataPreload tdp;
 
     private SessionManager sessionManager;
     private MockControl sessionManagerControl;
+
 
     protected String[] getConfigLocations() {
         // point to the needed spring config files, must be on the classpath
@@ -50,6 +49,12 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
         dao = (HierarchyDao) applicationContext.getBean("org.sakaiproject.hierarchy.dao.HierarchyDao");
         if (dao == null) {
             throw new NullPointerException("Dao could not be retrieved from spring context");
+        }
+
+        // load up the test data preloader from spring
+        tdp = (TestDataPreload) applicationContext.getBean("org.sakaiproject.hierarchy.test.data.TestDataPreload");
+        if (tdp == null) {
+            throw new NullPointerException("TestDatePreload could not be retrieved from spring context");
         }
 
         // load up any other needed spring beans
@@ -68,9 +73,6 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
         hierarchyService = new HierarchyServiceImpl();
         hierarchyService.setDao(dao);
         hierarchyService.setSessionManager(sessionManager);
-
-        // preload the DB for testing
-        tdp.preloadTestData(dao);
     }
 
     // run this before each test starts and as part of the transaction
@@ -107,17 +109,17 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
         // test creating a hierarchy that already exists
         try {
             hierarchyService.createHierarchy(TestDataPreload.HIERARCHYA);
-            Assert.fail("Should have thrown exception");
+            fail("Should have thrown exception");
         } catch (IllegalArgumentException e) {
-            Assert.assertNotNull(e);
+            assertNotNull(e);
         }
 
         // test creating a hierarchy with too long an id
         try {
             hierarchyService.createHierarchy("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
-            Assert.fail("Should have thrown exception");
+            fail("Should have thrown exception");
         } catch (IllegalArgumentException e) {
-            Assert.assertNotNull(e);
+            assertNotNull(e);
         }
 
     }
@@ -126,7 +128,37 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#setHierarchyRootNode(java.lang.String, java.lang.String)}.
      */
     public void testSetHierarchyRootNode() {
-        fail("Not yet implemented"); // TODO
+        HierarchyNode node;
+
+        // test reassigning existing rootnode is no problem
+        node = hierarchyService.setHierarchyRootNode(TestDataPreload.HIERARCHYA, tdp.node1.id);
+        assertNotNull(node);
+        assertEquals(TestDataPreload.HIERARCHYA, node.hierarchyId);
+        assertEquals(tdp.node1.id, node.id);
+
+        // test reassigning a new node to be the parent node
+        assertEquals(Boolean.FALSE, tdp.meta11.getIsRootNode());
+        assertEquals(Boolean.TRUE, tdp.meta9.getIsRootNode());
+        node = hierarchyService.setHierarchyRootNode(TestDataPreload.HIERARCHYB, tdp.node11.id);
+        assertNotNull(node);
+        assertEquals(TestDataPreload.HIERARCHYB, node.hierarchyId);
+        assertEquals(tdp.node11.id, node.id);
+
+        // test assigning a node which has parents causes failure
+        try {
+            hierarchyService.setHierarchyRootNode(TestDataPreload.HIERARCHYA, tdp.node3.id);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }
+
+        // test assigning a root node from another hierarchy to this root causes failure
+        try {
+            hierarchyService.setHierarchyRootNode(TestDataPreload.HIERARCHYB, tdp.node1.id);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }
     }
 
     /**

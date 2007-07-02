@@ -14,6 +14,7 @@
 
 package org.sakaiproject.hierarchy.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -65,5 +66,36 @@ public class HierarchyNode {
      * Empty constructor
      */
     public HierarchyNode() {}
+
+
+    /*
+     * overrides for various internal methods
+     */
+
+    @Override
+    public boolean equals(Object obj) {
+        if (null == obj) return false;
+        if (!(obj instanceof HierarchyNode)) return false;
+        else {
+            HierarchyNode castObj = (HierarchyNode) obj;
+            if (null == this.id || null == castObj.id) return false;
+            else return (
+                    this.id.equals(castObj.id) &&
+                    this.hierarchyId.equals(castObj.hierarchyId)
+                );
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        if (null == this.id) return super.hashCode();
+        String hashStr = this.getClass().getName() + ":" + this.id.hashCode() + ":" + this.hierarchyId.hashCode();
+        return hashStr.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "id:" + this.id + ";hierachyId:" + this.hierarchyId + ";parents:" + this.parentNodeIds.size() + ";children:" + this.childNodeIds.size();
+    }
 
 }

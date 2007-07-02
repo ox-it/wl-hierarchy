@@ -32,6 +32,7 @@ public interface HierarchyService extends HierarchyNodeReader, HierarchyNodeWrit
      * Sets the root node of this hierarchy, note that although a hierarchy might have multiple
      * nodes at the top of the hierarchy, it always has a primary node which is considering the
      * "entry point" into the hierarchy<br/>
+     * A node must have no parents to be set to the root node<br/>
      * The first node added to a hierarchy becomes the root node by default
      * @param hierarchyId a unique id which defines the hierarchy
      * @param nodeId a unique id for a hierarchy node

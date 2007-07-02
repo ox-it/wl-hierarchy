@@ -26,6 +26,15 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  */
 public class TestDataPreload {
 
+    public GenericDao dao;
+    public void setDao(GenericDao dao) {
+        this.dao = dao;
+    }
+
+    public void init() {
+        preloadTestData(dao);
+    }
+
     /**
      * current user, access level user in LOCATION1_ID
      */
@@ -74,7 +83,8 @@ public class TestDataPreload {
     public HierarchyPersistentNode pNode7 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
     public HierarchyPersistentNode pNode8 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
     public HierarchyPersistentNode pNode9 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
-    public HierarchyPersistentNode pNode10 = new HierarchyPersistentNode(toCode("9"), toCode("9"), null, null );
+    public HierarchyPersistentNode pNode10 = new HierarchyPersistentNode(toCode("9,11"), toCode("9,11"), null, null );
+    public HierarchyPersistentNode pNode11 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
 
     public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(pNode1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null);
     public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(pNode2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null);
@@ -86,6 +96,7 @@ public class TestDataPreload {
     public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(pNode8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null);
     public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(pNode9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null);
     public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(pNode10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null);
+    public HierarchyNodeMetaData meta11 = new HierarchyNodeMetaData(pNode11, HIERARCHYB, Boolean.FALSE, USER_ID, "Provost of BZ", null);
 
     public HierarchyNode node1;
     public HierarchyNode node2;
@@ -97,12 +108,14 @@ public class TestDataPreload {
     public HierarchyNode node8;
     public HierarchyNode node9;
     public HierarchyNode node10;
+    public HierarchyNode node11;
 
 
     /**
      * Preload a bunch of test data into the database
      * @param dao a generic dao
      */
+    public boolean preloaded = false;
     public void preloadTestData(GenericDao dao) {
         dao.save(pNode1);
         dao.save(pNode2);
@@ -114,6 +127,7 @@ public class TestDataPreload {
         dao.save(pNode8);
         dao.save(pNode9);
         dao.save(pNode10);
+        dao.save(pNode11);
 
         dao.save(meta1);
         dao.save(meta2);
@@ -125,6 +139,7 @@ public class TestDataPreload {
         dao.save(meta8);
         dao.save(meta9);
         dao.save(meta10);
+        dao.save(meta11);
 
         node1 = HierarchyUtils.makeNode(pNode1, meta1);
         node2 = HierarchyUtils.makeNode(pNode2, meta2);
@@ -136,6 +151,9 @@ public class TestDataPreload {
         node8 = HierarchyUtils.makeNode(pNode8, meta8);
         node9 = HierarchyUtils.makeNode(pNode9, meta9);
         node10 = HierarchyUtils.makeNode(pNode10, meta10);
+        node11 = HierarchyUtils.makeNode(pNode11, meta11);
+
+        preloaded = true;
     }
 
     /**

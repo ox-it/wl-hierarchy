@@ -58,6 +58,19 @@ public class HierarchyUtils {
     }
 
     /**
+     * Convenience method to create a user-facing node object from a combination metaData/Node object
+     * @param metaData a {@link HierarchyNodeMetaData} which has been persisted and contains a {@link HierarchyPersistentNode}
+     * @return a {@link HierarchyNode} which contains data from the persistent object
+     */
+    public static HierarchyNode makeNode(HierarchyNodeMetaData metaData) {
+        if (metaData.getNode() == null || 
+                metaData.getNode().getId() == null) {
+            throw new IllegalArgumentException("Invalid metaData object: Must contain a complete HierarchyPersistentNode object");
+        }
+        return makeNode(metaData.getNode(), metaData);
+    }
+
+    /**
      * Make a Set of node Ids from an encoded string of nodeIds,
      * will not throw exception or return null
      * @param nodeIds an encoded string of nodeIds

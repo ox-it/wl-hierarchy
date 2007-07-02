@@ -15,6 +15,7 @@
 package org.sakaiproject.hierarchy.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -73,8 +74,32 @@ public class HierarchyServiceImpl implements HierarchyService {
     }
 
     public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId) {
-        // TODO Auto-generated method stub
-        return null;
+        HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
+        HierarchyNodeMetaData rootMetaData = getRootNodeMetaByHierarchy(hierarchyId);
+
+        Set<HierarchyNodeMetaData> entities = new HashSet<HierarchyNodeMetaData>();
+
+        if (rootMetaData != null) {
+            if (metaData.getId().equals(rootMetaData.getId())) {
+                // this node is already the root node
+                return HierarchyUtils.makeNode(metaData);
+            } else if (!metaData.getHierarchyId().equals(rootMetaData.getHierarchyId())) {
+                throw new IllegalArgumentException("Cannot move a node from one hierarchy ("+metaData.getHierarchyId()+
+                        ") to another ("+hierarchyId+") and replace the root node, this could orphan nodes");
+            }
+            rootMetaData.setIsRootNode(Boolean.FALSE);
+            entities.add(metaData);
+        }
+
+        if (metaData.getNode().getParentIds() != null) {
+            throw new IllegalArgumentException("Cannot assign a node ("+nodeId+") to the hierarchy rootNode when it has parents");
+        }
+
+        metaData.setIsRootNode(Boolean.TRUE);
+        entities.add(metaData);
+
+        dao.saveSet(entities);
+        return HierarchyUtils.makeNode(metaData);
     }
 
     public void destroyHierarchy(String hierarchyId) {
@@ -153,6 +178,42 @@ public class HierarchyServiceImpl implements HierarchyService {
         metaDatas.add(metaData);
         Set[] entitySets = new Set[] {pNodes, metaDatas};
         dao.saveMixedSet(entitySets);
+    }
+
+    /**
+     * Fetch node data from storage
+     * @param nodeId
+     * @return a {@link HierarchyNodeMetaData} or null if not found
+     */
+    @SuppressWarnings("unchecked")
+    private HierarchyNodeMetaData getNodeMeta(String nodeId) {
+        List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
+                new String[] {"node.id"}, new Object[] {new Long(nodeId)});
+        if (l.size() > 1) {
+            throw new IllegalStateException("Invalid hierarchy state: more than one node with id: " + nodeId);
+        } else if (l.size() == 1) {
+            return l.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Find the current root node
+     * @param hierarchyId
+     * @return the root {@link HierarchyNodeMetaData} of the hierarchy
+     */
+    @SuppressWarnings("unchecked")
+    private HierarchyNodeMetaData getRootNodeMetaByHierarchy(String hierarchyId) {
+        List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
+                new String[] {"hierarchyId", "isRootNode"}, new Object[] {hierarchyId, Boolean.TRUE});
+        if (l.size() > 1) {
+            throw new IllegalStateException("Invalid hierarchy state: more than one root node for hierarchyId: " + hierarchyId);
+        } else if (l.size() == 1) {
+            return l.get(0);
+        } else {
+            return null;
+        }
     }
 
 }
