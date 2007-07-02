@@ -11,9 +11,14 @@
 
 package org.sakaiproject.hierarchy.impl.test.data;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.sakaiproject.genericdao.api.GenericDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
+import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
+import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
  * Contains test data for preloading and test constants
@@ -22,7 +27,7 @@ import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 public class TestDataPreload {
 
     /**
-     * current user, access level user in LOCATION_ID1
+     * current user, access level user in LOCATION1_ID
      */
     public final static String USER_ID = "user-11111111";
     public final static String USER_DISPLAY = "Aaron Zeckoski";
@@ -60,43 +65,55 @@ public class TestDataPreload {
     public final static String HIERARCHYB = "hierarchyB";
 
     // testing data objects here
-    public HierarchyPersistentNode root1 = new HierarchyPersistentNode(null, null, "2,3,4", "2,3,4,5,6,7");
-    public HierarchyPersistentNode node2 = new HierarchyPersistentNode("1", "1", null, null);
-    public HierarchyPersistentNode node3 = new HierarchyPersistentNode("1", "1", "5", "5");
-    public HierarchyPersistentNode node4 = new HierarchyPersistentNode("1", "1", "6,7,8", "6,7,8");
-    public HierarchyPersistentNode node5 = new HierarchyPersistentNode("3", "1,2,3", null, null);
-    public HierarchyPersistentNode node6 = new HierarchyPersistentNode("4", "1,2,4", null, null);
-    public HierarchyPersistentNode node7 = new HierarchyPersistentNode("4", "1,2,4", null, null);
-    public HierarchyPersistentNode node8 = new HierarchyPersistentNode("4", "1,2,4", null, null);
-    public HierarchyPersistentNode root9 = new HierarchyPersistentNode(null, null, "10", "10");
-    public HierarchyPersistentNode node10 = new HierarchyPersistentNode("9", "9", null, null);
+    public HierarchyPersistentNode pNode1 = new HierarchyPersistentNode(null, null, toCode("2,3,4"), toCode("2,3,4,5,6,7") );
+    public HierarchyPersistentNode pNode2 = new HierarchyPersistentNode(toCode("1"), toCode("1"), null, null );
+    public HierarchyPersistentNode pNode3 = new HierarchyPersistentNode(toCode("1"), toCode("1"), toCode("5"), toCode("5") );
+    public HierarchyPersistentNode pNode4 = new HierarchyPersistentNode(toCode("1"), toCode("1"), toCode("6,7,8"), toCode("6,7,8") );
+    public HierarchyPersistentNode pNode5 = new HierarchyPersistentNode(toCode("3"), toCode("1,2,3"), null, null );
+    public HierarchyPersistentNode pNode6 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
+    public HierarchyPersistentNode pNode7 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
+    public HierarchyPersistentNode pNode8 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
+    public HierarchyPersistentNode pNode9 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
+    public HierarchyPersistentNode pNode10 = new HierarchyPersistentNode(toCode("9"), toCode("9"), null, null );
 
-    public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(root1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null);
-    public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(node2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null);
-    public HierarchyNodeMetaData meta3 = new HierarchyNodeMetaData(node3, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Arts", null);
-    public HierarchyNodeMetaData meta4 = new HierarchyNodeMetaData(node4, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Science", null);
-    public HierarchyNodeMetaData meta5 = new HierarchyNodeMetaData(node5, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Art", null);
-    public HierarchyNodeMetaData meta6 = new HierarchyNodeMetaData(node6, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Math", null);
-    public HierarchyNodeMetaData meta7 = new HierarchyNodeMetaData(node7, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Physics", null);
-    public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(node8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null);
-    public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(root9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null);
-    public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(node10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null);
+    public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(pNode1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null);
+    public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(pNode2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null);
+    public HierarchyNodeMetaData meta3 = new HierarchyNodeMetaData(pNode3, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Arts", null);
+    public HierarchyNodeMetaData meta4 = new HierarchyNodeMetaData(pNode4, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Science", null);
+    public HierarchyNodeMetaData meta5 = new HierarchyNodeMetaData(pNode5, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Art", null);
+    public HierarchyNodeMetaData meta6 = new HierarchyNodeMetaData(pNode6, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Math", null);
+    public HierarchyNodeMetaData meta7 = new HierarchyNodeMetaData(pNode7, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Physics", null);
+    public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(pNode8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null);
+    public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(pNode9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null);
+    public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(pNode10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null);
+
+    public HierarchyNode node1;
+    public HierarchyNode node2;
+    public HierarchyNode node3;
+    public HierarchyNode node4;
+    public HierarchyNode node5;
+    public HierarchyNode node6;
+    public HierarchyNode node7;
+    public HierarchyNode node8;
+    public HierarchyNode node9;
+    public HierarchyNode node10;
+
 
     /**
      * Preload a bunch of test data into the database
      * @param dao a generic dao
      */
     public void preloadTestData(GenericDao dao) {
-        dao.save(root1);
-        dao.save(node2);
-        dao.save(node3);
-        dao.save(node4);
-        dao.save(node5);
-        dao.save(node6);
-        dao.save(node7);
-        dao.save(node8);
-        dao.save(root9);
-        dao.save(node10);
+        dao.save(pNode1);
+        dao.save(pNode2);
+        dao.save(pNode3);
+        dao.save(pNode4);
+        dao.save(pNode5);
+        dao.save(pNode6);
+        dao.save(pNode7);
+        dao.save(pNode8);
+        dao.save(pNode9);
+        dao.save(pNode10);
 
         dao.save(meta1);
         dao.save(meta2);
@@ -108,6 +125,33 @@ public class TestDataPreload {
         dao.save(meta8);
         dao.save(meta9);
         dao.save(meta10);
+
+        node1 = HierarchyUtils.makeNode(pNode1, meta1);
+        node2 = HierarchyUtils.makeNode(pNode2, meta2);
+        node3 = HierarchyUtils.makeNode(pNode3, meta3);
+        node4 = HierarchyUtils.makeNode(pNode4, meta4);
+        node5 = HierarchyUtils.makeNode(pNode5, meta5);
+        node6 = HierarchyUtils.makeNode(pNode6, meta6);
+        node7 = HierarchyUtils.makeNode(pNode7, meta7);
+        node8 = HierarchyUtils.makeNode(pNode8, meta8);
+        node9 = HierarchyUtils.makeNode(pNode9, meta9);
+        node10 = HierarchyUtils.makeNode(pNode10, meta10);
+    }
+
+    /**
+     * Encode the comma delimited list of nodes
+     * @param commaDelimitedNums
+     * @return an encoded string
+     */
+    private String toCode(String commaDelimitedNums) {
+        Set<String> s = new TreeSet<String>();
+        if (commaDelimitedNums != null && !commaDelimitedNums.equals("")) {
+            String[] split = commaDelimitedNums.split(",");
+            for (int i = 0; i < split.length; i++) {
+                s.add( split[i] );
+            }
+        }
+        return HierarchyUtils.makeNodeIdString(s);
     }
 
 }

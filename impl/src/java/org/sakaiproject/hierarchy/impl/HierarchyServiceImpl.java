@@ -14,6 +14,7 @@
 
 package org.sakaiproject.hierarchy.impl;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -21,6 +22,9 @@ import org.apache.commons.logging.LogFactory;
 
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
+import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
+import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
+import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 import org.sakaiproject.tool.api.SessionManager;
 
@@ -52,8 +56,20 @@ public class HierarchyServiceImpl implements HierarchyService {
 
 
     public HierarchyNode createHierarchy(String hierarchyId) {
-        // TODO Auto-generated method stub
-        return null;
+        if (hierarchyId.length() < 1 || hierarchyId.length() > 250) {
+            throw new IllegalArgumentException("Invalid hierarchyId ("+hierarchyId+"): length must be 1 to 250 chars");
+        }
+
+        int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {hierarchyId});
+        if (count > 0) {
+            throw new IllegalArgumentException("Invalid hierarchyId ("+hierarchyId+"): this id is already in use, you must use a unique id when creating a new hierarchy");
+        }
+
+        HierarchyPersistentNode pNode = new HierarchyPersistentNode(); // no children or parents to start
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, getCurrentUserId());
+        saveNodeAndMetaData(pNode, metaData);
+
+        return HierarchyUtils.makeNode(pNode, metaData);
     }
 
     public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId) {
@@ -113,6 +129,30 @@ public class HierarchyServiceImpl implements HierarchyService {
     public HierarchyNode saveNodeMetaData(String nodeId, String title, String description) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+
+    /**
+     * @return the current userId
+     */
+    private String getCurrentUserId() {
+        String userId = sessionManager.getCurrentSessionUserId();
+        if (userId == null || userId.equals("")) { userId = "admin"; } // make sure there is always something
+        return userId;
+    }
+
+    /**
+     * Convenience method to save a node and metadata in one transaction
+     * @param pNode
+     * @param metaData
+     */
+    private void saveNodeAndMetaData(HierarchyPersistentNode pNode, HierarchyNodeMetaData metaData) {
+        Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
+        pNodes.add(pNode);
+        Set<HierarchyNodeMetaData> metaDatas = new HashSet<HierarchyNodeMetaData>();
+        metaDatas.add(metaData);
+        Set[] entitySets = new Set[] {pNodes, metaDatas};
+        dao.saveMixedSet(entitySets);
     }
 
 }

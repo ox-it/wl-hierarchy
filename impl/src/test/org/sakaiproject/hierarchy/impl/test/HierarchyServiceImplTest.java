@@ -17,6 +17,7 @@ import org.easymock.MockControl;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.impl.HierarchyServiceImpl;
 import org.sakaiproject.hierarchy.impl.test.data.TestDataPreload;
+import org.sakaiproject.hierarchy.model.HierarchyNode;
 import org.sakaiproject.tool.api.SessionManager;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
@@ -83,10 +84,11 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * test name like so: testMethodClassInt (for method(Class, int);
      */
 
-    public void testValidTestDate() {
+    public void testValidTestData() {
         // ensure the test data is setup the way we think
-        assertEquals(new Long(1), tdp.root1.getId());
-        assertEquals(new Long(9), tdp.root9.getId());
+        assertEquals(new Long(1), tdp.pNode1.getId());
+        assertEquals(new Long(6), tdp.pNode6.getId());
+        assertEquals(new Long(9), tdp.pNode9.getId());
     }
 
     /**
@@ -94,7 +96,13 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      */
     public void testCreateHierarchy() {
         // test creating a valid hierarchy
-        hierarchyService.createHierarchy("hierarchyC");
+        HierarchyNode node = hierarchyService.createHierarchy("hierarchyC");
+        assertNotNull(node);
+        assertEquals("hierarchyC", node.hierarchyId);
+        assertNotNull(node.parentNodeIds);
+        assertNotNull(node.childNodeIds);
+        assertTrue(node.parentNodeIds.isEmpty());
+        assertTrue(node.childNodeIds.isEmpty());
 
         // test creating a hierarchy that already exists
         try {
@@ -104,7 +112,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
             Assert.assertNotNull(e);
         }
 
-        // test creating a hierarchy with too long a name
+        // test creating a hierarchy with too long an id
         try {
             hierarchyService.createHierarchy("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
             Assert.fail("Should have thrown exception");
