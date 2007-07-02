@@ -28,11 +28,6 @@ public class HierarchyPersistentNode {
      */
     private String directParentIds;
     /**
-     * the ids of child nodes that touch this node directly,
-     * similar treatment to the way the it works for the {@link #parentIds}
-     */
-    private String directChildIds;
-    /**
      * the ids of all parents of this node, 
      * this goes all the way up the hierarchy to the root node, 
      * expect this to be only one parent in most cases, 
@@ -42,6 +37,11 @@ public class HierarchyPersistentNode {
      * Examples: ":123:432:43:", ":38:", "" (no parent)
      */
     private String parentIds;
+    /**
+     * the ids of child nodes that touch this node directly,
+     * similar treatment to the way the it works for the {@link #parentIds}
+     */
+    private String directChildIds;
     /**
      * the ids of all children of this node, 
      * this goes all the way down the hierarchy to the leaf nodes,
@@ -67,7 +67,7 @@ public class HierarchyPersistentNode {
     /**
      * Full constructor
      */
-    public HierarchyPersistentNode(String directParentIds, String directChildIds, String parentIds, String childIds) {
+    public HierarchyPersistentNode(String directParentIds, String parentIds, String directChildIds, String childIds) {
         this.directParentIds = directParentIds;
         this.directChildIds = directChildIds;
         this.parentIds = parentIds;

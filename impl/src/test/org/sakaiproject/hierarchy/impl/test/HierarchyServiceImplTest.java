@@ -81,6 +81,12 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * test name like so: testMethodClassInt (for method(Class, int);
      */
 
+    public void testValidTestDate() {
+        // ensure the test data is setup the way we think
+        assertEquals(new Long(1), tdp.rootNodeA1.getId());
+        assertEquals(new Long(9), tdp.rootNodeB9.getId());
+    }
+    
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#createHierarchy(java.lang.String)}.
      */

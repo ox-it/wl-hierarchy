@@ -12,6 +12,7 @@
 package org.sakaiproject.hierarchy.impl.test.data;
 
 import org.sakaiproject.genericdao.api.GenericDao;
+import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 
 /**
  * Contains test data for preloading and test constants
@@ -54,15 +55,32 @@ public class TestDataPreload {
     public final static String INVALID_LOCATION_ID = "invalid-LLLLLLLL";
 
     // testing data objects here
-
-    //public BlogWowBlog blog1 = new BlogWowBlog(USER_ID, LOCATION1_ID, "blog1 title", "blog1 profile", null, new Date(), null);
+    public HierarchyPersistentNode rootNodeA1 = new HierarchyPersistentNode(null, null, "2", "2,3,4,5,6,7");
+    public HierarchyPersistentNode node2 = new HierarchyPersistentNode("1", "1", "3,4", "3,4,5,6,7");
+    public HierarchyPersistentNode node3 = new HierarchyPersistentNode("2", "1,2", "5", "5");
+    public HierarchyPersistentNode node4 = new HierarchyPersistentNode("2", "1,2", "6,7,8", "6,7,8");
+    public HierarchyPersistentNode node5 = new HierarchyPersistentNode("3", "1,2,3", null, null);
+    public HierarchyPersistentNode node6 = new HierarchyPersistentNode("4", "1,2,4", null, null);
+    public HierarchyPersistentNode node7 = new HierarchyPersistentNode("4", "1,2,4", null, null);
+    public HierarchyPersistentNode node8 = new HierarchyPersistentNode("4", "1,2,4", null, null);
+    public HierarchyPersistentNode rootNodeB9 = new HierarchyPersistentNode(null, null, "10", "10");
+    public HierarchyPersistentNode node10 = new HierarchyPersistentNode("9", "9", null, null);
 
     /**
      * Preload a bunch of test data into the database
      * @param dao a generic dao
      */
     public void preloadTestData(GenericDao dao) {
-        //dao.save(blog1);
+        dao.save(rootNodeA1);
+        dao.save(node2);
+        dao.save(node3);
+        dao.save(node4);
+        dao.save(node5);
+        dao.save(node6);
+        dao.save(node7);
+        dao.save(node8);
+        dao.save(rootNodeB9);
+        dao.save(node10);
     }
 
 }
