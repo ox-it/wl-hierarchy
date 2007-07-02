@@ -24,8 +24,9 @@ public interface HierarchyService extends HierarchyNodeReader, HierarchyNodeWrit
     /**
      * Creates a new hierarchy with the unique id specified, exception if this id is already used
      * @param hierarchyId a unique id which defines the hierarchy
+     * @return the object representing the root node of the new hierarchy
      */
-    public void createHierarchy(String hierarchyId);
+    public HierarchyNode createHierarchy(String hierarchyId);
 
     /**
      * Sets the root node of this hierarchy, note that although a hierarchy might have multiple

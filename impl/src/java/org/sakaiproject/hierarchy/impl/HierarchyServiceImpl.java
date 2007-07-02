@@ -51,9 +51,9 @@ public class HierarchyServiceImpl implements HierarchyService {
 
 
 
-    public void createHierarchy(String hierarchyId) {
+    public HierarchyNode createHierarchy(String hierarchyId) {
         // TODO Auto-generated method stub
-
+        return null;
     }
 
     public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId) {

@@ -12,6 +12,7 @@
 package org.sakaiproject.hierarchy.impl.test.data;
 
 import org.sakaiproject.genericdao.api.GenericDao;
+import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 
 /**
@@ -54,24 +55,39 @@ public class TestDataPreload {
     public final static String LOCATION2_TITLE = "Location 2 title";
     public final static String INVALID_LOCATION_ID = "invalid-LLLLLLLL";
 
+    // testing constants
+    public final static String HIERARCHYA = "hierarchyA";
+    public final static String HIERARCHYB = "hierarchyB";
+
     // testing data objects here
-    public HierarchyPersistentNode rootNodeA1 = new HierarchyPersistentNode(null, null, "2", "2,3,4,5,6,7");
-    public HierarchyPersistentNode node2 = new HierarchyPersistentNode("1", "1", "3,4", "3,4,5,6,7");
-    public HierarchyPersistentNode node3 = new HierarchyPersistentNode("2", "1,2", "5", "5");
-    public HierarchyPersistentNode node4 = new HierarchyPersistentNode("2", "1,2", "6,7,8", "6,7,8");
+    public HierarchyPersistentNode root1 = new HierarchyPersistentNode(null, null, "2,3,4", "2,3,4,5,6,7");
+    public HierarchyPersistentNode node2 = new HierarchyPersistentNode("1", "1", null, null);
+    public HierarchyPersistentNode node3 = new HierarchyPersistentNode("1", "1", "5", "5");
+    public HierarchyPersistentNode node4 = new HierarchyPersistentNode("1", "1", "6,7,8", "6,7,8");
     public HierarchyPersistentNode node5 = new HierarchyPersistentNode("3", "1,2,3", null, null);
     public HierarchyPersistentNode node6 = new HierarchyPersistentNode("4", "1,2,4", null, null);
     public HierarchyPersistentNode node7 = new HierarchyPersistentNode("4", "1,2,4", null, null);
     public HierarchyPersistentNode node8 = new HierarchyPersistentNode("4", "1,2,4", null, null);
-    public HierarchyPersistentNode rootNodeB9 = new HierarchyPersistentNode(null, null, "10", "10");
+    public HierarchyPersistentNode root9 = new HierarchyPersistentNode(null, null, "10", "10");
     public HierarchyPersistentNode node10 = new HierarchyPersistentNode("9", "9", null, null);
+
+    public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(root1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null);
+    public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(node2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null);
+    public HierarchyNodeMetaData meta3 = new HierarchyNodeMetaData(node3, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Arts", null);
+    public HierarchyNodeMetaData meta4 = new HierarchyNodeMetaData(node4, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Science", null);
+    public HierarchyNodeMetaData meta5 = new HierarchyNodeMetaData(node5, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Art", null);
+    public HierarchyNodeMetaData meta6 = new HierarchyNodeMetaData(node6, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Math", null);
+    public HierarchyNodeMetaData meta7 = new HierarchyNodeMetaData(node7, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Physics", null);
+    public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(node8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null);
+    public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(root9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null);
+    public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(node10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null);
 
     /**
      * Preload a bunch of test data into the database
      * @param dao a generic dao
      */
     public void preloadTestData(GenericDao dao) {
-        dao.save(rootNodeA1);
+        dao.save(root1);
         dao.save(node2);
         dao.save(node3);
         dao.save(node4);
@@ -79,8 +95,19 @@ public class TestDataPreload {
         dao.save(node6);
         dao.save(node7);
         dao.save(node8);
-        dao.save(rootNodeB9);
+        dao.save(root9);
         dao.save(node10);
+
+        dao.save(meta1);
+        dao.save(meta2);
+        dao.save(meta3);
+        dao.save(meta4);
+        dao.save(meta5);
+        dao.save(meta6);
+        dao.save(meta7);
+        dao.save(meta8);
+        dao.save(meta9);
+        dao.save(meta10);
     }
 
 }

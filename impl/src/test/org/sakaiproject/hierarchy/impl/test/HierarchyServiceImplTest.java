@@ -11,6 +11,8 @@
 
 package org.sakaiproject.hierarchy.impl.test;
 
+import junit.framework.Assert;
+
 import org.easymock.MockControl;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.impl.HierarchyServiceImpl;
@@ -83,15 +85,33 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 
     public void testValidTestDate() {
         // ensure the test data is setup the way we think
-        assertEquals(new Long(1), tdp.rootNodeA1.getId());
-        assertEquals(new Long(9), tdp.rootNodeB9.getId());
+        assertEquals(new Long(1), tdp.root1.getId());
+        assertEquals(new Long(9), tdp.root9.getId());
     }
-    
+
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#createHierarchy(java.lang.String)}.
      */
     public void testCreateHierarchy() {
-        fail("Not yet implemented"); // TODO
+        // test creating a valid hierarchy
+        hierarchyService.createHierarchy("hierarchyC");
+
+        // test creating a hierarchy that already exists
+        try {
+            hierarchyService.createHierarchy(TestDataPreload.HIERARCHYA);
+            Assert.fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            Assert.assertNotNull(e);
+        }
+
+        // test creating a hierarchy with too long a name
+        try {
+            hierarchyService.createHierarchy("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+            Assert.fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            Assert.assertNotNull(e);
+        }
+
     }
 
     /**
