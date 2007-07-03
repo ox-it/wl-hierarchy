@@ -62,6 +62,12 @@
          <version>${sakai.spring.version}</version>
       </dependency>
 
+      <dependency>
+         <groupId>${sakai.hibernate.groupId}</groupId>
+         <artifactId>${sakai.hibernate.artifactId}</artifactId>
+         <version>${sakai.hibernate.version}</version>
+      </dependency>
+
       <!-- Apache commons dependencies -->
       <dependency>
          <groupId>commons-logging</groupId>
@@ -148,10 +154,11 @@
                <directory>${basedir}/../pack/src/webapp/WEB-INF</directory>
                <includes>
                   <include>spring-hibernate.xml</include>
+                  <include>logic-support.xml</include>
                </includes>
             </resource>
             <resource>
-               <directory>${basedir}/../dao/src/test</directory>
+               <directory>${basedir}/src/test</directory>
                <includes>
                   <include>hibernate-test.xml</include>
                   <include>hibernate.properties</include>
