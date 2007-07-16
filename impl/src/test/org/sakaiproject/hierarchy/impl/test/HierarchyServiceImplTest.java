@@ -165,14 +165,40 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#destroyHierarchy(java.lang.String)}.
      */
     public void testDestroyHierarchy() {
-        //fail("Not yet implemented"); // TODO
+        hierarchyService.destroyHierarchy(TestDataPreload.HIERARCHYB);
+        int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {TestDataPreload.HIERARCHYB});
+        assertEquals(0, count);
+
+        // test removing a non-existent hierarchy fails
+        try {
+            hierarchyService.destroyHierarchy(TestDataPreload.HIERARCHYB);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }
     }
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getRootLevelNode(java.lang.String)}.
      */
     public void testGetRootLevelNode() {
-        //fail("Not yet implemented"); // TODO
+        HierarchyNode node = hierarchyService.getRootNode(TestDataPreload.HIERARCHYB);
+        assertNotNull(node);
+        assertEquals(tdp.node9, node);
+        assertEquals(TestDataPreload.HIERARCHYB, node.hierarchyId);
+
+        node = hierarchyService.getRootNode(TestDataPreload.HIERARCHYA);
+        assertNotNull(node);
+        assertEquals(tdp.node1, node);
+        assertEquals(TestDataPreload.HIERARCHYA, node.hierarchyId);
+
+        // fetching root from invalid hierarchy fails
+        try {
+            node = hierarchyService.getRootNode(TestDataPreload.INVALID_HIERARCHY);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }        
     }
 
     /**

@@ -103,15 +103,36 @@ public class HierarchyServiceImpl implements HierarchyService {
     }
 
     public void destroyHierarchy(String hierarchyId) {
-        // TODO Auto-generated method stub
+        List l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {hierarchyId});
+        if (l.isEmpty()) {
+            throw new IllegalArgumentException("Could not find hierarchy to remove with the following id: " + hierarchyId);
+        }
 
+        Set<HierarchyPersistentNode> nodes = new HashSet<HierarchyPersistentNode>();
+        Set<HierarchyNodeMetaData> nodesMetaData = new HashSet<HierarchyNodeMetaData>();
+        for (int i = 0; i < l.size(); i++) {
+            HierarchyNodeMetaData nmd = (HierarchyNodeMetaData) l.get(i);
+            nodesMetaData.add(nmd);
+            nodes.add(nmd.getNode());
+        }
+
+        Set[] entitySets = new Set[] { nodesMetaData, nodes };
+        dao.deleteMixedSet(entitySets);
     }
 
 
 
     public HierarchyNode getRootNode(String hierarchyId) {
-        // TODO Auto-generated method stub
-        return null;
+        List l = dao.findByProperties(HierarchyNodeMetaData.class, 
+                new String[] {"hierarchyId", "isRootNode"}, 
+                new Object[] {hierarchyId, Boolean.TRUE}
+            );
+        if (l.isEmpty() || l.size() != 1) {
+            throw new IllegalArgumentException("Could not find hierarchy root node for hierarchy: " + hierarchyId);
+        }
+
+        HierarchyNodeMetaData metaData = (HierarchyNodeMetaData) l.get(0);
+        return HierarchyUtils.makeNode(metaData);
     }
 
     public HierarchyNode getNodeById(String nodeId) {

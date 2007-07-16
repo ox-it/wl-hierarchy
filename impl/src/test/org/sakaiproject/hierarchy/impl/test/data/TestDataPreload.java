@@ -72,6 +72,7 @@ public class TestDataPreload {
     // testing constants
     public final static String HIERARCHYA = "hierarchyA";
     public final static String HIERARCHYB = "hierarchyB";
+    public final static String INVALID_HIERARCHY = "hierarchy-invalid";
 
     // testing data objects here
     public HierarchyPersistentNode pNode1 = new HierarchyPersistentNode(null, null, toCode("2,3,4"), toCode("2,3,4,5,6,7") );
