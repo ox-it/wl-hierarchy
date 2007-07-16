@@ -11,6 +11,8 @@
 
 package org.sakaiproject.hierarchy.impl.test;
 
+import java.util.Set;
+
 import org.easymock.MockControl;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
@@ -205,21 +207,136 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getNodeById(java.lang.String)}.
      */
     public void testGetNodeById() {
-        //fail("Not yet implemented"); // TODO
+        HierarchyNode node = hierarchyService.getNodeById(tdp.node4.id);
+        assertNotNull(node);
+        assertEquals(tdp.node4, node);
+        assertEquals(tdp.node4.id, node.id);
+
+        node = hierarchyService.getNodeById(tdp.node6.id);
+        assertNotNull(node);
+        assertEquals(tdp.node6, node);
+        assertEquals(tdp.node6.id, node.id);
+
+        // fetching node with invalid id should fail
+        try {
+            node = hierarchyService.getNodeById(TestDataPreload.INVALID_NODE_ID);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }  
     }
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getChildNodes(java.lang.String, boolean)}.
      */
     public void testGetChildNodes() {
-        //fail("Not yet implemented"); // TODO
+        Set<HierarchyNode> nodes;
+
+        // check children for the root
+        nodes = hierarchyService.getChildNodes(tdp.node1.id, true);
+        assertNotNull(nodes);
+        assertEquals(3, nodes.size());
+        assertTrue(nodes.contains(tdp.node2));
+        assertTrue(nodes.contains(tdp.node3));
+        assertTrue(nodes.contains(tdp.node4));
+
+        nodes = hierarchyService.getChildNodes(tdp.node1.id, false);
+        assertNotNull(nodes);
+        assertEquals(7, nodes.size());
+        assertTrue(nodes.contains(tdp.node2));
+        assertTrue(nodes.contains(tdp.node3));
+        assertTrue(nodes.contains(tdp.node4));
+        assertTrue(nodes.contains(tdp.node5));
+        assertTrue(nodes.contains(tdp.node6));
+        assertTrue(nodes.contains(tdp.node7));
+        assertTrue(nodes.contains(tdp.node8));
+
+        // check children for the mid level nodes
+        nodes = hierarchyService.getChildNodes(tdp.node4.id, true);
+        assertNotNull(nodes);
+        assertEquals(3, nodes.size());
+        assertTrue(nodes.contains(tdp.node6));
+        assertTrue(nodes.contains(tdp.node7));
+        assertTrue(nodes.contains(tdp.node8));
+
+        nodes = hierarchyService.getChildNodes(tdp.node4.id, false);
+        assertNotNull(nodes);
+        assertEquals(3, nodes.size());
+        assertTrue(nodes.contains(tdp.node6));
+        assertTrue(nodes.contains(tdp.node7));
+        assertTrue(nodes.contains(tdp.node8));
+
+        // leaf nodes have no children
+        nodes = hierarchyService.getChildNodes(tdp.node5.id, true);
+        assertNotNull(nodes);
+        assertEquals(0, nodes.size());
+
+        nodes = hierarchyService.getChildNodes(tdp.node7.id, true);
+        assertNotNull(nodes);
+        assertEquals(0, nodes.size());
+
+        // fetching children for invalid node id should fail
+        try {
+            nodes = hierarchyService.getChildNodes(TestDataPreload.INVALID_NODE_ID, true);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }  
     }
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getParentNodes(java.lang.String, boolean)}.
      */
     public void testGetParentNodes() {
-        //fail("Not yet implemented"); // TODO
+        Set<HierarchyNode> nodes;
+
+        // check parents for leaf nodes first
+        nodes = hierarchyService.getParentNodes(tdp.node7.id, false);
+        assertNotNull(nodes);
+        assertEquals(2, nodes.size());
+        assertTrue(nodes.contains(tdp.node1));
+        assertTrue(nodes.contains(tdp.node4));
+
+        nodes = hierarchyService.getParentNodes(tdp.node7.id, true);
+        assertNotNull(nodes);
+        assertEquals(1, nodes.size());
+        assertTrue(nodes.contains(tdp.node4));
+
+        nodes = hierarchyService.getParentNodes(tdp.node5.id, false);
+        assertNotNull(nodes);
+        assertEquals(2, nodes.size());
+        assertTrue(nodes.contains(tdp.node1));
+        assertTrue(nodes.contains(tdp.node3));
+
+        // check one with multiple parents
+        nodes = hierarchyService.getParentNodes(tdp.node10.id, false);
+        assertNotNull(nodes);
+        assertEquals(2, nodes.size());
+        assertTrue(nodes.contains(tdp.node9));
+        assertTrue(nodes.contains(tdp.node11));
+
+        nodes = hierarchyService.getParentNodes(tdp.node10.id, true);
+        assertNotNull(nodes);
+        assertEquals(2, nodes.size());
+        assertTrue(nodes.contains(tdp.node9));
+        assertTrue(nodes.contains(tdp.node11));
+
+        // root nodes have no parents
+        nodes = hierarchyService.getParentNodes(tdp.node1.id, true);
+        assertNotNull(nodes);
+        assertEquals(0, nodes.size());
+
+        nodes = hierarchyService.getParentNodes(tdp.node9.id, true);
+        assertNotNull(nodes);
+        assertEquals(0, nodes.size());
+
+        // fetching children for invalid node id should fail
+        try {
+            nodes = hierarchyService.getParentNodes(TestDataPreload.INVALID_NODE_ID, true);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }  
     }
 
     /**

@@ -123,31 +123,58 @@ public class HierarchyServiceImpl implements HierarchyService {
 
 
     public HierarchyNode getRootNode(String hierarchyId) {
-        List l = dao.findByProperties(HierarchyNodeMetaData.class, 
-                new String[] {"hierarchyId", "isRootNode"}, 
-                new Object[] {hierarchyId, Boolean.TRUE}
-            );
-        if (l.isEmpty() || l.size() != 1) {
+        HierarchyNodeMetaData metaData = getRootNodeMetaByHierarchy(hierarchyId);
+        if (metaData == null) {
             throw new IllegalArgumentException("Could not find hierarchy root node for hierarchy: " + hierarchyId);
         }
-
-        HierarchyNodeMetaData metaData = (HierarchyNodeMetaData) l.get(0);
         return HierarchyUtils.makeNode(metaData);
     }
 
     public HierarchyNode getNodeById(String nodeId) {
-        // TODO Auto-generated method stub
-        return null;
+        HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
+        return HierarchyUtils.makeNode(metaData);
     }
 
     public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
-        // TODO Auto-generated method stub
-        return null;
+        Set<HierarchyNode> children = new HashSet<HierarchyNode>();
+
+        HierarchyNodeMetaData parentMetaData = getNodeMeta(nodeId);
+        String childIdString = null;
+        if (directOnly) {
+            childIdString = parentMetaData.getNode().getDirectChildIds();
+        } else {
+            childIdString = parentMetaData.getNode().getChildIds();
+        }
+
+        if (childIdString == null) { return children; }
+
+        Set<String> childrenIds = HierarchyUtils.makeNodeIdSet( childIdString );
+        List<HierarchyNodeMetaData> childNodeMetas = getNodeMetas(childrenIds);
+        for (HierarchyNodeMetaData metaData : childNodeMetas) {
+            children.add( HierarchyUtils.makeNode(metaData) );
+        }
+        return children;
     }
 
     public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly) {
-        // TODO Auto-generated method stub
-        return null;
+        Set<HierarchyNode> parents = new HashSet<HierarchyNode>();
+
+        HierarchyNodeMetaData parentMetaData = getNodeMeta(nodeId);
+        String parentIdString = null;
+        if (directOnly) {
+            parentIdString = parentMetaData.getNode().getDirectParentIds();
+        } else {
+            parentIdString = parentMetaData.getNode().getParentIds();
+        }
+
+        if (parentIdString == null) { return parents; }
+
+        Set<String> parentsIds = HierarchyUtils.makeNodeIdSet( parentIdString );
+        List<HierarchyNodeMetaData> parentNodeMetas = getNodeMetas(parentsIds);
+        for (HierarchyNodeMetaData metaData : parentNodeMetas) {
+            parents.add( HierarchyUtils.makeNode(metaData) );
+        }
+        return parents;
     }
 
 
@@ -235,6 +262,24 @@ public class HierarchyServiceImpl implements HierarchyService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Get all nodes based on a set of nodeIds
+     * @param nodeIds
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private List<HierarchyNodeMetaData> getNodeMetas(Set<String> nodeIds) {
+        Long[] pNodeIds = new Long[nodeIds.size()];
+        int i = 0;
+        for (String nodeId : nodeIds) {
+            pNodeIds[i] = new Long(nodeId);
+            i++;
+        }
+        List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
+                new String[] {"node.id"}, new Object[] {pNodeIds});
+        return l;
     }
 
 }

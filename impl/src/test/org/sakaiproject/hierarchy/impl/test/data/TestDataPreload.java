@@ -73,16 +73,17 @@ public class TestDataPreload {
     public final static String HIERARCHYA = "hierarchyA";
     public final static String HIERARCHYB = "hierarchyB";
     public final static String INVALID_HIERARCHY = "hierarchy-invalid";
+    public final static String INVALID_NODE_ID = "invalid-nodeID";
 
     // testing data objects here
-    public HierarchyPersistentNode pNode1 = new HierarchyPersistentNode(null, null, toCode("2,3,4"), toCode("2,3,4,5,6,7") );
+    public HierarchyPersistentNode pNode1 = new HierarchyPersistentNode(null, null, toCode("2,3,4"), toCode("2,3,4,5,6,7,8") );
     public HierarchyPersistentNode pNode2 = new HierarchyPersistentNode(toCode("1"), toCode("1"), null, null );
     public HierarchyPersistentNode pNode3 = new HierarchyPersistentNode(toCode("1"), toCode("1"), toCode("5"), toCode("5") );
     public HierarchyPersistentNode pNode4 = new HierarchyPersistentNode(toCode("1"), toCode("1"), toCode("6,7,8"), toCode("6,7,8") );
-    public HierarchyPersistentNode pNode5 = new HierarchyPersistentNode(toCode("3"), toCode("1,2,3"), null, null );
-    public HierarchyPersistentNode pNode6 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
-    public HierarchyPersistentNode pNode7 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
-    public HierarchyPersistentNode pNode8 = new HierarchyPersistentNode(toCode("4"), toCode("1,2,4"), null, null );
+    public HierarchyPersistentNode pNode5 = new HierarchyPersistentNode(toCode("3"), toCode("1,3"), null, null );
+    public HierarchyPersistentNode pNode6 = new HierarchyPersistentNode(toCode("4"), toCode("1,4"), null, null );
+    public HierarchyPersistentNode pNode7 = new HierarchyPersistentNode(toCode("4"), toCode("1,4"), null, null );
+    public HierarchyPersistentNode pNode8 = new HierarchyPersistentNode(toCode("4"), toCode("1,4"), null, null );
     public HierarchyPersistentNode pNode9 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
     public HierarchyPersistentNode pNode10 = new HierarchyPersistentNode(toCode("9,11"), toCode("9,11"), null, null );
     public HierarchyPersistentNode pNode11 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
