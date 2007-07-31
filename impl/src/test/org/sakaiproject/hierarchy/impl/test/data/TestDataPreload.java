@@ -171,7 +171,7 @@ public class TestDataPreload {
                 s.add( split[i] );
             }
         }
-        return HierarchyUtils.makeNodeIdString(s);
+        return HierarchyUtils.makeEncodedNodeIdString(s);
     }
 
 }

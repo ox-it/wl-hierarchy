@@ -28,7 +28,7 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  */
 public class HierarchyUtils {
 
-    public static final String SEPERATOR = ":";
+    public static final char SEPERATOR = ':';
 
     /**
      * Create a {@link HierarchyNode} from the persistent data,
@@ -75,13 +75,13 @@ public class HierarchyUtils {
     /**
      * Make a Set of node Ids from an encoded string of nodeIds,
      * will not throw exception or return null
-     * @param nodeIds an encoded string of nodeIds
+     * @param encodedNodeIds an encoded string of nodeIds
      * @return a {@link Set} with the nodeIds in it, ordered by nodeId
      */
-    public static Set<String> makeNodeIdSet(String nodeIds) {
+    public static Set<String> makeNodeIdSet(String encodedNodeIds) {
         Set<String> s = new TreeSet<String>();
-        if (nodeIds != null) {
-            String[] split = nodeIds.split(SEPERATOR);
+        if (encodedNodeIds != null) {
+            String[] split = encodedNodeIds.split( String.valueOf(SEPERATOR) );
             if (split.length > 0) {
                 for (int i = 0; i < split.length; i++) {
                     if (split[i] != null && !split[i].equals("")) {
@@ -98,7 +98,7 @@ public class HierarchyUtils {
      * @param nodeIds a {@link Set} with the nodeIds in it
      * @return an encoded string of nodeIds
      */
-    public static String makeNodeIdString(Set<String> nodeIds) {
+    public static String makeEncodedNodeIdString(Set<String> nodeIds) {
         if (nodeIds == null || nodeIds.size() <= 0) {
             return null;
         }
@@ -113,6 +113,65 @@ public class HierarchyUtils {
             coded.append(HierarchyUtils.SEPERATOR);            
         }
         return coded.toString();
+    }
+
+    /**
+     * Method to allow us to easily build an encoded string for a single node without having to create a set first
+     * @param nodeId unique id string for a node
+     * @return an encoded string of nodeIds
+     */
+    public static String makeSingleEncodedNodeIdString(String nodeId) {
+        if (nodeId == null || nodeId.length() == 0) {
+            return null;
+        }
+        return HierarchyUtils.SEPERATOR + nodeId + HierarchyUtils.SEPERATOR;
+    }
+
+    /**
+     * Method to allows us to add a single nodeId to an encoded string of nodeIds without creating a set,
+     * will maintain the correct order for nodeIds, 
+     * (do not run this over and over, use a set if you need to add more than one node)
+     * @param encodedNodeIds an encoded string of nodeIds
+     * @param nodeId unique id string for a node
+     * @return an encoded string of nodeIds
+     */
+    public static String addSingleNodeIdToEncodedString(String encodedNodeIds, String nodeId) {
+        if (encodedNodeIds == null || encodedNodeIds.length() == 0) {
+            return makeSingleEncodedNodeIdString(nodeId);
+        }
+        if (nodeId == null || nodeId.length() == 0) {
+            return encodedNodeIds;
+        }
+        if (encodedNodeIds.indexOf(makeSingleEncodedNodeIdString(nodeId)) != -1) {
+            // this nodeId is already in the encoded string
+            return encodedNodeIds;
+        }
+        int thisSeparator = 0;
+        int lastIndex = encodedNodeIds.length()-1;
+        while (thisSeparator < lastIndex ) {
+            int nextSeparator = encodedNodeIds.indexOf(HierarchyUtils.SEPERATOR, thisSeparator+1);
+            String thisNodeId = encodedNodeIds.substring(thisSeparator+1, nextSeparator);
+            if (thisNodeId.compareTo(nodeId) > 0) {
+                // thisNodeId comes after nodeId
+                break;
+            } else {
+                thisSeparator = nextSeparator;
+            }
+        }
+
+        String newEncodedNodeIds = null;
+        if (thisSeparator == 0) {
+            // put the node at the front of the string
+            newEncodedNodeIds = HierarchyUtils.SEPERATOR + nodeId + encodedNodeIds;
+        } else if (thisSeparator == lastIndex) {
+            // put node at the end
+            newEncodedNodeIds = encodedNodeIds + nodeId + HierarchyUtils.SEPERATOR;
+        } else {
+            // put the node at the location indicated by thisSeparator
+            newEncodedNodeIds = encodedNodeIds.substring(0, thisSeparator)
+                + HierarchyUtils.SEPERATOR + nodeId + encodedNodeIds.substring(thisSeparator);
+        }
+        return newEncodedNodeIds;
     }
 
 }

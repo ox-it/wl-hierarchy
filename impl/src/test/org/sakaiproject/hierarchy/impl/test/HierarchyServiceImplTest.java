@@ -130,7 +130,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#setHierarchyRootNode(java.lang.String, java.lang.String)}.
      */
     public void testSetHierarchyRootNode() {
-        HierarchyNode node;
+        HierarchyNode node = null;
 
         // test reassigning existing rootnode is no problem
         node = hierarchyService.setHierarchyRootNode(TestDataPreload.HIERARCHYA, tdp.node1.id);
@@ -184,7 +184,9 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getRootLevelNode(java.lang.String)}.
      */
     public void testGetRootLevelNode() {
-        HierarchyNode node = hierarchyService.getRootNode(TestDataPreload.HIERARCHYB);
+        HierarchyNode node = null;
+
+        node = hierarchyService.getRootNode(TestDataPreload.HIERARCHYB);
         assertNotNull(node);
         assertEquals(tdp.node9, node);
         assertEquals(TestDataPreload.HIERARCHYB, node.hierarchyId);
@@ -207,7 +209,9 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getNodeById(java.lang.String)}.
      */
     public void testGetNodeById() {
-        HierarchyNode node = hierarchyService.getNodeById(tdp.node4.id);
+        HierarchyNode node = null;
+
+        node = hierarchyService.getNodeById(tdp.node4.id);
         assertNotNull(node);
         assertEquals(tdp.node4, node);
         assertEquals(tdp.node4.id, node.id);
@@ -343,7 +347,158 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#addNode(java.lang.String, java.lang.String)}.
      */
     public void testAddNode() {
-        //fail("Not yet implemented"); // TODO
+        HierarchyNode node = null;
+        String newNodeId = null;
+
+        // check we can insert a node in a normal tree and that the links are created correctly in this node
+        node = hierarchyService.addNode(TestDataPreload.HIERARCHYA, tdp.node2.id);
+        assertNotNull(node);
+        newNodeId = node.id;
+        assertNotNull(newNodeId);
+        assertNotNull(node.directParentNodeIds);
+        assertEquals(1, node.directParentNodeIds.size());
+        assertTrue(node.directParentNodeIds.contains(tdp.node2.id));
+        assertNotNull(node.parentNodeIds);
+        assertEquals(2, node.parentNodeIds.size());
+        assertTrue(node.parentNodeIds.contains(tdp.node2.id));
+        assertTrue(node.parentNodeIds.contains(tdp.node1.id));
+        assertNotNull(node.directChildNodeIds);
+        assertTrue(node.directChildNodeIds.isEmpty());
+        assertNotNull(node.childNodeIds);
+        assertTrue(node.childNodeIds.isEmpty());
+
+        // now check that the child links were updated correctly for the parent
+        node = hierarchyService.getNodeById(tdp.node2.id);
+        assertNotNull(node);
+        assertEquals(tdp.node2.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(1, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(newNodeId));
+        assertNotNull(node.childNodeIds);
+        assertEquals(1, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+
+        // and the root node
+        node = hierarchyService.getNodeById(tdp.node1.id);
+        assertNotNull(node);
+        assertEquals(tdp.node1.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(3, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(tdp.node2.id));
+        assertTrue(node.directChildNodeIds.contains(tdp.node3.id));
+        assertTrue(node.directChildNodeIds.contains(tdp.node4.id));
+        assertNotNull(node.childNodeIds);
+        assertEquals(8, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+        assertTrue(node.childNodeIds.contains(tdp.node2.id));
+        assertTrue(node.childNodeIds.contains(tdp.node3.id));
+        assertTrue(node.childNodeIds.contains(tdp.node4.id));
+        assertTrue(node.childNodeIds.contains(tdp.node5.id));
+        assertTrue(node.childNodeIds.contains(tdp.node6.id));
+        assertTrue(node.childNodeIds.contains(tdp.node7.id));
+        assertTrue(node.childNodeIds.contains(tdp.node8.id));
+
+
+        // check we can insert a node in an upward tree and that the links are created correctly in this node
+        node = hierarchyService.addNode(TestDataPreload.HIERARCHYB, tdp.node10.id);
+        assertNotNull(node);
+        newNodeId = node.id;
+        assertNotNull(newNodeId);
+        assertNotNull(node.directParentNodeIds);
+        assertEquals(1, node.directParentNodeIds.size());
+        assertTrue(node.directParentNodeIds.contains(tdp.node10.id));
+        assertNotNull(node.parentNodeIds);
+        assertEquals(3, node.parentNodeIds.size());
+        assertTrue(node.parentNodeIds.contains(tdp.node10.id));
+        assertTrue(node.parentNodeIds.contains(tdp.node9.id));
+        assertTrue(node.parentNodeIds.contains(tdp.node11.id));
+        assertNotNull(node.directChildNodeIds);
+        assertTrue(node.directChildNodeIds.isEmpty());
+        assertNotNull(node.childNodeIds);
+        assertTrue(node.childNodeIds.isEmpty());
+
+        // now check that the child links were updated correctly for the parent
+        node = hierarchyService.getNodeById(tdp.node10.id);
+        assertNotNull(node);
+        assertEquals(tdp.node10.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(1, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(newNodeId));
+        assertNotNull(node.childNodeIds);
+        assertEquals(1, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+
+        // and the root node
+        node = hierarchyService.getNodeById(tdp.node9.id);
+        assertNotNull(node);
+        assertEquals(tdp.node9.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(1, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(tdp.node10.id));
+        assertNotNull(node.childNodeIds);
+        assertEquals(2, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+        assertTrue(node.childNodeIds.contains(tdp.node10.id));
+
+        // and the other higher parent node
+        node = hierarchyService.getNodeById(tdp.node11.id);
+        assertNotNull(node);
+        assertEquals(tdp.node11.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(1, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(tdp.node10.id));
+        assertNotNull(node.childNodeIds);
+        assertEquals(2, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+        assertTrue(node.childNodeIds.contains(tdp.node10.id));
+
+
+        // check we can insert a node next to others and that the links are created correctly in this node
+        node = hierarchyService.addNode(TestDataPreload.HIERARCHYA, tdp.node3.id);
+        assertNotNull(node);
+        newNodeId = node.id;
+        assertNotNull(newNodeId);
+        assertNotNull(node.directParentNodeIds);
+        assertEquals(1, node.directParentNodeIds.size());
+        assertTrue(node.directParentNodeIds.contains(tdp.node3.id));
+        assertNotNull(node.parentNodeIds);
+        assertEquals(2, node.parentNodeIds.size());
+        assertTrue(node.parentNodeIds.contains(tdp.node3.id));
+        assertTrue(node.parentNodeIds.contains(tdp.node1.id));
+        assertNotNull(node.directChildNodeIds);
+        assertTrue(node.directChildNodeIds.isEmpty());
+        assertNotNull(node.childNodeIds);
+        assertTrue(node.childNodeIds.isEmpty());
+
+        // now check that the child links were updated correctly for the parent
+        node = hierarchyService.getNodeById(tdp.node3.id);
+        assertNotNull(node);
+        assertEquals(tdp.node3.id, node.id);
+        assertNotNull(node.directChildNodeIds);
+        assertEquals(2, node.directChildNodeIds.size());
+        assertTrue(node.directChildNodeIds.contains(newNodeId));
+        assertTrue(node.directChildNodeIds.contains(tdp.node5.id));
+        assertNotNull(node.childNodeIds);
+        assertEquals(2, node.childNodeIds.size());
+        assertTrue(node.childNodeIds.contains(newNodeId));
+        assertTrue(node.childNodeIds.contains(tdp.node5.id));
+
+        // check that adding a node without a parent puts the node at the top of the hierarchy
+        // NOTE: not currently supported, so this should die
+        try {
+            node = hierarchyService.addNode(TestDataPreload.HIERARCHYA, null);
+            fail("Should have thrown exception");
+        } catch (RuntimeException e) {
+            assertNotNull(e);
+        }
+
+        // check that attempting to add a node to a non-existent node fails
+        try {
+            node = hierarchyService.addNode(TestDataPreload.HIERARCHYA, TestDataPreload.INVALID_NODE_ID);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }
     }
 
     /**

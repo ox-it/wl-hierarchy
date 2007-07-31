@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.NotSupportedException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,6 +30,8 @@ import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 import org.sakaiproject.tool.api.SessionManager;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * The default implementation of the Hierarchy interface
@@ -180,8 +184,54 @@ public class HierarchyServiceImpl implements HierarchyService {
 
 
     public HierarchyNode addNode(String hierarchyId, String parentNodeId) {
-        // TODO Auto-generated method stub
-        return null;
+        if (parentNodeId == null) {
+            throw new RuntimeException("Setting parentNodeId to null is not yet supported");
+        }
+
+        // validate the parent node and hierarchy (this needs to be cached for sure)
+        HierarchyNodeMetaData parentNodeMeta = getNodeMeta(parentNodeId);
+        if (parentNodeMeta == null) {
+            throw new IllegalArgumentException("Invalid parent node id, cannot find node with id: " + parentNodeId);
+        }
+        if (! parentNodeMeta.getHierarchyId().equals(hierarchyId)) {
+            throw new IllegalArgumentException("Invalid hierarchy id, cannot find node ("+parentNodeId+") in this hierarchy: " + hierarchyId);
+        }
+
+        // get the set of all nodes above the new node (these will have to be updated)
+        Set<String> parentNodeIds = HierarchyUtils.makeNodeIdSet( parentNodeMeta.getNode().getParentIds() );
+        parentNodeIds.add(parentNodeId);
+
+        // create the new node and assign the new parents from our parent
+        HierarchyPersistentNode pNode = new HierarchyPersistentNode(
+                HierarchyUtils.makeSingleEncodedNodeIdString(parentNodeId),
+                HierarchyUtils.makeEncodedNodeIdString(parentNodeIds) );
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, getCurrentUserId());
+        // save this new node (perhaps we should be saving all of these in one massive update?) -AZ
+        saveNodeAndMetaData(pNode, metaData);
+        String newNodeId = pNode.getId().toString();
+
+        // update all the links in the tree for this new node
+        List<HierarchyPersistentNode> pNodesList = getNodes(parentNodeIds);
+        Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
+        for (HierarchyPersistentNode node : pNodesList) {
+            if (node.getId().toString().equals(parentNodeId)) {
+                // special case for our parent, update direct children
+                node.setDirectChildIds( 
+                        HierarchyUtils.addSingleNodeIdToEncodedString(
+                                node.getDirectChildIds(), newNodeId) ); 
+            }
+
+            // update the children for each node
+            node.setChildIds( 
+                    HierarchyUtils.addSingleNodeIdToEncodedString(
+                            node.getChildIds(), newNodeId) );
+
+            // add to the set of node to be saved
+            pNodes.add(node);
+        }
+        dao.saveSet( pNodes );
+
+        return HierarchyUtils.makeNode(pNode, metaData);
     }
 
     public HierarchyNode updateChildren(String nodeId, Set<String> childNodeIds) {
@@ -265,7 +315,7 @@ public class HierarchyServiceImpl implements HierarchyService {
     }
 
     /**
-     * Get all nodes based on a set of nodeIds
+     * Get all nodes and meta data based on a set of nodeIds
      * @param nodeIds
      * @return
      */
@@ -279,6 +329,24 @@ public class HierarchyServiceImpl implements HierarchyService {
         }
         List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
                 new String[] {"node.id"}, new Object[] {pNodeIds});
+        return l;
+    }
+
+    /**
+     * Get all nodes only based on a set of nodeIds
+     * @param nodeIds
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private List<HierarchyPersistentNode> getNodes(Set<String> nodeIds) {
+        Long[] pNodeIds = new Long[nodeIds.size()];
+        int i = 0;
+        for (String nodeId : nodeIds) {
+            pNodeIds[i] = new Long(nodeId);
+            i++;
+        }
+        List<HierarchyPersistentNode> l = dao.findByProperties(HierarchyPersistentNode.class, 
+                new String[] {"id"}, new Object[] {pNodeIds});
         return l;
     }
 
