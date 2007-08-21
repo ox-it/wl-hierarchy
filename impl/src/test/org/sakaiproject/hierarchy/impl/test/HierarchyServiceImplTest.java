@@ -13,13 +13,11 @@ package org.sakaiproject.hierarchy.impl.test;
 
 import java.util.Set;
 
-import org.easymock.MockControl;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.impl.HierarchyServiceImpl;
 import org.sakaiproject.hierarchy.impl.test.data.TestDataPreload;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
-import org.sakaiproject.tool.api.SessionManager;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
 /**
@@ -34,8 +32,8 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     private HierarchyDao dao;
     private TestDataPreload tdp;
 
-    private SessionManager sessionManager;
-    private MockControl sessionManagerControl;
+//    private SessionManager sessionManager;
+//    private MockControl sessionManagerControl;
 
 
     protected String[] getConfigLocations() {
@@ -61,20 +59,20 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 
         // load up any other needed spring beans
 
-        // setup the mock objects if needed
-        sessionManagerControl = MockControl.createControl(SessionManager.class);
-        sessionManager = (SessionManager) sessionManagerControl.getMock();
-
-        //this mock object is simply keeping us from getting a null when getCurrentSessionUserId is called 
-        sessionManager.getCurrentSessionUserId(); // expect this to be called
-        sessionManagerControl.setDefaultMatcher(MockControl.ALWAYS_MATCHER);
-        sessionManagerControl.setReturnValue(TestDataPreload.USER_ID, MockControl.ZERO_OR_MORE);
-        sessionManagerControl.replay();
+//        // setup the mock objects if needed
+//        sessionManagerControl = MockControl.createControl(SessionManager.class);
+//        sessionManager = (SessionManager) sessionManagerControl.getMock();
+//
+//        //this mock object is simply keeping us from getting a null when getCurrentSessionUserId is called 
+//        sessionManager.getCurrentSessionUserId(); // expect this to be called
+//        sessionManagerControl.setDefaultMatcher(MockControl.ALWAYS_MATCHER);
+//        sessionManagerControl.setReturnValue(TestDataPreload.USER_ID, MockControl.ZERO_OR_MORE);
+//        sessionManagerControl.replay();
 
         //create and setup the object to be tested
         hierarchyService = new HierarchyServiceImpl();
         hierarchyService.setDao(dao);
-        hierarchyService.setSessionManager(sessionManager);
+//        hierarchyService.setSessionManager(sessionManager);
     }
 
     // run this before each test starts and as part of the transaction

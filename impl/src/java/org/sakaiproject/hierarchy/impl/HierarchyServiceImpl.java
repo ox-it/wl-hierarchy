@@ -18,20 +18,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.transaction.NotSupportedException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
-import org.sakaiproject.tool.api.SessionManager;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * The default implementation of the Hierarchy interface
@@ -47,10 +41,10 @@ public class HierarchyServiceImpl implements HierarchyService {
         this.dao = dao;
     }
 
-    private SessionManager sessionManager;
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
+//    private SessionManager sessionManager;
+//    public void setSessionManager(SessionManager sessionManager) {
+//        this.sessionManager = sessionManager;
+//    }
 
 
 
@@ -71,7 +65,7 @@ public class HierarchyServiceImpl implements HierarchyService {
         }
 
         HierarchyPersistentNode pNode = new HierarchyPersistentNode(); // no children or parents to start
-        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, getCurrentUserId());
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, null); //getCurrentUserId());
         saveNodeAndMetaData(pNode, metaData);
 
         return HierarchyUtils.makeNode(pNode, metaData);
@@ -205,7 +199,7 @@ public class HierarchyServiceImpl implements HierarchyService {
         HierarchyPersistentNode pNode = new HierarchyPersistentNode(
                 HierarchyUtils.makeSingleEncodedNodeIdString(parentNodeId),
                 HierarchyUtils.makeEncodedNodeIdString(parentNodeIds) );
-        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, getCurrentUserId());
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, null); //getCurrentUserId());
         // save this new node (perhaps we should be saving all of these in one massive update?) -AZ
         saveNodeAndMetaData(pNode, metaData);
         String newNodeId = pNode.getId().toString();
@@ -258,11 +252,11 @@ public class HierarchyServiceImpl implements HierarchyService {
     /**
      * @return the current userId
      */
-    private String getCurrentUserId() {
-        String userId = sessionManager.getCurrentSessionUserId();
-        if (userId == null || userId.equals("")) { userId = "admin"; } // make sure there is always something
-        return userId;
-    }
+//    private String getCurrentUserId() {
+//        String userId = sessionManager.getCurrentSessionUserId();
+//        if (userId == null || userId.equals("")) { userId = "admin"; } // make sure there is always something
+//        return userId;
+//    }
 
     /**
      * Convenience method to save a node and metadata in one transaction

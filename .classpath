@@ -20,7 +20,5 @@
 	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/easymock/jars/easymock-1.2_Java1.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/db-impl"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/entity-broker"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/tool-api"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
