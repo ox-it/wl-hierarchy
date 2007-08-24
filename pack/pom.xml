@@ -5,7 +5,7 @@
    <modelVersion>4.0.0</modelVersion>
    <name>Sakai Hierarchy Components Pack</name>
    <groupId>org.sakaiproject.hierarchy</groupId>
-   <artifactId>pack</artifactId>
+   <artifactId>hierarchy-pack</artifactId>
    <organization>
       <name>CARET, Cambridge University</name>
       <url>http://caret.cam.ac.uk/</url>
@@ -29,7 +29,7 @@
       <!-- internal dependencies -->
       <dependency>
          <groupId>org.sakaiproject.hierarchy</groupId>
-         <artifactId>impl</artifactId>
+         <artifactId>hierarchy-impl</artifactId>
          <version>1.0.0-RC1</version>
          <scope>runtime</scope>
       </dependency>
