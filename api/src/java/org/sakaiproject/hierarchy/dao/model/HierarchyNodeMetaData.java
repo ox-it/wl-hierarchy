@@ -18,121 +18,139 @@ package org.sakaiproject.hierarchy.dao.model;
  */
 public class HierarchyNodeMetaData {
 
-    /**
-     * The unique internal id for this meta data
-     */
-    private Long id;
-    /**
-     * this is the node that this meta data is associated with
-     */
-    private HierarchyPersistentNode node;
-    /**
-     * The assigned unique id for this hierarchy (used for lookup)
-     */
-    private String hierarchyId;
-    /**
-     * true if this is the rootnode for this hierarchy
-     */
-    private Boolean isRootNode;
-    /**
-     * the userId of the owner (creator) of the associated node
-     */
-    private String ownerId;
-    /**
-     * the title for the associated node
-     */
-    private String title;
-    /**
-     * the description for the associated node
-     */
-    private String description;
+   /**
+    * The unique internal id for this meta data
+    */
+   private Long id;
 
+   /**
+    * this is the node that this meta data is associated with
+    */
+   private HierarchyPersistentNode node;
 
-    /**
-     * Empty constructor
-     */
-    public HierarchyNodeMetaData() {
-    }
+   /**
+    * The assigned unique id for this hierarchy (used for lookup)
+    */
+   private String hierarchyId;
 
-    /**
-     * minimal
-     */
-    public HierarchyNodeMetaData(HierarchyPersistentNode node, String hierarchyId, Boolean isRootNode, String ownerId) {
-        this.node = node;
-        this.hierarchyId = hierarchyId;
-        this.isRootNode = isRootNode;
-        this.ownerId = ownerId;
-    }
+   /**
+    * true if this is the rootnode for this hierarchy
+    */
+   private Boolean isRootNode;
 
-    /**
-     * full
-     */
-    public HierarchyNodeMetaData(HierarchyPersistentNode node, String hierarchyId, Boolean isRootNode, String ownerId, String title, String description) {
-        this.node = node;
-        this.hierarchyId = hierarchyId;
-        this.isRootNode = isRootNode;
-        this.ownerId = ownerId;
-        this.title = title;
-        this.description = description;
-    }
+   /**
+    * the userId of the owner (creator) of the associated node
+    */
+   private String ownerId;
 
+   /**
+    * the title for the associated node
+    */
+   private String title;
 
+   /**
+    * the description for the associated node
+    */
+   private String description;
 
-    public String getDescription() {
-        return description;
-    }
+   /**
+    * the permissions token for the associated node
+    */
+   private String permToken;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+   /**
+    * Empty constructor
+    */
+   public HierarchyNodeMetaData() {
+   }
 
-    public String getHierarchyId() {
-        return hierarchyId;
-    }
+   /**
+    * minimal
+    */
+   public HierarchyNodeMetaData(HierarchyPersistentNode node, String hierarchyId, Boolean isRootNode,
+         String ownerId) {
+      this.node = node;
+      this.hierarchyId = hierarchyId;
+      this.isRootNode = isRootNode;
+      this.ownerId = ownerId;
+   }
 
-    public void setHierarchyId(String hierarchyId) {
-        this.hierarchyId = hierarchyId;
-    }
+   /**
+    * full
+    */
+   public HierarchyNodeMetaData(HierarchyPersistentNode node, String hierarchyId, Boolean isRootNode,
+         String ownerId, String title, String description, String permToken) {
+      this.node = node;
+      this.hierarchyId = hierarchyId;
+      this.isRootNode = isRootNode;
+      this.ownerId = ownerId;
+      this.title = title;
+      this.description = description;
+      this.permToken = permToken;
+   }
 
-    public Long getId() {
-        return id;
-    }
+   public String getDescription() {
+      return description;
+   }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+   public void setDescription(String description) {
+      this.description = description;
+   }
 
-    public Boolean getIsRootNode() {
-        return isRootNode;
-    }
+   public String getHierarchyId() {
+      return hierarchyId;
+   }
 
-    public void setIsRootNode(Boolean isRootNode) {
-        this.isRootNode = isRootNode;
-    }
+   public void setHierarchyId(String hierarchyId) {
+      this.hierarchyId = hierarchyId;
+   }
 
-    public HierarchyPersistentNode getNode() {
-        return node;
-    }
+   public Long getId() {
+      return id;
+   }
 
-    public void setNode(HierarchyPersistentNode node) {
-        this.node = node;
-    }
+   public void setId(Long id) {
+      this.id = id;
+   }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
+   public Boolean getIsRootNode() {
+      return isRootNode;
+   }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
+   public void setIsRootNode(Boolean isRootNode) {
+      this.isRootNode = isRootNode;
+   }
 
-    public String getTitle() {
-        return title;
-    }
+   public HierarchyPersistentNode getNode() {
+      return node;
+   }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+   public void setNode(HierarchyPersistentNode node) {
+      this.node = node;
+   }
 
+   public String getOwnerId() {
+      return ownerId;
+   }
+
+   public void setOwnerId(String ownerId) {
+      this.ownerId = ownerId;
+   }
+
+   public String getTitle() {
+      return title;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public String getPermToken() {
+      return permToken;
+   }
+
+   public void setPermToken(String permToken) {
+      this.permToken = permToken;
+   }
 
 }

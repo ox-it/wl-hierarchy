@@ -14,7 +14,6 @@
 
 package org.sakaiproject.hierarchy.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -41,6 +40,11 @@ public class HierarchyNode {
      * the description for this node 
      */
     public String description;
+    /**
+     * the permissions token for the associated node, 
+     * can be looked up in the permissions token key generator service
+     */
+    public String permToken;
     /**
      * a set of all direct parents for this node,
      * the ids of parent nodes that touch this node directly

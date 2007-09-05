@@ -23,5 +23,6 @@
       <property name="ownerId" type="string" length="255" />
       <property name="title" type="string" length="255" />
       <property name="description" type="text" />
+      <property name="permToken" type="string" length="255" index="HIERARCHY_PERMTOKEN" />
    </class>
 </hibernate-mapping>

@@ -53,6 +53,7 @@ public class HierarchyUtils {
         hNode.hierarchyId = metaData.getHierarchyId();
         hNode.title = metaData.getTitle();
         hNode.description = metaData.getDescription();
+        hNode.permToken = metaData.getPermToken();
 
         return hNode;
     }

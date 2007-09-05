@@ -22,42 +22,42 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  */
 public interface HierarchyNodeReader {
 
-    /**
-     * Get the hierarchy root node
-     * @param hierarchyId a unique string which identifies this hierarchy
-     * @return the {@link HierarchyNode} representing the root of the hierarchy
-     */
-    public HierarchyNode getRootNode(String hierarchyId);
+   /**
+    * Get the hierarchy root node
+    * @param hierarchyId a unique string which identifies this hierarchy
+    * @return the {@link HierarchyNode} representing the root of the hierarchy
+    */
+   public HierarchyNode getRootNode(String hierarchyId);
 
-    /**
-     * Get a node based on the unique id
-     * @param nodeId a unique id for a hierarchy node
-     * @return the {@link HierarchyNode} representing this node or null if it does not exist
-     */
-    public HierarchyNode getNodeById(String nodeId);
+   /**
+    * Get a node based on the unique id
+    * @param nodeId a unique id for a hierarchy node
+    * @return the {@link HierarchyNode} representing this node or null if it does not exist
+    */
+   public HierarchyNode getNodeById(String nodeId);
 
-    /**
-     * Get all the parent nodes for a specific node all the way to the root node, 
-     * returns empty set if this is the root node
-     * 
-     * @param nodeId a unique id for a hierarchy node
-     * @param directOnly if true then only include the nodes which are directly connected to this node, 
-     * else return every node that is a parent of this node
-     * @return a Set of {@link HierarchyNode} objects representing all parent nodes for the specified child,
-     * empty set if no parents found
-     */
-    public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly);
+   /**
+    * Get all the parent nodes for a specific node all the way to the root node, 
+    * returns empty set if this is the root node
+    * 
+    * @param nodeId a unique id for a hierarchy node
+    * @param directOnly if true then only include the nodes which are directly connected to this node, 
+    * else return every node that is a parent of this node
+    * @return a Set of {@link HierarchyNode} objects representing all parent nodes for the specified child,
+    * empty set if no parents found
+    */
+   public Set<HierarchyNode> getParentNodes(String nodeId, boolean directOnly);
 
-    /**
-     * Get all children nodes for this node in the hierarchy all the way to the leaves, 
-     * will return no nodes if this node has no children
-     * 
-     * @param nodeId a unique id for a hierarchy node
-     * @param directOnly if true then only include the nodes which are directly connected to this node, 
-     * else return every node that is a child of this node
-     * @return a Set of {@link HierarchyNode} objects representing all children nodes for the specified parent,
-     * empty set if no children found
-     */
-    public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly);
+   /**
+    * Get all children nodes for this node in the hierarchy all the way to the leaves, 
+    * will return no nodes if this node has no children
+    * 
+    * @param nodeId a unique id for a hierarchy node
+    * @param directOnly if true then only include the nodes which are directly connected to this node, 
+    * else return every node that is a child of this node
+    * @return a Set of {@link HierarchyNode} objects representing all children nodes for the specified parent,
+    * empty set if no children found
+    */
+   public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly);
 
 }

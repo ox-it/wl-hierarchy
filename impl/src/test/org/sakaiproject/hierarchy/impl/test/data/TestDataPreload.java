@@ -88,17 +88,17 @@ public class TestDataPreload {
     public HierarchyPersistentNode pNode10 = new HierarchyPersistentNode(toCode("9,11"), toCode("9,11"), null, null );
     public HierarchyPersistentNode pNode11 = new HierarchyPersistentNode(null, null, toCode("10"), toCode("10") );
 
-    public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(pNode1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null);
-    public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(pNode2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null);
-    public HierarchyNodeMetaData meta3 = new HierarchyNodeMetaData(pNode3, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Arts", null);
-    public HierarchyNodeMetaData meta4 = new HierarchyNodeMetaData(pNode4, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Science", null);
-    public HierarchyNodeMetaData meta5 = new HierarchyNodeMetaData(pNode5, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Art", null);
-    public HierarchyNodeMetaData meta6 = new HierarchyNodeMetaData(pNode6, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Math", null);
-    public HierarchyNodeMetaData meta7 = new HierarchyNodeMetaData(pNode7, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Physics", null);
-    public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(pNode8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null);
-    public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(pNode9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null);
-    public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(pNode10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null);
-    public HierarchyNodeMetaData meta11 = new HierarchyNodeMetaData(pNode11, HIERARCHYB, Boolean.FALSE, USER_ID, "Provost of BZ", null);
+    public HierarchyNodeMetaData meta1 = new HierarchyNodeMetaData(pNode1, HIERARCHYA, Boolean.TRUE, USER_ID, "Univ of AZ", null, null);
+    public HierarchyNodeMetaData meta2 = new HierarchyNodeMetaData(pNode2, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Engineering", null, null);
+    public HierarchyNodeMetaData meta3 = new HierarchyNodeMetaData(pNode3, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Arts", null, null);
+    public HierarchyNodeMetaData meta4 = new HierarchyNodeMetaData(pNode4, HIERARCHYA, Boolean.FALSE, USER_ID, "College of Science", null, null);
+    public HierarchyNodeMetaData meta5 = new HierarchyNodeMetaData(pNode5, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Art", null, null);
+    public HierarchyNodeMetaData meta6 = new HierarchyNodeMetaData(pNode6, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Math", null, null);
+    public HierarchyNodeMetaData meta7 = new HierarchyNodeMetaData(pNode7, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Physics", null, null);
+    public HierarchyNodeMetaData meta8 = new HierarchyNodeMetaData(pNode8, HIERARCHYA, Boolean.FALSE, USER_ID, "Dept of Biology", null, null);
+    public HierarchyNodeMetaData meta9 = new HierarchyNodeMetaData(pNode9, HIERARCHYB, Boolean.TRUE, USER_ID, "Univ of BZ", null, null);
+    public HierarchyNodeMetaData meta10 = new HierarchyNodeMetaData(pNode10, HIERARCHYB, Boolean.FALSE, USER_ID, "College of BZ", null, null);
+    public HierarchyNodeMetaData meta11 = new HierarchyNodeMetaData(pNode11, HIERARCHYB, Boolean.FALSE, USER_ID, "Provost of BZ", null, null);
 
     public HierarchyNode node1;
     public HierarchyNode node2;

@@ -11,8 +11,6 @@
 
 package org.sakaiproject.hierarchy;
 
-import java.util.Set;
-
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
@@ -22,52 +20,75 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  */
 public interface HierarchyNodeWriter {
 
-    /**
-     * Add a new node to a hierarchy
-     * @param hierarchyId a unique id which defines the hierarchy
-     * @param parentNodeId the unique id for the parent of this node, can be null if this is the root or a top level node
-     * @return the object representing the newly added node
-     */
-    public HierarchyNode addNode(String hierarchyId, String parentNodeId);
+   /**
+    * Add a new node to a hierarchy
+    * @param hierarchyId a unique id which defines the hierarchy
+    * @param parentNodeId the unique id for the parent of this node, can be null if this is the root or a top level node
+    * @return the object representing the newly added node
+    */
+   public HierarchyNode addNode(String hierarchyId, String parentNodeId);
 
-    /**
-     * Add parents to a node (creates the association),
-     * only adds direct parents (directly connected to this node),
-     * others are implicitly defined
-     * @param nodeId a unique id for a hierarchy node
-     * @param parentNodeIds a set of parent node ids to associate with this node,
-     * removes parents not in this array and adds parents which are listed (if not already associated)
-     * @return the object representing the updated node
-     */
-    public HierarchyNode updateParents(String nodeId, Set<String> parentNodeIds);
+   /**
+    * Remove a node from the hierarchy if it is possible,
+    * nodes can only be removed if they have no children associations,
+    * root nodes can never be removed,
+    * exception occurs if these rules are violated
+    * @param nodeId a unique id for a hierarchy node
+    * @return the object representing the parent of the removed node
+    */
+   public HierarchyNode removeNode(String nodeId);
 
-    /**
-     * Add children to a node (creates the association),
-     * only adds direct children (directly connected to this node),
-     * others are implicitly defined
-     * @param nodeId a unique id for a hierarchy node
-     * @param childNodeIds a set of child node ids to associate with this node,
-     * removes children not in this array and adds children which are listed (if not already associated)
-     * @return the object representing the updated node
-     */
-    public HierarchyNode updateChildren(String nodeId, Set<String> childNodeIds);
+   /**
+    * Add parents to a node (creates the association),
+    * only adds direct parents (directly connected to this node),
+    * others are implicitly defined,<br/>
+    * this will not create loops in the hierarchy
+    * @param nodeId a unique id for a hierarchy node
+    * @param parentNodeId a unique id for a hierarchy node which will be a parent of this node
+    * @return the object representing the updated node
+    */
+   public HierarchyNode addParentRelation(String nodeId, String parentNodeId);
 
-    /**
-     * Remove a node from the hierarchy if it is possible,
-     * nodes can only be removed if they have no children associations,
-     * root nodes can never be removed,
-     * exception occurs if these rules are violated
-     * @param nodeId a unique id for a hierarchy node
-     */
-    public void removeNode(String nodeId);
+   /**
+    * Add children to a node (creates the association),
+    * only adds direct children (directly connected to this node),
+    * others are implicitly defined,<br/>
+    * this will not create loops in the hierarchy
+    * @param nodeId a unique id for a hierarchy node
+    * @param childNodeId a unique id for a hierarchy node which will be a child of this node
+    * @return the object representing the updated node
+    */
+   public HierarchyNode addChildRelation(String nodeId, String childNodeId);
 
-    /**
-     * Save meta data on a node
-     * @param nodeId a unique id for a hierarchy node
-     * @param title the title of the node
-     * @param description a description for this node
-     * @return the object representing the updated node
-     */
-    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description);
+   /**
+    * Remove a parent relation from a node,
+    * this will not be allowed to orphan a node,
+    * only extra parents may be removed, 
+    * the last parent for a node cannot currently be removed
+    * @param nodeId a unique id for a hierarchy node
+    * @param parentNodeId a unique id for a hierarchy node which is a parent of this node
+    * @return the object representing the updated node
+    */
+   public HierarchyNode removeParentRelation(String nodeId, String parentNodeId);
+
+   /**
+    * Remove a child relation from a node,
+    * this will not be allowed to orphan a node
+    * @param nodeId a unique id for a hierarchy node
+    * @param childNodeId a unique id for a hierarchy node which is a child of this node
+    * @return the object representing the updated node
+    */
+   public HierarchyNode removeChildRelation(String nodeId, String childNodeId);
+
+
+   /**
+    * Save meta data on a node, this is optional and nodes do not need meta data associated
+    * @param nodeId a unique id for a hierarchy node
+    * @param title the title of the node (can be null)
+    * @param description a description for this node (can be null)
+    * @param permKey the permission token key associated with this node (can be null)
+    * @return the object representing the updated node
+    */
+   public HierarchyNode saveNodeMetaData(String nodeId, String title, String description, String permKey);
 
 }

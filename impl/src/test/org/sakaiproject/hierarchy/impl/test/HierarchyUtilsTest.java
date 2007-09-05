@@ -61,7 +61,7 @@ public class HierarchyUtilsTest extends TestCase {
     public void testMakeNodeHierarchyPersistentNodeHierarchyNodeMetaData() {
         HierarchyNode node = null;
 
-        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(null, "HID", Boolean.FALSE, "aaronz", "Title", "Desc");
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(null, "HID", Boolean.FALSE, "aaronz", "Title", "Desc", "KEY");
         HierarchyPersistentNode pNode = new HierarchyPersistentNode(ENCODED_NODE1, ENCODED_1);
         pNode.setId( new Long(100) );
 
@@ -71,6 +71,7 @@ public class HierarchyUtilsTest extends TestCase {
         assertEquals("HID", node.hierarchyId);
         assertEquals("Title", node.title);
         assertEquals("Desc", node.description);
+        assertEquals("KEY", node.permToken);
         assertNotNull(node.directParentNodeIds);
         assertTrue(node.directParentNodeIds.contains(NODE1));
         assertNotNull(node.parentNodeIds);
@@ -93,7 +94,7 @@ public class HierarchyUtilsTest extends TestCase {
         assertNull(node);
 
         HierarchyPersistentNode pNode = null;
-        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, "HID", Boolean.FALSE, "aaronz", "Title", "Desc");
+        HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, "HID", Boolean.FALSE, "aaronz", "Title", "Desc", null);
 
         // test that invalid pNode causes death
         try {
