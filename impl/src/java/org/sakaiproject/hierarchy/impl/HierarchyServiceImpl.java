@@ -368,23 +368,27 @@ public class HierarchyServiceImpl implements HierarchyService {
 
          // update the parents of the current node (they have new children)
          List<HierarchyPersistentNode> pNodesList = getNodes(currentNode.parentNodeIds);
+         Set<String> nodesToAdd = addNode.childNodeIds;
+         nodesToAdd.add(addNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the children for each node
             Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
-            nodeChildren.addAll(addNode.childNodeIds);
+            nodeChildren.addAll(nodesToAdd);
             pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
          }
 
-         // update the children of the add node (they have a new parent)
+         // update the children of the add node (they have new parants)
          pNodesList = getNodes(addNode.childNodeIds);
+         nodesToAdd = currentNode.parentNodeIds;
+         nodesToAdd.add(currentNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the parents for each node
-            pNode.setParentIds(
-                  HierarchyUtils.addSingleNodeIdToEncodedString(
-                        pNode.getParentIds(), nodeId));
+            Set<String> parents = HierarchyUtils.makeNodeIdSet(pNode.getParentIds());
+            parents.addAll(nodesToAdd);
+            pNode.setParentIds(HierarchyUtils.makeEncodedNodeIdString(parents));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
@@ -397,8 +401,97 @@ public class HierarchyServiceImpl implements HierarchyService {
    }
 
    public HierarchyNode removeChildRelation(String nodeId, String childNodeId) {
-      // TODO Auto-generated method stub
-      return null;
+      if (nodeId == null || childNodeId == null) {
+         throw new NullPointerException("nodeId (" + nodeId + ") and childNodeId (" + childNodeId
+               + ") cannot be null");
+      }
+
+      if (nodeId.equals(childNodeId)) {
+         throw new IllegalArgumentException("nodeId and childNodeId cannot be the same: " + nodeId);
+      }
+
+      HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
+      if (metaData == null) {
+         throw new IllegalArgumentException("Invalid nodeId: " + nodeId);
+      }
+
+      HierarchyNodeMetaData removeMetaData = getNodeMeta(childNodeId);
+      if (removeMetaData == null) {
+         throw new IllegalArgumentException("Invalid childNodeId: " + childNodeId);
+      }
+
+      HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
+      // only do something if this child is a direct child of this node
+      if (currentNode.directChildNodeIds.contains(childNodeId)) {
+         // first check for orphaning
+         HierarchyNode removeNode = HierarchyUtils.makeNode(removeMetaData);
+         if (removeNode.directParentNodeIds.size() <= 1) {
+            throw new IllegalArgumentException("Cannot remove " + childNodeId + " as a child of " + nodeId
+                  + " because it would orphan the child node, you need to use the remove method" +
+                        "if you want to remove a node or add this node as the child of another node first");
+         }
+
+         // now we go ahead and update this node and all the related nodes
+         Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
+         Set<String> nodes = null;
+
+         // update the current node
+         nodes = HierarchyUtils.makeNodeIdSet(metaData.getNode().getChildIds());
+         nodes.remove(childNodeId);
+         metaData.getNode().setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         nodes = HierarchyUtils.makeNodeIdSet(metaData.getNode().getDirectChildIds());
+         nodes.remove(childNodeId);
+         metaData.getNode().setDirectChildIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         pNodes.add(metaData.getNode());
+
+         // update the remove node
+         nodes = HierarchyUtils.makeNodeIdSet(removeMetaData.getNode().getParentIds());
+         nodes.remove(nodeId);
+         removeMetaData.getNode().setParentIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         nodes = HierarchyUtils.makeNodeIdSet(removeMetaData.getNode().getDirectParentIds());
+         nodes.remove(nodeId);
+         removeMetaData.getNode().setDirectParentIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         pNodes.add(removeMetaData.getNode());
+
+         // update the parents of the current node (they have less children)
+         List<HierarchyPersistentNode> pNodesList = getNodes(currentNode.parentNodeIds);
+         Set<String> nodesToRemove = removeNode.childNodeIds;
+         nodesToRemove.add(removeNode.id);
+         for (HierarchyPersistentNode pNode : pNodesList) {
+            // update the children for each node
+            Set<String> children = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
+            children.removeAll(nodesToRemove);
+            // add back in all the children of the currentNode because we may have 
+            // taken out part of the tree below where if it connects to the children of removeNode
+            children.addAll(currentNode.childNodeIds);
+            pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(children));
+
+            // add to the set of nodes to be saved
+            pNodes.add(pNode);
+         }
+
+         // update the children of the remove node (they have lost parents)
+         pNodesList = getNodes(removeNode.childNodeIds);
+         nodesToRemove = currentNode.parentNodeIds;
+         nodesToRemove.add(currentNode.id);
+         for (HierarchyPersistentNode pNode : pNodesList) {
+            // update the parents for each node
+            Set<String> parents = HierarchyUtils.makeNodeIdSet(pNode.getParentIds());
+            parents.removeAll(nodesToRemove);
+            // add back in all the parents of the removeNode because we will have 
+            // taken out part of the tree above where it reconnects on the way to the root
+            parents.addAll(removeNode.parentNodeIds);
+            pNode.setParentIds(HierarchyUtils.makeEncodedNodeIdString(parents));
+
+            // add to the set of nodes to be saved
+            pNodes.add(pNode);
+         }
+
+         dao.saveSet(pNodes);
+
+      }
+
+      return HierarchyUtils.makeNode(metaData);
    }
 
    public HierarchyNode addParentRelation(String nodeId, String parentNodeId) {

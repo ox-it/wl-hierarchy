@@ -760,6 +760,88 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#removeChildRelation(java.lang.String, java.lang.String)}.
     */
    public void testRemoveChildRelation() {
+      HierarchyNode node = null;
+
+      // create extra relation first
+      node = hierarchyService.addChildRelation(tdp.node2.id, tdp.node6.id);
+
+      // remove a child
+      node = hierarchyService.removeChildRelation(tdp.node11.id, tdp.node10.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(0, node.directChildNodeIds.size());
+      assertNotNull(node.childNodeIds);
+      assertEquals(0, node.childNodeIds.size());
+      
+      node = hierarchyService.removeChildRelation(tdp.node4.id, tdp.node6.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(2, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node8.id));
+      assertNotNull(node.childNodeIds);
+      assertEquals(2, node.childNodeIds.size());
+      assertTrue(node.childNodeIds.contains(tdp.node7.id));
+      assertTrue(node.childNodeIds.contains(tdp.node8.id));
+      
+      // remove child which is not a child (this is ok)
+      node = hierarchyService.removeChildRelation(tdp.node3.id, tdp.node6.id);
+
+      node = hierarchyService.removeChildRelation(tdp.node3.id, tdp.node2.id);
+
+      // cannot remove myself as a child of myself
+      try {
+         node = hierarchyService.removeChildRelation(tdp.node2.id, tdp.node2.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+      
+      // cannot orphan nodes by removing a child relation (must use remove node)
+      try {
+         node = hierarchyService.removeChildRelation(tdp.node1.id, tdp.node3.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      try {
+         node = hierarchyService.removeChildRelation(tdp.node3.id, tdp.node5.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      // cannot use invalid node ids (exception)
+      try {
+         node = hierarchyService.removeChildRelation(TestDataPreload.INVALID_NODE_ID, tdp.node6.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      try {
+         node = hierarchyService.removeChildRelation(tdp.node2.id, TestDataPreload.INVALID_NODE_ID);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      // cannot use null node id (exception)
+      try {
+         node = hierarchyService.removeChildRelation(null, tdp.node6.id);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      try {
+         node = hierarchyService.removeChildRelation(tdp.node2.id, null);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
+
 //    fail("Not yet implemented");
    }
 
@@ -796,10 +878,6 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 //    fail("Not yet implemented");
    }
 
-   /**
-    * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#updateChildren(java.lang.String, java.util.Set)}.
-    */
-   public void testUpdateChildren() {
 /*
       HierarchyNode node = null;
       Set<String> children = new HashSet<String>();;
@@ -932,8 +1010,5 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       //fail("Not yet implemented"); // TODO
 
    */
-   }
-
-
 
 }
