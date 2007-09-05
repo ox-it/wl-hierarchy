@@ -659,25 +659,110 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#addChildRelation(java.lang.String, java.lang.String)}.
     */
    public void testAddChildRelation() {
+      HierarchyNode node = null;
+
       // add new children
+      node = hierarchyService.addChildRelation(tdp.node2.id, tdp.node6.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(1, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
+      assertNotNull(node.childNodeIds);
+      assertEquals(1, node.childNodeIds.size());
+      assertTrue(node.childNodeIds.contains(tdp.node6.id));
+
+      node = hierarchyService.addChildRelation(tdp.node3.id, tdp.node7.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(2, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node5.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
 
       // add children which are already there
+      node = hierarchyService.addChildRelation(tdp.node3.id, tdp.node5.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(2, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node5.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
 
-      // cannot remove all children (must leave at least one)
+      node = hierarchyService.addChildRelation(tdp.node4.id, tdp.node7.id);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(3, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
+
+      // cannot add this node as a child of itself
+      try {
+         node = hierarchyService.addChildRelation(tdp.node7.id, tdp.node7.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
       // cannot create a cycle by adding a child which is already a child or parent of this node
-      // (this should probably
+      // (should probably check distance from the root...)
+      try {
+         node = hierarchyService.addChildRelation(tdp.node7.id, tdp.node4.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-      // cannot add children nodes which do not exist (should fail)
+      try {
+         node = hierarchyService.addChildRelation(tdp.node7.id, tdp.node1.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-      // cannot use invalid node id (exception)
+      try {
+         node = hierarchyService.addChildRelation(tdp.node5.id, tdp.node3.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-      // cannot use invalid parent node id (exception)
+      // cannot use invalid node ids (exception)
+      try {
+         node = hierarchyService.addChildRelation(TestDataPreload.INVALID_NODE_ID, tdp.node6.id);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      try {
+         node = hierarchyService.addChildRelation(tdp.node2.id, TestDataPreload.INVALID_NODE_ID);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
       // cannot use null node id (exception)
+      try {
+         node = hierarchyService.addChildRelation(null, tdp.node6.id);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      try {
+         node = hierarchyService.addChildRelation(tdp.node2.id, null);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
 
       //fail("Not yet implemented");
    }
+
+   /**
+    * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#removeChildRelation(java.lang.String, java.lang.String)}.
+    */
+   public void testRemoveChildRelation() {
+//    fail("Not yet implemented");
+   }
+
 
    /**
     * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#addParentRelation(java.lang.String, java.lang.String)}.
@@ -705,13 +790,6 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
    }
 
    /**
-    * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#removeChildRelation(java.lang.String, java.lang.String)}.
-    */
-   public void testRemoveChildRelation() {
-//    fail("Not yet implemented");
-   }
-
-   /**
     * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#removeParentRelation(java.lang.String, java.lang.String)}.
     */
    public void testRemoveParentRelation() {
@@ -722,135 +800,138 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#updateChildren(java.lang.String, java.util.Set)}.
     */
    public void testUpdateChildren() {
-//    HierarchyNode node = null;
-//    Set<String> children = new HashSet<String>();;
+/*
+      HierarchyNode node = null;
+      Set<String> children = new HashSet<String>();;
 
-//    // add new children
-//    children.add(tdp.node6.id);
-//    node = hierarchyService.updateChildren(tdp.node2.id, children);
-//    assertNotNull(node);
-//    assertNotNull(node.directChildNodeIds);
-//    assertEquals(1, node.directChildNodeIds.size());
-//    assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
+      // add new children
+      children.add(tdp.node6.id);
+      node = hierarchyService.updateChildren(tdp.node2.id, children);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(1, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
 
-//    children.add(tdp.node7.id);
-//    children.add(tdp.node8.id);
-//    node = hierarchyService.updateChildren(tdp.node2.id, children);
-//    assertNotNull(node);
-//    assertNotNull(node.directChildNodeIds);
-//    assertEquals(3, node.directChildNodeIds.size());
-//    assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
-//    assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
-//    assertTrue(node.directChildNodeIds.contains(tdp.node8.id));
+      children.add(tdp.node7.id);
+      children.add(tdp.node8.id);
+      node = hierarchyService.updateChildren(tdp.node2.id, children);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(3, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node6.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node8.id));
 
-//    // remove some children
-//    children.clear();
-//    children.add(tdp.node7.id);
-//    children.add(tdp.node8.id);
-//    node = hierarchyService.updateChildren(tdp.node4.id, children);
-//    assertNotNull(node);
-//    assertNotNull(node.directChildNodeIds);
-//    assertEquals(2, node.directChildNodeIds.size());
-//    assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
-//    assertTrue(node.directChildNodeIds.contains(tdp.node8.id));
+      // remove some children
+      children.clear();
+      children.add(tdp.node7.id);
+      children.add(tdp.node8.id);
+      node = hierarchyService.updateChildren(tdp.node4.id, children);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(2, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node7.id));
+      assertTrue(node.directChildNodeIds.contains(tdp.node8.id));
 
-//    // remove all children
-//    children.clear();
-//    node = hierarchyService.updateChildren(tdp.node4.id, children);
-//    assertNotNull(node);
-//    assertNotNull(node.directChildNodeIds);
-//    assertEquals(0, node.directChildNodeIds.size());
+      // remove all children
+      children.clear();
+      node = hierarchyService.updateChildren(tdp.node4.id, children);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(0, node.directChildNodeIds.size());
 
-//    // update children to the identical set
-//    children.clear();
-//    children.add(tdp.node5.id);
-//    node = hierarchyService.updateChildren(tdp.node3.id, children);
-//    assertNotNull(node);
-//    assertNotNull(node.directChildNodeIds);
-//    assertEquals(1, node.directChildNodeIds.size());
-//    assertTrue(node.directChildNodeIds.contains(tdp.node5.id));
+      // update children to the identical set
+      children.clear();
+      children.add(tdp.node5.id);
+      node = hierarchyService.updateChildren(tdp.node3.id, children);
+      assertNotNull(node);
+      assertNotNull(node.directChildNodeIds);
+      assertEquals(1, node.directChildNodeIds.size());
+      assertTrue(node.directChildNodeIds.contains(tdp.node5.id));
 
-//    // cannot add children nodes which do not exist (even if some are valid)
-//    children.add(TestDataPreload.INVALID_NODE_ID);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node3.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot add children nodes which do not exist (even if some are valid)
+      children.add(TestDataPreload.INVALID_NODE_ID);
+      try {
+         node = hierarchyService.updateChildren(tdp.node3.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    // cannot add child node which is equal to this node
-//    children.clear();
-//    children.add(tdp.node5.id);
-//    children.add(tdp.node3.id);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node3.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot add child node which is equal to this node
+      children.clear();
+      children.add(tdp.node5.id);
+      children.add(tdp.node3.id);
+      try {
+         node = hierarchyService.updateChildren(tdp.node3.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    children.clear();
-//    children.add(tdp.node3.id);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node3.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      children.clear();
+      children.add(tdp.node3.id);
+      try {
+         node = hierarchyService.updateChildren(tdp.node3.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    // cannot remove child node so that it becomes orphaned
-//    children.clear();
-//    children.add(tdp.node2.id);
-//    children.add(tdp.node4.id);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node1.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot remove child node so that it becomes orphaned
+      children.clear();
+      children.add(tdp.node2.id);
+      children.add(tdp.node4.id);
+      try {
+         node = hierarchyService.updateChildren(tdp.node1.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    children.clear();
-//    children.add(tdp.node3.id);
-//    children.add(tdp.node4.id);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node1.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      children.clear();
+      children.add(tdp.node3.id);
+      children.add(tdp.node4.id);
+      try {
+         node = hierarchyService.updateChildren(tdp.node1.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    // cannot use invalid node id (exception)
-//    children.clear();
-//    children.add(tdp.node6.id);
-//    try {
-//    node = hierarchyService.updateChildren(TestDataPreload.INVALID_NODE_ID, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot use invalid node id (exception)
+      children.clear();
+      children.add(tdp.node6.id);
+      try {
+         node = hierarchyService.updateChildren(TestDataPreload.INVALID_NODE_ID, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    // cannot use invalid child node id (exception)
-//    children.clear();
-//    children.add(tdp.node6.id);
-//    children.add(TestDataPreload.INVALID_NODE_ID);
-//    try {
-//    node = hierarchyService.updateChildren(tdp.node2.id, children);
-//    fail("Should have thrown exception");
-//    } catch (IllegalArgumentException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot use invalid child node id (exception)
+      children.clear();
+      children.add(tdp.node6.id);
+      children.add(TestDataPreload.INVALID_NODE_ID);
+      try {
+         node = hierarchyService.updateChildren(tdp.node2.id, children);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
 
-//    // cannot use null node id (exception)
-//    children.clear();
-//    try {
-//    node = hierarchyService.updateChildren(null, children);
-//    fail("Should have thrown exception");
-//    } catch (NullPointerException e) {
-//    assertNotNull(e.getMessage());
-//    }
+      // cannot use null node id (exception)
+      children.clear();
+      try {
+         node = hierarchyService.updateChildren(null, children);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
 
       //fail("Not yet implemented"); // TODO
+
+   */
    }
 
 

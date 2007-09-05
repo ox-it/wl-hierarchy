@@ -14,6 +14,7 @@
 
 package org.sakaiproject.hierarchy.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,35 +38,36 @@ public class HierarchyServiceImpl implements HierarchyService {
    private static Log log = LogFactory.getLog(HierarchyServiceImpl.class);
 
    private HierarchyDao dao;
+
    public void setDao(HierarchyDao dao) {
       this.dao = dao;
    }
 
-// private SessionManager sessionManager;
-// public void setSessionManager(SessionManager sessionManager) {
-// this.sessionManager = sessionManager;
-// }
-
-
+   // private SessionManager sessionManager;
+   // public void setSessionManager(SessionManager sessionManager) {
+   // this.sessionManager = sessionManager;
+   // }
 
    public void init() {
       log.info("init");
    }
 
-
-
    public HierarchyNode createHierarchy(String hierarchyId) {
       if (hierarchyId.length() < 1 || hierarchyId.length() > 250) {
-         throw new IllegalArgumentException("Invalid hierarchyId ("+hierarchyId+"): length must be 1 to 250 chars");
+         throw new IllegalArgumentException("Invalid hierarchyId (" + hierarchyId
+               + "): length must be 1 to 250 chars");
       }
 
-      int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {hierarchyId});
+      int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
+            new Object[] { hierarchyId });
       if (count > 0) {
-         throw new IllegalArgumentException("Invalid hierarchyId ("+hierarchyId+"): this id is already in use, you must use a unique id when creating a new hierarchy");
+         throw new IllegalArgumentException("Invalid hierarchyId (" + hierarchyId
+               + "): this id is already in use, you must use a unique id when creating a new hierarchy");
       }
 
-      HierarchyPersistentNode pNode = new HierarchyPersistentNode(); // no children or parents to start
-      HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, null); //getCurrentUserId());
+      HierarchyPersistentNode pNode = new HierarchyPersistentNode(); // no children or parents to
+      // start
+      HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, null); // getCurrentUserId());
       saveNodeAndMetaData(pNode, metaData);
 
       return HierarchyUtils.makeNode(pNode, metaData);
@@ -82,15 +84,17 @@ public class HierarchyServiceImpl implements HierarchyService {
             // this node is already the root node
             return HierarchyUtils.makeNode(metaData);
          } else if (!metaData.getHierarchyId().equals(rootMetaData.getHierarchyId())) {
-            throw new IllegalArgumentException("Cannot move a node from one hierarchy ("+metaData.getHierarchyId()+
-                  ") to another ("+hierarchyId+") and replace the root node, this could orphan nodes");
+            throw new IllegalArgumentException("Cannot move a node from one hierarchy ("
+                  + metaData.getHierarchyId() + ") to another (" + hierarchyId
+                  + ") and replace the root node, this could orphan nodes");
          }
          rootMetaData.setIsRootNode(Boolean.FALSE);
          entities.add(metaData);
       }
 
       if (metaData.getNode().getParentIds() != null) {
-         throw new IllegalArgumentException("Cannot assign a node ("+nodeId+") to the hierarchy rootNode when it has parents");
+         throw new IllegalArgumentException("Cannot assign a node (" + nodeId
+               + ") to the hierarchy rootNode when it has parents");
       }
 
       metaData.setIsRootNode(Boolean.TRUE);
@@ -101,9 +105,11 @@ public class HierarchyServiceImpl implements HierarchyService {
    }
 
    public void destroyHierarchy(String hierarchyId) {
-      List l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {hierarchyId});
+      List l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
+            new Object[] { hierarchyId });
       if (l.isEmpty()) {
-         throw new IllegalArgumentException("Could not find hierarchy to remove with the following id: " + hierarchyId);
+         throw new IllegalArgumentException("Could not find hierarchy to remove with the following id: "
+               + hierarchyId);
       }
 
       Set<HierarchyPersistentNode> nodes = new HashSet<HierarchyPersistentNode>();
@@ -118,12 +124,11 @@ public class HierarchyServiceImpl implements HierarchyService {
       dao.deleteMixedSet(entitySets);
    }
 
-
-
    public HierarchyNode getRootNode(String hierarchyId) {
       HierarchyNodeMetaData metaData = getRootNodeMetaByHierarchy(hierarchyId);
       if (metaData == null) {
-         throw new IllegalArgumentException("Could not find hierarchy root node for hierarchy: " + hierarchyId);
+         throw new IllegalArgumentException("Could not find hierarchy root node for hierarchy: "
+               + hierarchyId);
       }
       return HierarchyUtils.makeNode(metaData);
    }
@@ -144,12 +149,14 @@ public class HierarchyServiceImpl implements HierarchyService {
          childIdString = parentMetaData.getNode().getChildIds();
       }
 
-      if (childIdString == null) { return children; }
+      if (childIdString == null) {
+         return children;
+      }
 
-      Set<String> childrenIds = HierarchyUtils.makeNodeIdSet( childIdString );
+      Set<String> childrenIds = HierarchyUtils.makeNodeIdSet(childIdString);
       List<HierarchyNodeMetaData> childNodeMetas = getNodeMetas(childrenIds);
       for (HierarchyNodeMetaData metaData : childNodeMetas) {
-         children.add( HierarchyUtils.makeNode(metaData) );
+         children.add(HierarchyUtils.makeNode(metaData));
       }
       return children;
    }
@@ -165,17 +172,17 @@ public class HierarchyServiceImpl implements HierarchyService {
          parentIdString = parentMetaData.getNode().getParentIds();
       }
 
-      if (parentIdString == null) { return parents; }
+      if (parentIdString == null) {
+         return parents;
+      }
 
-      Set<String> parentsIds = HierarchyUtils.makeNodeIdSet( parentIdString );
+      Set<String> parentsIds = HierarchyUtils.makeNodeIdSet(parentIdString);
       List<HierarchyNodeMetaData> parentNodeMetas = getNodeMetas(parentsIds);
       for (HierarchyNodeMetaData metaData : parentNodeMetas) {
-         parents.add( HierarchyUtils.makeNode(metaData) );
+         parents.add(HierarchyUtils.makeNode(metaData));
       }
       return parents;
    }
-
-
 
    public HierarchyNode addNode(String hierarchyId, String parentNodeId) {
       if (parentNodeId == null) {
@@ -185,21 +192,23 @@ public class HierarchyServiceImpl implements HierarchyService {
       // validate the parent node and hierarchy (this needs to be cached for sure)
       HierarchyNodeMetaData parentNodeMeta = getNodeMeta(parentNodeId);
       if (parentNodeMeta == null) {
-         throw new IllegalArgumentException("Invalid parent node id, cannot find node with id: " + parentNodeId);
+         throw new IllegalArgumentException("Invalid parent node id, cannot find node with id: "
+               + parentNodeId);
       }
-      if (! parentNodeMeta.getHierarchyId().equals(hierarchyId)) {
-         throw new IllegalArgumentException("Invalid hierarchy id, cannot find node ("+parentNodeId+") in this hierarchy: " + hierarchyId);
+      if (!parentNodeMeta.getHierarchyId().equals(hierarchyId)) {
+         throw new IllegalArgumentException("Invalid hierarchy id, cannot find node (" + parentNodeId
+               + ") in this hierarchy: " + hierarchyId);
       }
 
       // get the set of all nodes above the new node (these will have to be updated)
-      Set<String> parentNodeIds = HierarchyUtils.makeNodeIdSet( parentNodeMeta.getNode().getParentIds() );
+      Set<String> parentNodeIds = HierarchyUtils.makeNodeIdSet(parentNodeMeta.getNode().getParentIds());
       parentNodeIds.add(parentNodeId);
 
       // create the new node and assign the new parents from our parent
-      HierarchyPersistentNode pNode = new HierarchyPersistentNode(
-            HierarchyUtils.makeSingleEncodedNodeIdString(parentNodeId),
-            HierarchyUtils.makeEncodedNodeIdString(parentNodeIds) );
-      HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, null); //getCurrentUserId());
+      HierarchyPersistentNode pNode = new HierarchyPersistentNode(HierarchyUtils
+            .makeSingleEncodedNodeIdString(parentNodeId), HierarchyUtils
+            .makeEncodedNodeIdString(parentNodeIds));
+      HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, null); // getCurrentUserId());
       // save this new node (perhaps we should be saving all of these in one massive update?) -AZ
       saveNodeAndMetaData(pNode, metaData);
       String newNodeId = pNode.getId().toString();
@@ -210,20 +219,19 @@ public class HierarchyServiceImpl implements HierarchyService {
       for (HierarchyPersistentNode node : pNodesList) {
          if (node.getId().toString().equals(parentNodeId)) {
             // special case for our parent, update direct children
-            node.setDirectChildIds( 
+            node.setDirectChildIds(
                   HierarchyUtils.addSingleNodeIdToEncodedString(
-                        node.getDirectChildIds(), newNodeId) ); 
+                        node.getDirectChildIds(), newNodeId));
          }
 
          // update the children for each node
-         node.setChildIds( 
-               HierarchyUtils.addSingleNodeIdToEncodedString(
-                     node.getChildIds(), newNodeId) );
+         node.setChildIds(
+               HierarchyUtils.addSingleNodeIdToEncodedString(node.getChildIds(), newNodeId));
 
          // add to the set of node to be saved
          pNodes.add(node);
       }
-      dao.saveSet( pNodes );
+      dao.saveSet(pNodes);
 
       return HierarchyUtils.makeNode(pNode, metaData);
    }
@@ -239,24 +247,26 @@ public class HierarchyServiceImpl implements HierarchyService {
          throw new IllegalArgumentException("Invalid node id, cannot find node with id: " + nodeId);
       }
       if (metaData.getIsRootNode().booleanValue()) {
-         throw new IllegalArgumentException("Cannot remove the root node ("+nodeId+"), " +
-               "you must remove the entire hierarchy ("+metaData.getHierarchyId()+") to remove this root node");
+         throw new IllegalArgumentException("Cannot remove the root node (" + nodeId + "), "
+               + "you must remove the entire hierarchy (" + metaData.getHierarchyId()
+               + ") to remove this root node");
       }
 
       // get the set of all nodes above the current node (these will have to be updated)
       HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
       if (currentNode.childNodeIds.size() != 0) {
-         throw new IllegalArgumentException("Cannot remove a node with children nodes, " +
-               "reduce the children on this node from "+currentNode.childNodeIds.size()+" to 0 before attempting to remove it");
+         throw new IllegalArgumentException("Cannot remove a node with children nodes, "
+               + "reduce the children on this node from " + currentNode.childNodeIds.size()
+               + " to 0 before attempting to remove it");
       }
 
       if (currentNode.directParentNodeIds.size() > 1) {
-         throw new IllegalArgumentException("Cannot remove a node with multiple parents, " + 
-               "reduce the parents on this node to 1 before attempting to remove it");
+         throw new IllegalArgumentException("Cannot remove a node with multiple parents, "
+               + "reduce the parents on this node to 1 before attempting to remove it");
       }
 
       // get the "main" parent node
-      String currentParentNodeId = currentNode.directParentNodeIds.iterator().next();
+      String currentParentNodeId = getParentNodeId(currentNode);
 
       // update all the links in the tree for this removed node
       List<HierarchyPersistentNode> pNodesList = getNodes(currentNode.parentNodeIds);
@@ -264,22 +274,22 @@ public class HierarchyServiceImpl implements HierarchyService {
       for (HierarchyPersistentNode pNode : pNodesList) {
          if (pNode.getId().toString().equals(currentParentNodeId)) {
             // special case for our parent, update direct children
-            Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet( pNode.getDirectChildIds() );
+            Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getDirectChildIds());
             nodeChildren.remove(nodeId);
-            pNode.setDirectChildIds( HierarchyUtils.makeEncodedNodeIdString(nodeChildren) );
+            pNode.setDirectChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
          }
 
          // update the children for each node
-         Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet( pNode.getChildIds() );
+         Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
          nodeChildren.remove(nodeId);
-         pNode.setChildIds( HierarchyUtils.makeEncodedNodeIdString(nodeChildren) );
+         pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
 
-         // add to the set of node to be saved
+         // add to the set of nodes to be saved
          pNodes.add(pNode);
       }
-      dao.saveSet( pNodes );
+      dao.saveSet(pNodes);
 
-      return HierarchyUtils.makeNode( getNodeMeta(currentParentNodeId) );
+      return HierarchyUtils.makeNode(getNodeMeta(currentParentNodeId));
    }
 
    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description, String permToken) {
@@ -304,58 +314,86 @@ public class HierarchyServiceImpl implements HierarchyService {
       return HierarchyUtils.makeNode(metaData);
    }
 
-
-
    public HierarchyNode addChildRelation(String nodeId, String childNodeId) {
-      // TODO Auto-generated method stub
+      if (nodeId == null || childNodeId == null) {
+         throw new NullPointerException("nodeId (" + nodeId + ") and childNodeId (" + childNodeId
+               + ") cannot be null");
+      }
 
-//    if (nodeId == null || childNodeIds == null) {
-//    throw new NullPointerException("nodeId ("+nodeId+") and childNodeIds ("+childNodeIds+") cannot be null");
-//    }
+      if (nodeId.equals(childNodeId)) {
+         throw new IllegalArgumentException("nodeId and childNodeId cannot be the same: " + nodeId);
+      }
 
-//    HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
-//    if (metaData == null) {
-//    throw new IllegalArgumentException("Invalid nodeId: " + nodeId);
-//    }
+      HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
+      if (metaData == null) {
+         throw new IllegalArgumentException("Invalid nodeId: " + nodeId);
+      }
 
-//    HierarchyNode node = null;
-//    if (! childNodeIds.equals(node.childNodeIds)) {
-//    // only do something here if the sets are different
-//    Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
-//    HierarchyPersistentNode currentNode = metaData.getNode();
+      HierarchyNodeMetaData addMetaData = getNodeMeta(childNodeId);
+      if (addMetaData == null) {
+         throw new IllegalArgumentException("Invalid childNodeId: " + childNodeId);
+      }
 
-//    Set<String> parentNodeIds = HierarchyUtils.makeNodeIdSet( currentNode.getParentIds() );
-//    Set<String> newChildNodeIds = HierarchyUtils.makeNodeIdSet( currentNode.getChildIds() );
+      HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
+      // only add this if it is not already in there
+      if (!currentNode.directChildNodeIds.contains(childNodeId)) {
+         // first check for a cycle
+         if (currentNode.childNodeIds.contains(childNodeId)
+               || currentNode.parentNodeIds.contains(childNodeId)) {
+            throw new IllegalArgumentException("Cannot add " + childNodeId + " as a child of " + nodeId
+                  + " because it is already in the node tree directly above or below this node");
+         }
 
-//    currentNode.setDirectChildIds(directChildIds);
-//    currentNode.setChildIds(childIds);
+         // now we go ahead and update this node and all the related nodes
+         HierarchyNode addNode = HierarchyUtils.makeNode(addMetaData);
+         Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
 
-//    // update all the links in the tree for this new node
-//    List<HierarchyPersistentNode> pNodesList = getNodes(parentNodeIds);
-//    if (parentNodeIds.size() != pNodesList.size()) {
-//    throw new IllegalStateException("At least one of the parent node ids is invalid in this node: " + currentNode.getId());
-//    }
+         // update the current node
+         metaData.getNode().setDirectChildIds(
+               HierarchyUtils.addSingleNodeIdToEncodedString(
+                     metaData.getNode().getDirectChildIds(), childNodeId));
+         metaData.getNode().setChildIds(
+               HierarchyUtils.addSingleNodeIdToEncodedString(
+                     metaData.getNode().getChildIds(), childNodeId));
+         pNodes.add(metaData.getNode());
 
-//    for (HierarchyPersistentNode pNode : pNodesList) {
-//    // update the children for each node
-//    Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet( pNode.getChildIds() );
-//    nodeChildren.addAll(newChildNodeIds);
-//    pNode.setChildIds( HierarchyUtils.makeEncodedNodeIdString(nodeChildren) );
+         // update the add node
+         addMetaData.getNode().setDirectParentIds(
+               HierarchyUtils.addSingleNodeIdToEncodedString(
+                     addMetaData.getNode().getDirectParentIds(), nodeId));
+         addMetaData.getNode().setParentIds(
+               HierarchyUtils.addSingleNodeIdToEncodedString(
+                     addMetaData.getNode().getParentIds(),nodeId));
+         pNodes.add(addMetaData.getNode());
 
-//    // add to the set of nodes to be saved
-//    pNodes.add(pNode);
-//    }
-//    dao.saveSet( pNodes );
-//    } else {
-//    node = HierarchyUtils.makeNode(metaData);
-//    }
+         // update the parents of the current node (they have new children)
+         List<HierarchyPersistentNode> pNodesList = getNodes(currentNode.parentNodeIds);
+         for (HierarchyPersistentNode pNode : pNodesList) {
+            // update the children for each node
+            Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
+            nodeChildren.addAll(addNode.childNodeIds);
+            pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
 
-      return null;
-   }
+            // add to the set of nodes to be saved
+            pNodes.add(pNode);
+         }
 
-   public HierarchyNode addParentRelation(String nodeId, String parentNodeId) {
-      // TODO Auto-generated method stub
-      return null;
+         // update the children of the add node (they have a new parent)
+         pNodesList = getNodes(addNode.childNodeIds);
+         for (HierarchyPersistentNode pNode : pNodesList) {
+            // update the parents for each node
+            pNode.setParentIds(
+                  HierarchyUtils.addSingleNodeIdToEncodedString(
+                        pNode.getParentIds(), nodeId));
+
+            // add to the set of nodes to be saved
+            pNodes.add(pNode);
+         }
+
+         dao.saveSet(pNodes);
+      }
+
+      return HierarchyUtils.makeNode(metaData);
    }
 
    public HierarchyNode removeChildRelation(String nodeId, String childNodeId) {
@@ -363,24 +401,20 @@ public class HierarchyServiceImpl implements HierarchyService {
       return null;
    }
 
+   public HierarchyNode addParentRelation(String nodeId, String parentNodeId) {
+      // TODO Not implemented yet
+      throw new RuntimeException("This method is not implemented yet");
+   }
+
    public HierarchyNode removeParentRelation(String nodeId, String parentNodeId) {
       // TODO Auto-generated method stub
-      return null;
+      throw new RuntimeException("This method is not implemented yet");
    }
 
 
-
-   /**
-    * @return the current userId
-    */
-// private String getCurrentUserId() {
-// String userId = sessionManager.getCurrentSessionUserId();
-// if (userId == null || userId.equals("")) { userId = "admin"; } // make sure there is always something
-// return userId;
-// }
-
    /**
     * Convenience method to save a node and metadata in one transaction
+    * 
     * @param pNode
     * @param metaData
     */
@@ -389,19 +423,20 @@ public class HierarchyServiceImpl implements HierarchyService {
       pNodes.add(pNode);
       Set<HierarchyNodeMetaData> metaDatas = new HashSet<HierarchyNodeMetaData>();
       metaDatas.add(metaData);
-      Set[] entitySets = new Set[] {pNodes, metaDatas};
+      Set[] entitySets = new Set[] { pNodes, metaDatas };
       dao.saveMixedSet(entitySets);
    }
 
    /**
     * Fetch node data from storage
+    * 
     * @param nodeId
     * @return a {@link HierarchyNodeMetaData} or null if not found
     */
    @SuppressWarnings("unchecked")
    private HierarchyNodeMetaData getNodeMeta(String nodeId) {
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
-            new String[] {"node.id"}, new Object[] {new Long(nodeId)});
+      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class,
+            new String[] { "node.id" }, new Object[] { new Long(nodeId) });
       if (l.size() > 1) {
          throw new IllegalStateException("Invalid hierarchy state: more than one node with id: " + nodeId);
       } else if (l.size() == 1) {
@@ -413,15 +448,17 @@ public class HierarchyServiceImpl implements HierarchyService {
 
    /**
     * Find the current root node
+    * 
     * @param hierarchyId
     * @return the root {@link HierarchyNodeMetaData} of the hierarchy
     */
    @SuppressWarnings("unchecked")
    private HierarchyNodeMetaData getRootNodeMetaByHierarchy(String hierarchyId) {
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
-            new String[] {"hierarchyId", "isRootNode"}, new Object[] {hierarchyId, Boolean.TRUE});
+      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] {
+         "hierarchyId", "isRootNode" }, new Object[] { hierarchyId, Boolean.TRUE });
       if (l.size() > 1) {
-         throw new IllegalStateException("Invalid hierarchy state: more than one root node for hierarchyId: " + hierarchyId);
+         throw new IllegalStateException("Invalid hierarchy state: more than one root node for hierarchyId: "
+               + hierarchyId);
       } else if (l.size() == 1) {
          return l.get(0);
       } else {
@@ -431,6 +468,7 @@ public class HierarchyServiceImpl implements HierarchyService {
 
    /**
     * Get all nodes and meta data based on a set of nodeIds
+    * 
     * @param nodeIds
     * @return
     */
@@ -442,28 +480,47 @@ public class HierarchyServiceImpl implements HierarchyService {
          pNodeIds[i] = new Long(nodeId);
          i++;
       }
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, 
-            new String[] {"node.id"}, new Object[] {pNodeIds});
+      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class,
+            new String[] { "node.id" }, new Object[] { pNodeIds });
       return l;
    }
 
    /**
     * Get all nodes only based on a set of nodeIds
+    * 
     * @param nodeIds
     * @return
     */
    @SuppressWarnings("unchecked")
    private List<HierarchyPersistentNode> getNodes(Set<String> nodeIds) {
-      Long[] pNodeIds = new Long[nodeIds.size()];
-      int i = 0;
-      for (String nodeId : nodeIds) {
-         pNodeIds[i] = new Long(nodeId);
-         i++;
+      List<HierarchyPersistentNode> l;
+      if (nodeIds.isEmpty()) {
+         l = new ArrayList<HierarchyPersistentNode>();
+      } else {
+         Long[] pNodeIds = new Long[nodeIds.size()];
+         int i = 0;
+         for (String nodeId : nodeIds) {
+            pNodeIds[i] = new Long(nodeId);
+            i++;
+         }
+         l = dao.findByProperties(HierarchyPersistentNode.class,
+               new String[] { "id" }, new Object[] { pNodeIds });
       }
-      List<HierarchyPersistentNode> l = dao.findByProperties(HierarchyPersistentNode.class, 
-            new String[] {"id"}, new Object[] {pNodeIds});
       return l;
    }
 
+   /**
+    * Find the direct parent node id for a node
+    * @param node
+    * @return the node if or null if none exists
+    */
+   private String getParentNodeId(HierarchyNode node) {
+      String parentNodeId = null;
+      if (node.directParentNodeIds != null &&
+            node.directParentNodeIds.size() > 0) {
+         parentNodeId = node.directParentNodeIds.iterator().next();
+      }
+      return parentNodeId;
+   }
 
 }
