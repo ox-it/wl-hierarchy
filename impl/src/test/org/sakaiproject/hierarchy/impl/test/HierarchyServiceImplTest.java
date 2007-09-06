@@ -195,13 +195,10 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       assertEquals(tdp.node1, node);
       assertEquals(TestDataPreload.HIERARCHYA, node.hierarchyId);
 
-      // fetching root from invalid hierarchy fails
-      try {
-         node = hierarchyService.getRootNode(TestDataPreload.INVALID_HIERARCHY);
-         fail("Should have thrown exception");
-      } catch (IllegalArgumentException e) {
-         assertNotNull(e);
-      }        
+      // fetching root from invalid hierarchy gets null
+      node = hierarchyService.getRootNode(TestDataPreload.INVALID_HIERARCHY);
+      assertNull(node);
+
    }
 
    /**

@@ -23,9 +23,10 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
 public interface HierarchyNodeReader {
 
    /**
-    * Get the hierarchy root node
+    * Get the hierarchy root node for a specific hierarchy if it exists
     * @param hierarchyId a unique string which identifies this hierarchy
     * @return the {@link HierarchyNode} representing the root of the hierarchy
+    * if found, otherwise returns a null
     */
    public HierarchyNode getRootNode(String hierarchyId);
 

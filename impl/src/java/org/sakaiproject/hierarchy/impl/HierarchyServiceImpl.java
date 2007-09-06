@@ -132,8 +132,7 @@ public class HierarchyServiceImpl implements HierarchyService {
    public HierarchyNode getRootNode(String hierarchyId) {
       HierarchyNodeMetaData metaData = getRootNodeMetaByHierarchy(hierarchyId);
       if (metaData == null) {
-         throw new IllegalArgumentException("Could not find hierarchy root node for hierarchy: "
-               + hierarchyId);
+         return null;
       }
       return HierarchyUtils.makeNode(metaData);
    }
