@@ -308,9 +308,27 @@ public class HierarchyServiceImpl implements HierarchyService {
       }
 
       // update the node meta data
-      metaData.setTitle(title);
-      metaData.setDescription(description);
-      metaData.setPermToken(permToken);
+      if (title != null) {
+         if (title.equals("")) {
+            metaData.setTitle(null);
+         } else {
+            metaData.setTitle(title);
+         }
+      }
+      if (description != null) {
+         if (description.equals("")) {
+            metaData.setDescription(null);
+         } else {
+            metaData.setDescription(description);
+         }
+      }
+      if (permToken != null) {
+         if (permToken.equals("")) {
+            metaData.setPermToken(null);
+         } else {
+            metaData.setPermToken(permToken);
+         }
+      }
 
       // save the node meta data
       dao.save(metaData);

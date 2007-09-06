@@ -82,11 +82,13 @@ public interface HierarchyNodeWriter {
 
 
    /**
-    * Save meta data on a node, this is optional and nodes do not need meta data associated
+    * Save meta data on a node, this is optional and nodes do not need meta data associated,
+    * if the params are nulls then the values remain unchanged, if they are empty string
+    * then the values are wiped out
     * @param nodeId a unique id for a hierarchy node
-    * @param title the title of the node (can be null)
-    * @param description a description for this node (can be null)
-    * @param permKey the permission token key associated with this node (can be null)
+    * @param title the title of the node (optional)
+    * @param description a description for this node (optional)
+    * @param permKey the permission token key associated with this node (optional)
     * @return the object representing the updated node
     */
    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description, String permKey);

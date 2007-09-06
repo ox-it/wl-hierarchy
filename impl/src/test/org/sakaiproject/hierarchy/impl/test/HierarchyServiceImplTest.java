@@ -618,15 +618,23 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       assertEquals("TOKEN2", node.permToken);
 
       // saving some nulls (should be ok)
-      node = hierarchyService.saveNodeMetaData(tdp.node2.id, null, "DESC", null);
+      node = hierarchyService.saveNodeMetaData(tdp.node2.id, null, "DESC", "");
       assertNotNull(node);
       assertEquals(node.id, tdp.node2.id);
-      assertNull(node.title);
+      assertEquals("Node TWO", node.title);
       assertEquals("DESC", node.description);
       assertNull(node.permToken);
 
-      // saving all nulls (should be ok)
+      // saving all nulls (should be save as previous values)
       node = hierarchyService.saveNodeMetaData(tdp.node2.id, null, null, null);
+      assertNotNull(node);
+      assertEquals(node.id, tdp.node2.id);
+      assertEquals("Node TWO", node.title);
+      assertEquals("DESC", node.description);
+      assertNull(node.permToken);
+
+      // saving empty strings (should blank everything out)
+      node = hierarchyService.saveNodeMetaData(tdp.node2.id, "", "", "");
       assertNotNull(node);
       assertEquals(node.id, tdp.node2.id);
       assertNull(node.title);
