@@ -15,12 +15,17 @@
 package org.sakaiproject.hierarchy.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sakaiproject.genericdao.api.finders.ByPropsFinder;
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
@@ -428,7 +433,7 @@ public class HierarchyServiceImpl implements HierarchyService {
          if (removeNode.directParentNodeIds.size() <= 1) {
             throw new IllegalArgumentException("Cannot remove " + childNodeId + " as a child of " + nodeId
                   + " because it would orphan the child node, you need to use the remove method" +
-                        "if you want to remove a node or add this node as the child of another node first");
+            "if you want to remove a node or add this node as the child of another node first");
          }
 
          // now we go ahead and update this node and all the related nodes
@@ -502,6 +507,50 @@ public class HierarchyServiceImpl implements HierarchyService {
    public HierarchyNode removeParentRelation(String nodeId, String parentNodeId) {
       // TODO Auto-generated method stub
       throw new RuntimeException("This method is not implemented yet");
+   }
+
+
+   @SuppressWarnings("unchecked")
+   public Set<String> getNodesWithToken(String hierarchyId, String permToken) {
+      if (permToken == null || permToken.equals("")) {
+         throw new NullPointerException("permToken cannot be null or empty string");
+      }
+
+      List l = dao.findByProperties(HierarchyNodeMetaData.class, 
+            new String[] { "hierarchyId" }, new Object[] { hierarchyId });
+      if (l.isEmpty()) {
+         throw new IllegalArgumentException("Could not find hierarchy with the following id: "
+               + hierarchyId);
+      }
+
+      List nodeIdsList = dao.findByProperties(HierarchyNodeMetaData.class, 
+            new String[] { "hierarchyId", "permToken" }, 
+            new Object[] { hierarchyId, permToken },
+            new int[] {ByPropsFinder.EQUALS, ByPropsFinder.EQUALS},
+            new String[] {"node.id"});
+
+      Set<String> nodeIds = new TreeSet<String>();
+      for (Iterator iter = nodeIdsList.iterator(); iter.hasNext();) {
+         HierarchyNodeMetaData metaData = (HierarchyNodeMetaData) iter.next();
+         nodeIds.add(metaData.getNode().getId().toString());
+      }
+
+      return nodeIds;
+   }
+
+   public Map<String, Set<String>> getNodesWithTokens(String hierarchyId, String[] permTokens) {
+      // TODO it would be better if this were more efficient...
+      if (permTokens == null) {
+         throw new NullPointerException("permTokens cannot be null");
+      }
+
+      Map<String, Set<String>> tokenNodes = new HashMap<String, Set<String>>();
+      for (int i = 0; i < permTokens.length; i++) {
+         Set<String> nodeIds = getNodesWithToken(hierarchyId, permTokens[i]);
+         tokenNodes.put(permTokens[i], nodeIds);
+      }
+
+      return tokenNodes;
    }
 
 

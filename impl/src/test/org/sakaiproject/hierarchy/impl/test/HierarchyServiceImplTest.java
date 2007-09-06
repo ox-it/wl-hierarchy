@@ -11,6 +11,7 @@
 
 package org.sakaiproject.hierarchy.impl.test;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
@@ -772,7 +773,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       assertEquals(0, node.directChildNodeIds.size());
       assertNotNull(node.childNodeIds);
       assertEquals(0, node.childNodeIds.size());
-      
+
       node = hierarchyService.removeChildRelation(tdp.node4.id, tdp.node6.id);
       assertNotNull(node);
       assertNotNull(node.directChildNodeIds);
@@ -783,7 +784,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       assertEquals(2, node.childNodeIds.size());
       assertTrue(node.childNodeIds.contains(tdp.node7.id));
       assertTrue(node.childNodeIds.contains(tdp.node8.id));
-      
+
       // remove child which is not a child (this is ok)
       node = hierarchyService.removeChildRelation(tdp.node3.id, tdp.node6.id);
 
@@ -796,7 +797,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
       } catch (IllegalArgumentException e) {
          assertNotNull(e.getMessage());
       }
-      
+
       // cannot orphan nodes by removing a child relation (must use remove node)
       try {
          node = hierarchyService.removeChildRelation(tdp.node1.id, tdp.node3.id);
@@ -878,7 +879,114 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 //    fail("Not yet implemented");
    }
 
-/*
+
+   /**
+    * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getNodesWithToken(java.lang.String)}.
+    */
+   public void testGetNodesWithToken() {
+      Set<String> nodeIds;
+
+      // get all the nodes with a specific token
+      nodeIds = hierarchyService.getNodesWithToken(TestDataPreload.HIERARCHYA, TestDataPreload.PERM_TOKEN_1);
+      assertNotNull(nodeIds);
+      assertEquals(3, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node2.id));
+      assertTrue(nodeIds.contains(tdp.node3.id));
+      assertTrue(nodeIds.contains(tdp.node5.id));
+
+      nodeIds = hierarchyService.getNodesWithToken(TestDataPreload.HIERARCHYB, TestDataPreload.PERM_TOKEN_1);
+      assertNotNull(nodeIds);
+      assertEquals(1, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node10.id));
+
+      nodeIds = hierarchyService.getNodesWithToken(TestDataPreload.HIERARCHYA, TestDataPreload.PERM_TOKEN_2);
+      assertNotNull(nodeIds);
+      assertEquals(1, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node4.id));
+
+      // attempt to get nodes for invalid token
+      nodeIds = hierarchyService.getNodesWithToken(TestDataPreload.HIERARCHYA, TestDataPreload.INVALID_PERM_TOKEN);
+      assertNotNull(nodeIds);
+      assertEquals(0, nodeIds.size());
+
+      // cannot use invalid hierarchy
+      try {
+         hierarchyService.getNodesWithToken(TestDataPreload.INVALID_HIERARCHY, TestDataPreload.PERM_TOKEN_1);
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      // cannot get null token
+      try {
+         hierarchyService.getNodesWithToken(TestDataPreload.HIERARCHYA, null);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }
+   }
+
+   /**
+    * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#getNodesWithTokens(java.lang.String[])}.
+    */
+   public void testGetNodesWithTokens() {
+      Set<String> nodeIds;
+      Map<String, Set<String>> tokenNodes;
+
+      // get nodes for tokens
+      tokenNodes = hierarchyService.getNodesWithTokens(TestDataPreload.HIERARCHYA, 
+            new String[] {TestDataPreload.PERM_TOKEN_1, TestDataPreload.PERM_TOKEN_2});
+      assertNotNull(tokenNodes);
+      assertEquals(2, tokenNodes.size());
+      nodeIds = tokenNodes.get(TestDataPreload.PERM_TOKEN_1);
+      assertEquals(3, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node2.id));
+      assertTrue(nodeIds.contains(tdp.node3.id));
+      assertTrue(nodeIds.contains(tdp.node5.id));
+      nodeIds = tokenNodes.get(TestDataPreload.PERM_TOKEN_2);
+      assertEquals(1, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node4.id));
+
+      // mix valid and invalid tokens
+      tokenNodes = hierarchyService.getNodesWithTokens(TestDataPreload.HIERARCHYB, 
+            new String[] {TestDataPreload.PERM_TOKEN_1, TestDataPreload.PERM_TOKEN_2});
+      assertNotNull(tokenNodes);
+      assertEquals(2, tokenNodes.size());
+      nodeIds = tokenNodes.get(TestDataPreload.PERM_TOKEN_1);
+      assertEquals(1, nodeIds.size());
+      assertTrue(nodeIds.contains(tdp.node10.id));
+      nodeIds = tokenNodes.get(TestDataPreload.PERM_TOKEN_2);
+      assertEquals(0, nodeIds.size());
+      
+      // attempt to get nodes for invalid token
+      tokenNodes = hierarchyService.getNodesWithTokens(TestDataPreload.HIERARCHYA, 
+            new String[] {TestDataPreload.INVALID_PERM_TOKEN});
+      assertNotNull(tokenNodes);
+      assertEquals(1, tokenNodes.size());
+      nodeIds = tokenNodes.get(TestDataPreload.INVALID_PERM_TOKEN);
+      assertEquals(0, nodeIds.size());
+
+      // cannot use invalid hierarchy
+      try {
+         hierarchyService.getNodesWithTokens(TestDataPreload.INVALID_HIERARCHY, 
+               new String[] {TestDataPreload.PERM_TOKEN_1});
+         fail("Should have thrown exception");
+      } catch (IllegalArgumentException e) {
+         assertNotNull(e.getMessage());
+      }
+
+      // cannot get null token
+      try {
+         hierarchyService.getNodesWithTokens(TestDataPreload.HIERARCHYA, null);
+         fail("Should have thrown exception");
+      } catch (NullPointerException e) {
+         assertNotNull(e.getMessage());
+      }      
+   }
+
+
+
+   /*
       HierarchyNode node = null;
       Set<String> children = new HashSet<String>();;
 
@@ -1009,6 +1117,6 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 
       //fail("Not yet implemented"); // TODO
 
-   */
+    */
 
 }
