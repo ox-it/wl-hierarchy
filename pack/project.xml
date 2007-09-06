@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
  	<pomVersion>3</pomVersion>
 	<extend>../../master/project.xml</extend>
-	<name>sakai-entitybroker-pack</name>
+	<name>sakai-hierarchy-pack</name>
 	<groupId>sakaiproject</groupId>
-	<id>sakai-entitybroker-pack</id>
+	<id>sakai-hierarchy-pack</id>
 	<currentVersion>${sakai.version}</currentVersion>
 	<organization>
 		<name>Sakai Project</name>
@@ -35,7 +35,7 @@
 		<!-- Internal dependencies -->
         <dependency>
             <groupId>sakaiproject</groupId>
-            <artifactId>sakai-entitybroker-impl</artifactId>
+            <artifactId>sakai-hierarchy-impl</artifactId>
             <version>${sakai.version}</version>
 			<properties>
 				<war.bundle>true</war.bundle>
