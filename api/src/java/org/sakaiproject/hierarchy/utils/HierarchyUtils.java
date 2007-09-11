@@ -23,7 +23,7 @@ public class HierarchyUtils {
     * @param nodes
     * @return a list of {@link HierarchyNode}
     */
-   public List<HierarchyNode> getSortedNodes(Collection<HierarchyNode> nodes) {
+   public static List<HierarchyNode> getSortedNodes(Collection<HierarchyNode> nodes) {
       List<HierarchyNode> sortedNodes = new ArrayList<HierarchyNode>();
       for (HierarchyNode hierarchyNode : nodes) {
          if (sortedNodes.size() < 1) {
@@ -32,7 +32,7 @@ public class HierarchyUtils {
             int i;
             for (i = 0; i < sortedNodes.size(); i++) {
                HierarchyNode sortedNode = sortedNodes.get(i);
-               if (sortedNode.childNodeIds.contains(hierarchyNode.id)) {
+               if (sortedNode.parentNodeIds.contains(hierarchyNode.id)) {
                   break;
                }
             }

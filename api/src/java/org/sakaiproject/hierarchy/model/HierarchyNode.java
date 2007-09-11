@@ -68,6 +68,31 @@ public class HierarchyNode {
     */
    public HierarchyNode() {}
 
+   /**
+    * Testing constructor
+    * @param id
+    * @param hierarchyId
+    * @param title
+    * @param permToken
+    * @param directParentNodeIds
+    * @param directChildNodeIds
+    * @param parentNodeIds
+    * @param childNodeIds
+    */
+   public HierarchyNode(String id, String hierarchyId, String title,
+         String permToken, Set<String> directParentNodeIds,
+         Set<String> parentNodeIds, Set<String> directChildNodeIds,
+         Set<String> childNodeIds) {
+      this.id = id;
+      this.hierarchyId = hierarchyId;
+      this.title = title;
+      this.permToken = permToken;
+      this.directParentNodeIds = directParentNodeIds;
+      this.parentNodeIds = parentNodeIds;
+      this.directChildNodeIds = directChildNodeIds;
+      this.childNodeIds = childNodeIds;
+   }
+
 
    /*
     * overrides for various internal methods

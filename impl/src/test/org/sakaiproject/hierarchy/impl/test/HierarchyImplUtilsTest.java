@@ -26,7 +26,7 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public class HierarchyUtilsTest extends TestCase {
+public class HierarchyImplUtilsTest extends TestCase {
 
     private char s = HierarchyImplUtils.SEPERATOR;
 

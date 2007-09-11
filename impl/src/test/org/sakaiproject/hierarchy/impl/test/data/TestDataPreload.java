@@ -123,11 +123,11 @@ public class TestDataPreload {
    public HierarchyNode node11;
 
 
+   public boolean preloaded = false;
    /**
     * Preload a bunch of test data into the database
     * @param dao a generic dao
     */
-   public boolean preloaded = false;
    public void preloadTestData(GenericDao dao) {
       dao.save(pNode1);
       dao.save(pNode2);
