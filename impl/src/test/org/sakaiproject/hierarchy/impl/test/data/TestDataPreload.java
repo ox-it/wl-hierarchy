@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import org.sakaiproject.genericdao.api.GenericDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
-import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
+import org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
@@ -153,17 +153,17 @@ public class TestDataPreload {
       dao.save(meta10);
       dao.save(meta11);
 
-      node1 = HierarchyUtils.makeNode(pNode1, meta1);
-      node2 = HierarchyUtils.makeNode(pNode2, meta2);
-      node3 = HierarchyUtils.makeNode(pNode3, meta3);
-      node4 = HierarchyUtils.makeNode(pNode4, meta4);
-      node5 = HierarchyUtils.makeNode(pNode5, meta5);
-      node6 = HierarchyUtils.makeNode(pNode6, meta6);
-      node7 = HierarchyUtils.makeNode(pNode7, meta7);
-      node8 = HierarchyUtils.makeNode(pNode8, meta8);
-      node9 = HierarchyUtils.makeNode(pNode9, meta9);
-      node10 = HierarchyUtils.makeNode(pNode10, meta10);
-      node11 = HierarchyUtils.makeNode(pNode11, meta11);
+      node1 = HierarchyImplUtils.makeNode(pNode1, meta1);
+      node2 = HierarchyImplUtils.makeNode(pNode2, meta2);
+      node3 = HierarchyImplUtils.makeNode(pNode3, meta3);
+      node4 = HierarchyImplUtils.makeNode(pNode4, meta4);
+      node5 = HierarchyImplUtils.makeNode(pNode5, meta5);
+      node6 = HierarchyImplUtils.makeNode(pNode6, meta6);
+      node7 = HierarchyImplUtils.makeNode(pNode7, meta7);
+      node8 = HierarchyImplUtils.makeNode(pNode8, meta8);
+      node9 = HierarchyImplUtils.makeNode(pNode9, meta9);
+      node10 = HierarchyImplUtils.makeNode(pNode10, meta10);
+      node11 = HierarchyImplUtils.makeNode(pNode11, meta11);
 
       preloaded = true;
    }
@@ -181,7 +181,7 @@ public class TestDataPreload {
             s.add( split[i] );
          }
       }
-      return HierarchyUtils.makeEncodedNodeIdString(s);
+      return HierarchyImplUtils.makeEncodedNodeIdString(s);
    }
 
 }

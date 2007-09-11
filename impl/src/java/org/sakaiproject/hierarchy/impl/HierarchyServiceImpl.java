@@ -30,7 +30,7 @@ import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
-import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
+import org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
@@ -75,7 +75,7 @@ public class HierarchyServiceImpl implements HierarchyService {
       HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.TRUE, null); // getCurrentUserId());
       saveNodeAndMetaData(pNode, metaData);
 
-      return HierarchyUtils.makeNode(pNode, metaData);
+      return HierarchyImplUtils.makeNode(pNode, metaData);
    }
 
    public HierarchyNode setHierarchyRootNode(String hierarchyId, String nodeId) {
@@ -87,7 +87,7 @@ public class HierarchyServiceImpl implements HierarchyService {
       if (rootMetaData != null) {
          if (metaData.getId().equals(rootMetaData.getId())) {
             // this node is already the root node
-            return HierarchyUtils.makeNode(metaData);
+            return HierarchyImplUtils.makeNode(metaData);
          } else if (!metaData.getHierarchyId().equals(rootMetaData.getHierarchyId())) {
             throw new IllegalArgumentException("Cannot move a node from one hierarchy ("
                   + metaData.getHierarchyId() + ") to another (" + hierarchyId
@@ -106,11 +106,12 @@ public class HierarchyServiceImpl implements HierarchyService {
       entities.add(metaData);
 
       dao.saveSet(entities);
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
+   @SuppressWarnings("unchecked")
    public void destroyHierarchy(String hierarchyId) {
-      List l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
+      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
             new Object[] { hierarchyId });
       if (l.isEmpty()) {
          throw new IllegalArgumentException("Could not find hierarchy to remove with the following id: "
@@ -134,12 +135,12 @@ public class HierarchyServiceImpl implements HierarchyService {
       if (metaData == null) {
          return null;
       }
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
    public HierarchyNode getNodeById(String nodeId) {
       HierarchyNodeMetaData metaData = getNodeMeta(nodeId);
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
    public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
@@ -157,10 +158,10 @@ public class HierarchyServiceImpl implements HierarchyService {
          return children;
       }
 
-      Set<String> childrenIds = HierarchyUtils.makeNodeIdSet(childIdString);
+      Set<String> childrenIds = HierarchyImplUtils.makeNodeIdSet(childIdString);
       List<HierarchyNodeMetaData> childNodeMetas = getNodeMetas(childrenIds);
       for (HierarchyNodeMetaData metaData : childNodeMetas) {
-         children.add(HierarchyUtils.makeNode(metaData));
+         children.add(HierarchyImplUtils.makeNode(metaData));
       }
       return children;
    }
@@ -180,11 +181,13 @@ public class HierarchyServiceImpl implements HierarchyService {
          return parents;
       }
 
-      Set<String> parentsIds = HierarchyUtils.makeNodeIdSet(parentIdString);
+      Set<String> parentsIds = HierarchyImplUtils.makeNodeIdSet(parentIdString);
       List<HierarchyNodeMetaData> parentNodeMetas = getNodeMetas(parentsIds);
       for (HierarchyNodeMetaData metaData : parentNodeMetas) {
-         parents.add(HierarchyUtils.makeNode(metaData));
+         parents.add(HierarchyImplUtils.makeNode(metaData));
       }
+
+      
       return parents;
    }
 
@@ -205,12 +208,12 @@ public class HierarchyServiceImpl implements HierarchyService {
       }
 
       // get the set of all nodes above the new node (these will have to be updated)
-      Set<String> parentNodeIds = HierarchyUtils.makeNodeIdSet(parentNodeMeta.getNode().getParentIds());
+      Set<String> parentNodeIds = HierarchyImplUtils.makeNodeIdSet(parentNodeMeta.getNode().getParentIds());
       parentNodeIds.add(parentNodeId);
 
       // create the new node and assign the new parents from our parent
-      HierarchyPersistentNode pNode = new HierarchyPersistentNode(HierarchyUtils
-            .makeSingleEncodedNodeIdString(parentNodeId), HierarchyUtils
+      HierarchyPersistentNode pNode = new HierarchyPersistentNode(HierarchyImplUtils
+            .makeSingleEncodedNodeIdString(parentNodeId), HierarchyImplUtils
             .makeEncodedNodeIdString(parentNodeIds));
       HierarchyNodeMetaData metaData = new HierarchyNodeMetaData(pNode, hierarchyId, Boolean.FALSE, null); // getCurrentUserId());
       // save this new node (perhaps we should be saving all of these in one massive update?) -AZ
@@ -224,20 +227,20 @@ public class HierarchyServiceImpl implements HierarchyService {
          if (node.getId().toString().equals(parentNodeId)) {
             // special case for our parent, update direct children
             node.setDirectChildIds(
-                  HierarchyUtils.addSingleNodeIdToEncodedString(
+                  HierarchyImplUtils.addSingleNodeIdToEncodedString(
                         node.getDirectChildIds(), newNodeId));
          }
 
          // update the children for each node
          node.setChildIds(
-               HierarchyUtils.addSingleNodeIdToEncodedString(node.getChildIds(), newNodeId));
+               HierarchyImplUtils.addSingleNodeIdToEncodedString(node.getChildIds(), newNodeId));
 
          // add to the set of node to be saved
          pNodes.add(node);
       }
       dao.saveSet(pNodes);
 
-      return HierarchyUtils.makeNode(pNode, metaData);
+      return HierarchyImplUtils.makeNode(pNode, metaData);
    }
 
    public HierarchyNode removeNode(String nodeId) {
@@ -257,7 +260,7 @@ public class HierarchyServiceImpl implements HierarchyService {
       }
 
       // get the set of all nodes above the current node (these will have to be updated)
-      HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
+      HierarchyNode currentNode = HierarchyImplUtils.makeNode(metaData);
       if (currentNode.childNodeIds.size() != 0) {
          throw new IllegalArgumentException("Cannot remove a node with children nodes, "
                + "reduce the children on this node from " + currentNode.childNodeIds.size()
@@ -278,22 +281,22 @@ public class HierarchyServiceImpl implements HierarchyService {
       for (HierarchyPersistentNode pNode : pNodesList) {
          if (pNode.getId().toString().equals(currentParentNodeId)) {
             // special case for our parent, update direct children
-            Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getDirectChildIds());
+            Set<String> nodeChildren = HierarchyImplUtils.makeNodeIdSet(pNode.getDirectChildIds());
             nodeChildren.remove(nodeId);
-            pNode.setDirectChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
+            pNode.setDirectChildIds(HierarchyImplUtils.makeEncodedNodeIdString(nodeChildren));
          }
 
          // update the children for each node
-         Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
+         Set<String> nodeChildren = HierarchyImplUtils.makeNodeIdSet(pNode.getChildIds());
          nodeChildren.remove(nodeId);
-         pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
+         pNode.setChildIds(HierarchyImplUtils.makeEncodedNodeIdString(nodeChildren));
 
          // add to the set of nodes to be saved
          pNodes.add(pNode);
       }
       dao.saveSet(pNodes);
 
-      return HierarchyUtils.makeNode(getNodeMeta(currentParentNodeId));
+      return HierarchyImplUtils.makeNode(getNodeMeta(currentParentNodeId));
    }
 
    public HierarchyNode saveNodeMetaData(String nodeId, String title, String description, String permToken) {
@@ -333,7 +336,7 @@ public class HierarchyServiceImpl implements HierarchyService {
       // save the node meta data
       dao.save(metaData);
 
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
    public HierarchyNode addChildRelation(String nodeId, String childNodeId) {
@@ -356,7 +359,7 @@ public class HierarchyServiceImpl implements HierarchyService {
          throw new IllegalArgumentException("Invalid childNodeId: " + childNodeId);
       }
 
-      HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
+      HierarchyNode currentNode = HierarchyImplUtils.makeNode(metaData);
       // only add this if it is not already in there
       if (!currentNode.directChildNodeIds.contains(childNodeId)) {
          // first check for a cycle
@@ -367,24 +370,24 @@ public class HierarchyServiceImpl implements HierarchyService {
          }
 
          // now we go ahead and update this node and all the related nodes
-         HierarchyNode addNode = HierarchyUtils.makeNode(addMetaData);
+         HierarchyNode addNode = HierarchyImplUtils.makeNode(addMetaData);
          Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
 
          // update the current node
          metaData.getNode().setDirectChildIds(
-               HierarchyUtils.addSingleNodeIdToEncodedString(
+               HierarchyImplUtils.addSingleNodeIdToEncodedString(
                      metaData.getNode().getDirectChildIds(), childNodeId));
          metaData.getNode().setChildIds(
-               HierarchyUtils.addSingleNodeIdToEncodedString(
+               HierarchyImplUtils.addSingleNodeIdToEncodedString(
                      metaData.getNode().getChildIds(), childNodeId));
          pNodes.add(metaData.getNode());
 
          // update the add node
          addMetaData.getNode().setDirectParentIds(
-               HierarchyUtils.addSingleNodeIdToEncodedString(
+               HierarchyImplUtils.addSingleNodeIdToEncodedString(
                      addMetaData.getNode().getDirectParentIds(), nodeId));
          addMetaData.getNode().setParentIds(
-               HierarchyUtils.addSingleNodeIdToEncodedString(
+               HierarchyImplUtils.addSingleNodeIdToEncodedString(
                      addMetaData.getNode().getParentIds(),nodeId));
          pNodes.add(addMetaData.getNode());
 
@@ -394,9 +397,9 @@ public class HierarchyServiceImpl implements HierarchyService {
          nodesToAdd.add(addNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the children for each node
-            Set<String> nodeChildren = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
+            Set<String> nodeChildren = HierarchyImplUtils.makeNodeIdSet(pNode.getChildIds());
             nodeChildren.addAll(nodesToAdd);
-            pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodeChildren));
+            pNode.setChildIds(HierarchyImplUtils.makeEncodedNodeIdString(nodeChildren));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
@@ -408,9 +411,9 @@ public class HierarchyServiceImpl implements HierarchyService {
          nodesToAdd.add(currentNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the parents for each node
-            Set<String> parents = HierarchyUtils.makeNodeIdSet(pNode.getParentIds());
+            Set<String> parents = HierarchyImplUtils.makeNodeIdSet(pNode.getParentIds());
             parents.addAll(nodesToAdd);
-            pNode.setParentIds(HierarchyUtils.makeEncodedNodeIdString(parents));
+            pNode.setParentIds(HierarchyImplUtils.makeEncodedNodeIdString(parents));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
@@ -419,7 +422,7 @@ public class HierarchyServiceImpl implements HierarchyService {
          dao.saveSet(pNodes);
       }
 
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
    public HierarchyNode removeChildRelation(String nodeId, String childNodeId) {
@@ -442,11 +445,11 @@ public class HierarchyServiceImpl implements HierarchyService {
          throw new IllegalArgumentException("Invalid childNodeId: " + childNodeId);
       }
 
-      HierarchyNode currentNode = HierarchyUtils.makeNode(metaData);
+      HierarchyNode currentNode = HierarchyImplUtils.makeNode(metaData);
       // only do something if this child is a direct child of this node
       if (currentNode.directChildNodeIds.contains(childNodeId)) {
          // first check for orphaning
-         HierarchyNode removeNode = HierarchyUtils.makeNode(removeMetaData);
+         HierarchyNode removeNode = HierarchyImplUtils.makeNode(removeMetaData);
          if (removeNode.directParentNodeIds.size() <= 1) {
             throw new IllegalArgumentException("Cannot remove " + childNodeId + " as a child of " + nodeId
                   + " because it would orphan the child node, you need to use the remove method" +
@@ -458,21 +461,21 @@ public class HierarchyServiceImpl implements HierarchyService {
          Set<String> nodes = null;
 
          // update the current node
-         nodes = HierarchyUtils.makeNodeIdSet(metaData.getNode().getChildIds());
+         nodes = HierarchyImplUtils.makeNodeIdSet(metaData.getNode().getChildIds());
          nodes.remove(childNodeId);
-         metaData.getNode().setChildIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
-         nodes = HierarchyUtils.makeNodeIdSet(metaData.getNode().getDirectChildIds());
+         metaData.getNode().setChildIds(HierarchyImplUtils.makeEncodedNodeIdString(nodes));
+         nodes = HierarchyImplUtils.makeNodeIdSet(metaData.getNode().getDirectChildIds());
          nodes.remove(childNodeId);
-         metaData.getNode().setDirectChildIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         metaData.getNode().setDirectChildIds(HierarchyImplUtils.makeEncodedNodeIdString(nodes));
          pNodes.add(metaData.getNode());
 
          // update the remove node
-         nodes = HierarchyUtils.makeNodeIdSet(removeMetaData.getNode().getParentIds());
+         nodes = HierarchyImplUtils.makeNodeIdSet(removeMetaData.getNode().getParentIds());
          nodes.remove(nodeId);
-         removeMetaData.getNode().setParentIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
-         nodes = HierarchyUtils.makeNodeIdSet(removeMetaData.getNode().getDirectParentIds());
+         removeMetaData.getNode().setParentIds(HierarchyImplUtils.makeEncodedNodeIdString(nodes));
+         nodes = HierarchyImplUtils.makeNodeIdSet(removeMetaData.getNode().getDirectParentIds());
          nodes.remove(nodeId);
-         removeMetaData.getNode().setDirectParentIds(HierarchyUtils.makeEncodedNodeIdString(nodes));
+         removeMetaData.getNode().setDirectParentIds(HierarchyImplUtils.makeEncodedNodeIdString(nodes));
          pNodes.add(removeMetaData.getNode());
 
          // update the parents of the current node (they have less children)
@@ -481,12 +484,12 @@ public class HierarchyServiceImpl implements HierarchyService {
          nodesToRemove.add(removeNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the children for each node
-            Set<String> children = HierarchyUtils.makeNodeIdSet(pNode.getChildIds());
+            Set<String> children = HierarchyImplUtils.makeNodeIdSet(pNode.getChildIds());
             children.removeAll(nodesToRemove);
             // add back in all the children of the currentNode because we may have 
             // taken out part of the tree below where if it connects to the children of removeNode
             children.addAll(currentNode.childNodeIds);
-            pNode.setChildIds(HierarchyUtils.makeEncodedNodeIdString(children));
+            pNode.setChildIds(HierarchyImplUtils.makeEncodedNodeIdString(children));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
@@ -498,12 +501,12 @@ public class HierarchyServiceImpl implements HierarchyService {
          nodesToRemove.add(currentNode.id);
          for (HierarchyPersistentNode pNode : pNodesList) {
             // update the parents for each node
-            Set<String> parents = HierarchyUtils.makeNodeIdSet(pNode.getParentIds());
+            Set<String> parents = HierarchyImplUtils.makeNodeIdSet(pNode.getParentIds());
             parents.removeAll(nodesToRemove);
             // add back in all the parents of the removeNode because we will have 
             // taken out part of the tree above where it reconnects on the way to the root
             parents.addAll(removeNode.parentNodeIds);
-            pNode.setParentIds(HierarchyUtils.makeEncodedNodeIdString(parents));
+            pNode.setParentIds(HierarchyImplUtils.makeEncodedNodeIdString(parents));
 
             // add to the set of nodes to be saved
             pNodes.add(pNode);
@@ -513,7 +516,7 @@ public class HierarchyServiceImpl implements HierarchyService {
 
       }
 
-      return HierarchyUtils.makeNode(metaData);
+      return HierarchyImplUtils.makeNode(metaData);
    }
 
    public HierarchyNode addParentRelation(String nodeId, String parentNodeId) {
@@ -577,6 +580,7 @@ public class HierarchyServiceImpl implements HierarchyService {
     * @param pNode
     * @param metaData
     */
+   @SuppressWarnings("unchecked")
    private void saveNodeAndMetaData(HierarchyPersistentNode pNode, HierarchyNodeMetaData metaData) {
       Set<HierarchyPersistentNode> pNodes = new HashSet<HierarchyPersistentNode>();
       pNodes.add(pNode);

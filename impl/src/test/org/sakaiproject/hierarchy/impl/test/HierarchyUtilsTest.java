@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
-import org.sakaiproject.hierarchy.impl.utils.HierarchyUtils;
+import org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 /**
@@ -28,7 +28,7 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  */
 public class HierarchyUtilsTest extends TestCase {
 
-    private char s = HierarchyUtils.SEPERATOR;
+    private char s = HierarchyImplUtils.SEPERATOR;
 
     private String NODE1 = "1";
     private String NODE2 = "2";
@@ -56,7 +56,7 @@ public class HierarchyUtilsTest extends TestCase {
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#makeNode(org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode, org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#makeNode(org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode, org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData)}.
      */
     public void testMakeNodeHierarchyPersistentNodeHierarchyNodeMetaData() {
         HierarchyNode node = null;
@@ -65,7 +65,7 @@ public class HierarchyUtilsTest extends TestCase {
         HierarchyPersistentNode pNode = new HierarchyPersistentNode(ENCODED_NODE1, ENCODED_1);
         pNode.setId( new Long(100) );
 
-        node = HierarchyUtils.makeNode(pNode, metaData);
+        node = HierarchyImplUtils.makeNode(pNode, metaData);
         assertNotNull(node);
         assertEquals("100", node.id);
         assertEquals("HID", node.hierarchyId);
@@ -84,13 +84,13 @@ public class HierarchyUtilsTest extends TestCase {
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#makeNode(org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#makeNode(org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData)}.
      */
     public void testMakeNodeHierarchyNodeMetaData() {
         HierarchyNode node = null;
 
         // test that null meta causes null
-        node = HierarchyUtils.makeNode(null);
+        node = HierarchyImplUtils.makeNode(null);
         assertNull(node);
 
         HierarchyPersistentNode pNode = null;
@@ -98,7 +98,7 @@ public class HierarchyUtilsTest extends TestCase {
 
         // test that invalid pNode causes death
         try {
-            node = HierarchyUtils.makeNode(metaData);
+            node = HierarchyImplUtils.makeNode(metaData);
             fail("Should have thrown exception");
         } catch (IllegalArgumentException e) {
             assertNotNull(e);
@@ -107,7 +107,7 @@ public class HierarchyUtilsTest extends TestCase {
         pNode = new HierarchyPersistentNode(ENCODED_NODE1, ENCODED_1);
         pNode.setId( new Long(100) );
         metaData.setNode(pNode);
-        node = HierarchyUtils.makeNode(metaData);
+        node = HierarchyImplUtils.makeNode(metaData);
         assertNotNull(node);
         assertEquals("100", node.id);
         assertEquals("HID", node.hierarchyId);
@@ -125,16 +125,16 @@ public class HierarchyUtilsTest extends TestCase {
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#makeNodeIdSet(java.lang.String)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#makeNodeIdSet(java.lang.String)}.
      */
     public void testMakeNodeIdSet() {
         Set<String> nodeIds = null;
 
-        nodeIds = HierarchyUtils.makeNodeIdSet(null);
+        nodeIds = HierarchyImplUtils.makeNodeIdSet(null);
         assertNotNull(nodeIds);
         assertTrue(nodeIds.isEmpty());
 
-        nodeIds = HierarchyUtils.makeNodeIdSet(ENCODED_1);
+        nodeIds = HierarchyImplUtils.makeNodeIdSet(ENCODED_1);
         assertNotNull(nodeIds);
         assertEquals(3, nodeIds.size());
         assertTrue(nodeIds.contains(NODE1));
@@ -143,7 +143,7 @@ public class HierarchyUtilsTest extends TestCase {
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#makeEncodedNodeIdString(java.util.Set)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#makeEncodedNodeIdString(java.util.Set)}.
      */
     public void testMakeEncodedNodeIdString() {
         String encoded = null;
@@ -151,7 +151,7 @@ public class HierarchyUtilsTest extends TestCase {
         Set<String> nodeIds = new HashSet<String>();
 
         // check that empty set generates null string
-        encoded = HierarchyUtils.makeEncodedNodeIdString(nodeIds);
+        encoded = HierarchyImplUtils.makeEncodedNodeIdString(nodeIds);
         assertNull(encoded);
 
         nodeIds.add(NODE1);
@@ -159,71 +159,71 @@ public class HierarchyUtilsTest extends TestCase {
         nodeIds.add(NODE3);
 
         // test converting set to string
-        encoded = HierarchyUtils.makeEncodedNodeIdString(nodeIds);
+        encoded = HierarchyImplUtils.makeEncodedNodeIdString(nodeIds);
         assertNotNull(encoded);
         assertEquals(ENCODED_1, encoded);
 
         nodeIds.add(NODE41);
 
         // test converting set to string
-        encoded = HierarchyUtils.makeEncodedNodeIdString(nodeIds);
+        encoded = HierarchyImplUtils.makeEncodedNodeIdString(nodeIds);
         assertNotNull(encoded);
         assertEquals(ENCODED_1_41, encoded);
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#makeSingleEncodedNodeIdString(java.lang.String)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#makeSingleEncodedNodeIdString(java.lang.String)}.
      */
     public void testMakeSingleEncodedNodeIdString() {
         String encoded = null;
 
         // encoding a string
-        encoded = HierarchyUtils.makeSingleEncodedNodeIdString(NODE1);
+        encoded = HierarchyImplUtils.makeSingleEncodedNodeIdString(NODE1);
         assertNotNull(encoded);
         assertEquals(ENCODED_NODE1, encoded);
 
-        encoded = HierarchyUtils.makeSingleEncodedNodeIdString(null);
+        encoded = HierarchyImplUtils.makeSingleEncodedNodeIdString(null);
         assertNull(encoded);
     }
 
     /**
-     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyUtils#addSingleNodeIdToEncodedString(java.lang.String, java.lang.String)}.
+     * Test method for {@link org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils#addSingleNodeIdToEncodedString(java.lang.String, java.lang.String)}.
      */
     public void testAddSingleNodeIdToEncodedString() {
         String encoded = null;
 
         // try adding strings to various points in the encoded string
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_2, NODE1);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_2, NODE1);
         assertNotNull(encoded);
         assertEquals(ENCODED_2_1, encoded);
 
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_3, NODE41);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_3, NODE41);
         assertNotNull(encoded);
         assertEquals(ENCODED_3_41, encoded);
 
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_1, NODE41);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_1, NODE41);
         assertNotNull(encoded);
         assertEquals(ENCODED_1_41, encoded);
 
         // try adding string that already exist
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_1, NODE3);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_1, NODE3);
         assertNotNull(encoded);
         assertEquals(ENCODED_1, encoded);
 
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_2, NODE2);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_2, NODE2);
         assertNotNull(encoded);
         assertEquals(ENCODED_2, encoded);
 
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_3, NODE42);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_3, NODE42);
         assertNotNull(encoded);
         assertEquals(ENCODED_3, encoded);
 
         // now try out the edge cases
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(null, NODE1);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(null, NODE1);
         assertNotNull(encoded);
         assertEquals(ENCODED_NODE1, encoded);
 
-        encoded = HierarchyUtils.addSingleNodeIdToEncodedString(ENCODED_1, null);
+        encoded = HierarchyImplUtils.addSingleNodeIdToEncodedString(ENCODED_1, null);
         assertNotNull(encoded);
         assertEquals(ENCODED_1, encoded);
     }

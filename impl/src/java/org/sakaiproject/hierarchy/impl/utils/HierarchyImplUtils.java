@@ -26,7 +26,7 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public class HierarchyUtils {
+public class HierarchyImplUtils {
 
     public static final char SEPERATOR = ':';
 
@@ -108,10 +108,10 @@ public class HierarchyUtils {
         Collections.sort(l);
         // encode the string
         StringBuilder coded = new StringBuilder();
-        coded.append(HierarchyUtils.SEPERATOR);
+        coded.append(HierarchyImplUtils.SEPERATOR);
         for (String nodeId : l) {
             coded.append(nodeId);
-            coded.append(HierarchyUtils.SEPERATOR);            
+            coded.append(HierarchyImplUtils.SEPERATOR);            
         }
         return coded.toString();
     }
@@ -125,7 +125,7 @@ public class HierarchyUtils {
         if (nodeId == null || nodeId.length() == 0) {
             return null;
         }
-        return HierarchyUtils.SEPERATOR + nodeId + HierarchyUtils.SEPERATOR;
+        return HierarchyImplUtils.SEPERATOR + nodeId + HierarchyImplUtils.SEPERATOR;
     }
 
     /**
@@ -150,7 +150,7 @@ public class HierarchyUtils {
         int thisSeparator = 0;
         int lastIndex = encodedNodeIds.length()-1;
         while (thisSeparator < lastIndex ) {
-            int nextSeparator = encodedNodeIds.indexOf(HierarchyUtils.SEPERATOR, thisSeparator+1);
+            int nextSeparator = encodedNodeIds.indexOf(HierarchyImplUtils.SEPERATOR, thisSeparator+1);
             String thisNodeId = encodedNodeIds.substring(thisSeparator+1, nextSeparator);
             if (thisNodeId.compareTo(nodeId) > 0) {
                 // thisNodeId comes after nodeId
@@ -163,14 +163,14 @@ public class HierarchyUtils {
         String newEncodedNodeIds = null;
         if (thisSeparator == 0) {
             // put the node at the front of the string
-            newEncodedNodeIds = HierarchyUtils.SEPERATOR + nodeId + encodedNodeIds;
+            newEncodedNodeIds = HierarchyImplUtils.SEPERATOR + nodeId + encodedNodeIds;
         } else if (thisSeparator == lastIndex) {
             // put node at the end
-            newEncodedNodeIds = encodedNodeIds + nodeId + HierarchyUtils.SEPERATOR;
+            newEncodedNodeIds = encodedNodeIds + nodeId + HierarchyImplUtils.SEPERATOR;
         } else {
             // put the node at the location indicated by thisSeparator
             newEncodedNodeIds = encodedNodeIds.substring(0, thisSeparator)
-                + HierarchyUtils.SEPERATOR + nodeId + encodedNodeIds.substring(thisSeparator);
+                + HierarchyImplUtils.SEPERATOR + nodeId + encodedNodeIds.substring(thisSeparator);
         }
         return newEncodedNodeIds;
     }
