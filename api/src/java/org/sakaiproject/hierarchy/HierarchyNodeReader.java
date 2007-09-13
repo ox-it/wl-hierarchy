@@ -11,6 +11,7 @@
 
 package org.sakaiproject.hierarchy;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.sakaiproject.hierarchy.model.HierarchyNode;
@@ -31,11 +32,20 @@ public interface HierarchyNodeReader {
    public HierarchyNode getRootNode(String hierarchyId);
 
    /**
-    * Get a node based on the unique id
+    * Get a node based on the unique id,
+    * convenience method for {@link #getNodesByIds(String[])}
     * @param nodeId a unique id for a hierarchy node
     * @return the {@link HierarchyNode} representing this node or null if it does not exist
     */
    public HierarchyNode getNodeById(String nodeId);
+
+   /**
+    * Get a set of nodes based on their unique ids,
+    * <b>NOTE:</b> this method is here for efficiency
+    * @param nodeIds unique ids for hierarchy nodes
+    * @return a map of nodeId -> {@link HierarchyNode}
+    */
+   public Map<String, HierarchyNode> getNodesByIds(String[] nodeIds);
 
    /**
     * Get all the parent nodes for a specific node all the way to the root node, 

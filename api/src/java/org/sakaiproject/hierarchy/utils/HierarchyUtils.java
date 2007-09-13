@@ -6,7 +6,10 @@ package org.sakaiproject.hierarchy.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.sakaiproject.hierarchy.model.HierarchyNode;
 
 
@@ -40,6 +43,46 @@ public class HierarchyUtils {
          }
       }
       return sortedNodes;
+   }
+
+   /**
+    * Create a set of all the unique child node ids based on the set of supplied nodes,
+    * can optionally be limited to return only direct children and to include the supplied node ids
+    * @param nodes a collection of {@link HierarchyNode}
+    * @param includeSuppliedNodes includes the nodeIds of the supplied collection of nodes in the returned set
+    * @param directOnly only use the direct children of each node
+    * @return the set of all unique child node ids
+    */
+   public static Set<String> getUniqueChildNodes(Collection<HierarchyNode> nodes, boolean includeSuppliedNodeIds, boolean directOnly) {
+      Set<String> s = new HashSet<String>();
+      for (HierarchyNode hierarchyNode : nodes) {
+         if (directOnly) {
+            s.addAll(hierarchyNode.directChildNodeIds);
+         } else {
+            s.addAll(hierarchyNode.childNodeIds);
+         }
+      }
+      return s;
+   }
+
+   /**
+    * Create a set of all the unique parent node ids based on the set of supplied nodes,
+    * can optionally be limited to return only direct parents and to include the supplied node ids
+    * @param nodes a collection of {@link HierarchyNode}
+    * @param includeSuppliedNodes includes the nodeIds of the supplied collection of nodes in the returned set
+    * @param directOnly only use the direct parents of each node
+    * @return the set of all unique parent node ids
+    */
+   public static Set<String> getUniqueParentNodes(Collection<HierarchyNode> nodes, boolean includeSuppliedNodeIds, boolean directOnly) {
+      Set<String> s = new HashSet<String>();
+      for (HierarchyNode hierarchyNode : nodes) {
+         if (directOnly) {
+            s.addAll(hierarchyNode.directParentNodeIds);
+         } else {
+            s.addAll(hierarchyNode.parentNodeIds);
+         }
+      }
+      return s;
    }
 
 }

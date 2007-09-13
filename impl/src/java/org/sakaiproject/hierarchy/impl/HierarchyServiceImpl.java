@@ -143,6 +143,17 @@ public class HierarchyServiceImpl implements HierarchyService {
       return HierarchyImplUtils.makeNode(metaData);
    }
 
+
+   public Map<String, HierarchyNode> getNodesByIds(String[] nodeIds) {
+      List<HierarchyNodeMetaData> nodeMetas = getNodeMetas(nodeIds);
+      Map<String, HierarchyNode> m = new HashMap<String, HierarchyNode>();
+      for (HierarchyNodeMetaData metaData : nodeMetas) {
+         HierarchyNode node = HierarchyImplUtils.makeNode(metaData);
+         m.put(node.id, node);
+      }
+      return m;
+   }
+
    public Set<HierarchyNode> getChildNodes(String nodeId, boolean directOnly) {
       Set<HierarchyNode> children = new HashSet<HierarchyNode>();
 
@@ -635,16 +646,23 @@ public class HierarchyServiceImpl implements HierarchyService {
     * @param nodeIds
     * @return
     */
-   @SuppressWarnings("unchecked")
    private List<HierarchyNodeMetaData> getNodeMetas(Set<String> nodeIds) {
-      Long[] pNodeIds = new Long[nodeIds.size()];
-      int i = 0;
-      for (String nodeId : nodeIds) {
-         pNodeIds[i] = new Long(nodeId);
-         i++;
+      return getNodeMetas(nodeIds.toArray(new String[] {}));
+   }
+
+   @SuppressWarnings("unchecked")
+   private List<HierarchyNodeMetaData> getNodeMetas(String[] nodeIds) {
+      List<HierarchyNodeMetaData> l = null;
+      if (nodeIds == null || nodeIds.length == 0) {
+         l = new ArrayList<HierarchyNodeMetaData>();
+      } else {
+         Long[] pNodeIds = new Long[nodeIds.length];
+         for (int i = 0; i < nodeIds.length; i++) {
+            pNodeIds[i] = new Long(nodeIds[i]);
+         }
+         l = dao.findByProperties(HierarchyNodeMetaData.class,
+               new String[] { "node.id" }, new Object[] { pNodeIds });
       }
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class,
-            new String[] { "node.id" }, new Object[] { pNodeIds });
       return l;
    }
 
@@ -654,20 +672,22 @@ public class HierarchyServiceImpl implements HierarchyService {
     * @param nodeIds
     * @return
     */
-   @SuppressWarnings("unchecked")
    private List<HierarchyPersistentNode> getNodes(Set<String> nodeIds) {
-      List<HierarchyPersistentNode> l;
-      if (nodeIds.isEmpty()) {
+      return getNodes(nodeIds.toArray(new String[] {}));
+   }
+
+   @SuppressWarnings("unchecked")
+   private List<HierarchyPersistentNode> getNodes(String[] nodeIds) {
+      List<HierarchyPersistentNode> l = null;
+      if (nodeIds == null || nodeIds.length == 0) {
          l = new ArrayList<HierarchyPersistentNode>();
       } else {
-         Long[] pNodeIds = new Long[nodeIds.size()];
-         int i = 0;
-         for (String nodeId : nodeIds) {
-            pNodeIds[i] = new Long(nodeId);
-            i++;
+         Long[] pNodeIds = new Long[nodeIds.length];
+         for (int i = 0; i < nodeIds.length; i++) {
+            pNodeIds[i] = new Long(nodeIds[i]);
          }
-         l = dao.findByProperties(HierarchyPersistentNode.class,
-               new String[] { "id" }, new Object[] { pNodeIds });
+         l = dao.findByProperties(HierarchyPersistentNode.class, new String[] { "id" },
+               new Object[] { pNodeIds });
       }
       return l;
    }
