@@ -56,6 +56,9 @@ public class HierarchyUtils {
    public static Set<String> getUniqueChildNodes(Collection<HierarchyNode> nodes, boolean includeSuppliedNodeIds, boolean directOnly) {
       Set<String> s = new HashSet<String>();
       for (HierarchyNode hierarchyNode : nodes) {
+         if (includeSuppliedNodeIds) {
+            s.add(hierarchyNode.id);
+         }
          if (directOnly) {
             s.addAll(hierarchyNode.directChildNodeIds);
          } else {
@@ -76,6 +79,9 @@ public class HierarchyUtils {
    public static Set<String> getUniqueParentNodes(Collection<HierarchyNode> nodes, boolean includeSuppliedNodeIds, boolean directOnly) {
       Set<String> s = new HashSet<String>();
       for (HierarchyNode hierarchyNode : nodes) {
+         if (includeSuppliedNodeIds) {
+            s.add(hierarchyNode.id);
+         }
          if (directOnly) {
             s.addAll(hierarchyNode.directParentNodeIds);
          } else {
