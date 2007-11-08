@@ -33,9 +33,9 @@
 
       <!-- generic DAO -->
       <dependency>
-         <groupId>generic-dao</groupId>
+         <groupId>org.sakaiproject</groupId>
          <artifactId>generic-dao</artifactId>
-         <version>0.9</version>
+         <version>${sakai.generic-dao.version}</version>
       </dependency>
 
       <dependency>
