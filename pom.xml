@@ -16,7 +16,7 @@
       is stored in the hierarchy itself, it is simply there to allow you to maintain the hierarchical
       structure and to provide methods to manipulate it and query it
    </description>
-   <version>1.0.0-RC1</version>
+   <version>1.0.0-RC1</version><!--hierarchy.version-->
 
    <!-- Sakai master pom is parent -->
    <parent>
