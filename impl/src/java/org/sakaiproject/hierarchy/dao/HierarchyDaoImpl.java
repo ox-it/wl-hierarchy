@@ -9,10 +9,9 @@
  * 
  *****************************************************************************/
 
-package org.sakaiproject.hierarchy.dao.impl;
+package org.sakaiproject.hierarchy.dao;
 
 import org.sakaiproject.genericdao.hibernate.HibernateCompleteGenericDao;
-import org.sakaiproject.hierarchy.dao.HierarchyDao;
 
 /**
  * Implementation of DAO
