@@ -32,7 +32,7 @@
 
     <!-- create a DAO bean, use the hibernate implementation -->
     <bean id="org.sakaiproject.hierarchy.dao.HierarchyDaoTarget"
-        class="org.sakaiproject.hierarchy.dao.HierarchyDaoImpl" init-method="init">
+        class="org.sakaiproject.hierarchy.dao.HierarchyDaoImpl">
         <property name="sessionFactory"
             ref="org.sakaiproject.hierarchy.dao.SessionFactory" />
         <property name="persistentClasses">

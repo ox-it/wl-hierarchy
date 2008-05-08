@@ -7,21 +7,19 @@
 		<config>pack/src/webapp/WEB-INF/components.xml</config>
 		<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
 		<config>impl/src/test/hibernate-test.xml</config>
-		<config>pack/src/webapp/WEB-INF/hibernate-hbms.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
-			<name>hierarchy</name>
+			<name><![CDATA[hierarchy]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>true</incomplete>
 			<configs>
 				<config>pack/src/webapp/WEB-INF/components.xml</config>
-				<config>pack/src/webapp/WEB-INF/hibernate-hbms.xml</config>
 				<config>pack/src/webapp/WEB-INF/spring-hibernate.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
-			<name>hierarchy test</name>
+			<name><![CDATA[hierarchy test]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>true</incomplete>
 			<configs>
