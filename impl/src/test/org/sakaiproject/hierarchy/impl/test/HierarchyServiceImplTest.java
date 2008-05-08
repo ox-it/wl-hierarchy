@@ -14,6 +14,7 @@ package org.sakaiproject.hierarchy.impl.test;
 import java.util.Map;
 import java.util.Set;
 
+import org.sakaiproject.genericdao.api.search.Search;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
 import org.sakaiproject.hierarchy.impl.HierarchyServiceImpl;
@@ -167,7 +168,8 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
     */
    public void testDestroyHierarchy() {
       hierarchyService.destroyHierarchy(TestDataPreload.HIERARCHYB);
-      int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] {"hierarchyId"}, new Object[] {TestDataPreload.HIERARCHYB});
+      long count = dao.countBySearch(HierarchyNodeMetaData.class, 
+            new Search("hierarchyId", TestDataPreload.HIERARCHYB) );
       assertEquals(0, count);
 
       // test removing a non-existent hierarchy fails

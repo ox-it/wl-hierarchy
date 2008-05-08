@@ -29,19 +29,6 @@
          <type>plugin</type>
       </dependency>
 
-      <dependency>
-         <groupId>servletapi</groupId>
-         <artifactId>servletapi</artifactId>
-         <version>2.3</version>
-         <type>jar</type>
-      </dependency>
-
-      <!-- generic DAO -->
-      <dependency>
-         <groupId>generic-dao</groupId>
-         <artifactId>generic-dao</artifactId>
-         <version>0.9</version>
-      </dependency>
    </dependencies>
 
    <build>

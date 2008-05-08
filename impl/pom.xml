@@ -11,9 +11,9 @@
    </organization>
    <inceptionYear>2007</inceptionYear>
    <packaging>jar</packaging>
-   <properties>
-      <deploy.target />
-   </properties>
+    <properties>
+        <sakai.generic-dao.version>0.9.5</sakai.generic-dao.version>
+    </properties>
 
    <!-- the base is parent -->
    <parent>
@@ -37,7 +37,6 @@
          <groupId>org.sakaiproject</groupId>
          <artifactId>generic-dao</artifactId>
          <version>${sakai.generic-dao.version}</version>
-         <scope>provided</scope>
       </dependency>
 
       <!-- spring and hibernate -->

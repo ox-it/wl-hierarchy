@@ -25,7 +25,9 @@ import java.util.TreeSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.sakaiproject.genericdao.api.finders.ByPropsFinder;
+import org.sakaiproject.genericdao.api.search.Order;
+import org.sakaiproject.genericdao.api.search.Restriction;
+import org.sakaiproject.genericdao.api.search.Search;
 import org.sakaiproject.hierarchy.HierarchyService;
 import org.sakaiproject.hierarchy.dao.HierarchyDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
@@ -63,8 +65,8 @@ public class HierarchyServiceImpl implements HierarchyService {
                + "): length must be 1 to 250 chars");
       }
 
-      int count = dao.countByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
-            new Object[] { hierarchyId });
+      long count = dao.countBySearch(HierarchyNodeMetaData.class, 
+            new Search("hierarchyId", hierarchyId) );
       if (count > 0) {
          throw new IllegalArgumentException("Invalid hierarchyId (" + hierarchyId
                + "): this id is already in use, you must use a unique id when creating a new hierarchy");
@@ -111,8 +113,8 @@ public class HierarchyServiceImpl implements HierarchyService {
 
    @SuppressWarnings("unchecked")
    public void destroyHierarchy(String hierarchyId) {
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] { "hierarchyId" },
-            new Object[] { hierarchyId });
+      List<HierarchyNodeMetaData> l = dao.findBySearch(HierarchyNodeMetaData.class, 
+            new Search("hierarchyId", hierarchyId) );
       if (l.isEmpty()) {
          throw new IllegalArgumentException("Could not find hierarchy to remove with the following id: "
                + hierarchyId);
@@ -547,18 +549,18 @@ public class HierarchyServiceImpl implements HierarchyService {
          throw new NullPointerException("permToken cannot be null or empty string");
       }
 
-      List l = dao.findByProperties(HierarchyNodeMetaData.class, 
-            new String[] { "hierarchyId" }, new Object[] { hierarchyId });
+      List l = dao.findBySearch(HierarchyNodeMetaData.class, 
+            new Search("hierarchyId", hierarchyId) );
       if (l.isEmpty()) {
          throw new IllegalArgumentException("Could not find hierarchy with the following id: "
                + hierarchyId);
       }
 
-      List nodeIdsList = dao.findByProperties(HierarchyNodeMetaData.class, 
-            new String[] { "hierarchyId", "permToken" }, 
-            new Object[] { hierarchyId, permToken },
-            new int[] {ByPropsFinder.EQUALS, ByPropsFinder.EQUALS},
-            new String[] {"node.id"});
+      List nodeIdsList = dao.findBySearch(HierarchyNodeMetaData.class, 
+            new Search(new Restriction[] {
+                  new Restriction("hierarchyId", hierarchyId),
+                  new Restriction("permToken", permToken)
+            }, new Order("node.id")));
 
       Set<String> nodeIds = new TreeSet<String>();
       for (Iterator iter = nodeIdsList.iterator(); iter.hasNext();) {
@@ -609,8 +611,8 @@ public class HierarchyServiceImpl implements HierarchyService {
     */
    @SuppressWarnings("unchecked")
    private HierarchyNodeMetaData getNodeMeta(String nodeId) {
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class,
-            new String[] { "node.id" }, new Object[] { new Long(nodeId) });
+      List<HierarchyNodeMetaData> l = dao.findBySearch(HierarchyNodeMetaData.class, 
+            new Search("node.id", new Long(nodeId)));
       if (l.size() > 1) {
          throw new IllegalStateException("Invalid hierarchy state: more than one node with id: " + nodeId);
       } else if (l.size() == 1) {
@@ -628,8 +630,11 @@ public class HierarchyServiceImpl implements HierarchyService {
     */
    @SuppressWarnings("unchecked")
    private HierarchyNodeMetaData getRootNodeMetaByHierarchy(String hierarchyId) {
-      List<HierarchyNodeMetaData> l = dao.findByProperties(HierarchyNodeMetaData.class, new String[] {
-         "hierarchyId", "isRootNode" }, new Object[] { hierarchyId, Boolean.TRUE });
+      List<HierarchyNodeMetaData> l = dao.findBySearch(HierarchyNodeMetaData.class, 
+            new Search(new Restriction[] {
+                  new Restriction("hierarchyId", hierarchyId),
+                  new Restriction("isRootNode", Boolean.TRUE)
+            }) );
       if (l.size() > 1) {
          throw new IllegalStateException("Invalid hierarchy state: more than one root node for hierarchyId: "
                + hierarchyId);
@@ -660,8 +665,8 @@ public class HierarchyServiceImpl implements HierarchyService {
          for (int i = 0; i < nodeIds.length; i++) {
             pNodeIds[i] = new Long(nodeIds[i]);
          }
-         l = dao.findByProperties(HierarchyNodeMetaData.class,
-               new String[] { "node.id" }, new Object[] { pNodeIds });
+         l = dao.findBySearch(HierarchyNodeMetaData.class, 
+               new Search("node.id", pNodeIds) );
       }
       return l;
    }
@@ -686,8 +691,8 @@ public class HierarchyServiceImpl implements HierarchyService {
          for (int i = 0; i < nodeIds.length; i++) {
             pNodeIds[i] = new Long(nodeIds[i]);
          }
-         l = dao.findByProperties(HierarchyPersistentNode.class, new String[] { "id" },
-               new Object[] { pNodeIds });
+         l = dao.findBySearch(HierarchyPersistentNode.class, 
+               new Search("id", pNodeIds) );
       }
       return l;
    }

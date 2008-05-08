@@ -11,13 +11,13 @@
 
 package org.sakaiproject.hierarchy.dao;
 
-import org.sakaiproject.genericdao.hibernate.HibernateCompleteGenericDao;
+import org.sakaiproject.genericdao.hibernate.HibernateGeneralGenericDao;
 
 /**
  * Implementation of DAO
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public class HierarchyDaoImpl extends HibernateCompleteGenericDao implements HierarchyDao {
+public class HierarchyDaoImpl extends HibernateGeneralGenericDao implements HierarchyDao {
 
 }

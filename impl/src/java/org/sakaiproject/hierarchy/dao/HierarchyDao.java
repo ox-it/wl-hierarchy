@@ -11,13 +11,13 @@
 
 package org.sakaiproject.hierarchy.dao;
 
-import org.sakaiproject.genericdao.api.CompleteGenericDao;
+import org.sakaiproject.genericdao.api.GeneralGenericDao;
 
 /**
  * DAO for access to the database for entity broker internal writes
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public interface HierarchyDao extends CompleteGenericDao {
+public interface HierarchyDao extends GeneralGenericDao {
 
 }

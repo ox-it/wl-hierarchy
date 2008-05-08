@@ -4,9 +4,6 @@
 <!-- Aaron Zeckoski (aaronz@vt.edu) -->
 <beans>
 
-   <!-- Bring in the HBM related beans beans -->
-   <import resource="hibernate-hbms.xml" />
-
    <!-- Bring in the hibernate related beans -->
    <import resource="spring-hibernate.xml" />
 
