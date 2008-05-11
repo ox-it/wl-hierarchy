@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <name>Sakai Hierarchy</name>
    <groupId>org.sakaiproject</groupId>
@@ -16,7 +14,7 @@
       is stored in the hierarchy itself, it is simply there to allow you to maintain the hierarchical
       structure and to provide methods to manipulate it and query it
    </description>
-   <version>1.1.0-SNAPSHOT</version><!--hierarchy.version-->
+   <version>1.1.0</version><!--hierarchy.version-->
 
    <!-- Sakai master pom is parent -->
    <parent>
@@ -117,9 +115,9 @@
 
    <!-- define source code repository location -->
    <scm>
-      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk/</connection>
-      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk/</developerConnection>
-      <url>https://source.sakaiproject.org/viewsvn/caret/hierarchy/trunk/?root=contrib</url>
+      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.1.0</connection>
+      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.1.0</developerConnection>
+      <url>https://source.sakaiproject.org/viewsvn/caret/hierarchy/tags/1.1.0?root=contrib</url>
    </scm>
 
    <!-- define javadocs and jxr docs -->
@@ -234,6 +232,6 @@
    </profiles>
 
    <!-- No build for a base project -->
-   <build></build>
+   <build />
 
 </project>
