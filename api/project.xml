@@ -33,14 +33,6 @@
 
    <build>
       <sourceDirectory>src/java</sourceDirectory>
-      <resources>
-         <resource>
-            <directory>src/java</directory>
-            <includes>
-               <include>**/*.xml</include>
-            </includes>
-         </resource>
-      </resources>
    </build>
 
 </project>

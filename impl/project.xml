@@ -122,6 +122,15 @@
 
    <build>
       <sourceDirectory>src/java</sourceDirectory>
+      <resources>
+         <resource>
+            <directory>${basedir}/src/java</directory>
+            <includes>
+               <include>**/*.xml</include>
+            </includes>
+            <filtering>false</filtering>
+         </resource>
+      </resources>
 
       <!-- unit testing -->
       <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
