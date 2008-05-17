@@ -25,11 +25,31 @@
       <relativePath>../master/pom.xml</relativePath>
    </parent>
 
-   <modules>
-      <module>api</module>
-      <module>impl</module>
-      <module>pack</module>
-   </modules>
+   <profiles>
+      <profile>
+         <id>full</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <modules>
+            <module>api</module>
+            <module>impl</module>
+            <module>pack</module>
+         </modules>
+      </profile>
+      <profile>
+         <id>api</id>
+         <modules>
+            <module>api</module>
+         </modules>
+      </profile>
+      <profile>
+         <id>ddl</id>
+         <modules>
+            <module>impl/src/ddl</module>
+         </modules>
+      </profile>
+   </profiles>
 
    <!-- Project developers -->
    <developers>
@@ -208,28 +228,6 @@
          </plugin>
       </plugins>
    </reporting>
-
-   <profiles>
-      <profile>
-         <id>release</id>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-javadoc-plugin</artifactId>
-                  <executions>
-                     <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                           <goal>jar</goal>
-                        </goals>
-                     </execution>
-                  </executions>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-   </profiles>
 
    <!-- No build for a base project -->
    <build />
