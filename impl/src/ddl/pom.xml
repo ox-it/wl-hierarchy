@@ -2,45 +2,31 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <!-- adjust these name,groupId,artifactId to match your project -->
     <name>Sakai Hierarchy DB DDL generator</name>
     <groupId>org.sakaiproject.hierarchy</groupId>
     <artifactId>hierarchy-ddl-generator</artifactId>
-    <organization>
-        <name>CARET, Cambridge University</name>
-        <url>http://caret.cam.ac.uk/</url>
-    </organization>
-    <inceptionYear>2007</inceptionYear>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <!-- the base is parent -->
+    <!-- this should refer to your project base POM (remove if not needed) -->
     <parent>
         <artifactId>hierarchy</artifactId>
         <groupId>org.sakaiproject</groupId>
         <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
     </parent>
 
+    <properties>
+        <!-- change this to reflect the name to use for the ddl files -->
+        <project.ddl.name>hierarchy</project.ddl.name>
+    </properties>
+
     <dependencies>
 
-        <!-- internal dependencies -->
+        <!-- pull in your hibernate persistent objects -->
         <dependency>
             <groupId>org.sakaiproject.hierarchy</groupId>
             <artifactId>hierarchy-api</artifactId>
             <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>${sakai.hibernate.groupId}</groupId>
-            <artifactId>${sakai.hibernate.artifactId}</artifactId>
-            <version>${sakai.hibernate.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Commons JARS put in shared/lib by Sakai -->
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -49,6 +35,7 @@
     <build>
         <resources>
             <resource>
+                <!-- this should pull in your hibernate template (.hbm.xml) files -->
                 <directory>${basedir}/../java</directory>
                 <includes>
                     <include>**/*.xml</include>
@@ -62,6 +49,7 @@
                 <!-- hibernate ddl generation -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>hibernate3-maven-plugin</artifactId>
+                <version>2.1</version>
                 <configuration>
                     <components>
                         <component>
@@ -72,7 +60,7 @@
                     <componentProperties>
                         <configurationfile>hibernate.cfg.xml</configurationfile>
                         <propertyfile>hibernate-hsqldb.properties</propertyfile>
-                        <outputfilename>hsqldb/hierarchy.sql</outputfilename>
+                        <outputfilename>hsqldb/${project.ddl.name}.sql</outputfilename>
                         <drop>false</drop>
                         <create>true</create>
                         <export>false</export>
@@ -97,7 +85,7 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-mysql.properties</propertyfile>
-                                <outputfilename>mysql/hierarchy.sql</outputfilename>
+                                <outputfilename>mysql/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
@@ -110,7 +98,7 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-oracle.properties</propertyfile>
-                                <outputfilename>oracle/hierarchy.sql</outputfilename>
+                                <outputfilename>oracle/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
@@ -123,7 +111,7 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-db2.properties</propertyfile>
-                                <outputfilename>db2/hierarchy.sql</outputfilename>
+                                <outputfilename>db2/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
@@ -136,7 +124,7 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-mssql.properties</propertyfile>
-                                <outputfilename>mssql/hierarchy.sql</outputfilename>
+                                <outputfilename>mssql/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
@@ -149,7 +137,7 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-derby.properties</propertyfile>
-                                <outputfilename>derby/hierarchy.sql</outputfilename>
+                                <outputfilename>derby/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
@@ -162,33 +150,13 @@
                         <configuration>
                             <componentProperties>
                                 <propertyfile>hibernate-postgres.properties</propertyfile>
-                                <outputfilename>postgres/hierarchy.sql</outputfilename>
+                                <outputfilename>postgres/${project.ddl.name}.sql</outputfilename>
                             </componentProperties>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>hsqldb</groupId>
-                        <artifactId>hsqldb</artifactId>
-                        <version>1.8.0.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Codehaus Snapshots</id>
-            <url>http://snapshots.repository.codehaus.org/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
