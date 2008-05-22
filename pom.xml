@@ -1,235 +1,267 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <name>Sakai Hierarchy</name>
-   <groupId>org.sakaiproject</groupId>
-   <artifactId>hierarchy</artifactId>
-   <packaging>pom</packaging>
-   <organization>
-      <name>CARET, University of Cambridge</name>
-      <url>http://www.caret.cam.ac.uk/</url>
-   </organization>
-   <inceptionYear>2007</inceptionYear>
-   <description>
-      Hierarchy is meant to provide a high performance basic hierarchy to associate data with, no data
-      is stored in the hierarchy itself, it is simply there to allow you to maintain the hierarchical
-      structure and to provide methods to manipulate it and query it
-   </description>
-   <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>Sakai Hierarchy</name>
+    <groupId>org.sakaiproject</groupId>
+    <artifactId>hierarchy</artifactId>
+    <packaging>pom</packaging>
+    <organization>
+        <name>CARET, University of Cambridge</name>
+        <url>http://www.caret.cam.ac.uk/</url>
+    </organization>
+    <inceptionYear>2007</inceptionYear>
+    <description>
+        Hierarchy is meant to provide a high performance basic hierarchy to associate data
+        with, no data is stored in the hierarchy itself, it is simply there to allow you
+        to maintain the hierarchical structure and to provide methods to manipulate it and
+        query it
+    </description>
+    <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
 
-   <!-- Sakai master pom is parent -->
-   <parent>
-      <artifactId>master</artifactId>
-      <groupId>org.sakaiproject</groupId>
-      <version>2.5.0</version>
+    <!-- Sakai master pom is parent -->
+    <parent>
+        <artifactId>master</artifactId>
+        <groupId>org.sakaiproject</groupId>
+        <version>2.5.0</version>
 <!--      <version>SNAPSHOT</version>-->
-      <relativePath>../master/pom.xml</relativePath>
-   </parent>
+        <relativePath>../master/pom.xml</relativePath>
+    </parent>
 
-   <profiles>
-      <profile>
-         <id>full</id>
-         <activation>
-            <activeByDefault>true</activeByDefault>
-         </activation>
-         <modules>
-            <module>api</module>
-            <module>impl</module>
-            <module>pack</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>api</id>
-         <modules>
-            <module>api</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>ddl</id>
-         <modules>
-            <module>impl/src/ddl</module>
-         </modules>
-      </profile>
-   </profiles>
+    <profiles>
+        <profile>
+            <id>full</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>api</module>
+                <module>impl</module>
+                <module>pack</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>api</id>
+            <modules>
+                <module>api</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>ddl</id>
+            <modules>
+                <module>impl/src/ddl</module>
+            </modules>
+        </profile>
+    </profiles>
 
-   <!-- Project developers -->
-   <developers>
-      <developer>
-         <id>aaronz@vt.edu</id>
-         <name>Aaron Zeckoski</name>
-         <email>aaron@caret.cam.ac.uk</email>
-         <url>http://confluence.sakaiproject.org/confluence/display/~aaronz</url>
-         <organization>CARET</organization>
-         <organizationUrl>http://www.caret.cam.ac.uk/</organizationUrl>
-         <roles>
-            <role>Project Manager</role>
-            <role>Architect</role>
-            <role>Developer</role>
-         </roles>
-         <timezone>0</timezone>
-      </developer>
-   </developers>
+    <!-- Project developers -->
+    <developers>
+        <developer>
+            <id>aaronz@vt.edu</id>
+            <name>Aaron Zeckoski</name>
+            <email>aaron@caret.cam.ac.uk</email>
+            <url>http://confluence.sakaiproject.org/confluence/display/~aaronz</url>
+            <organization>CARET</organization>
+            <organizationUrl>http://www.caret.cam.ac.uk/</organizationUrl>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>0</timezone>
+        </developer>
+    </developers>
 
-   <repositories>
-      <repository>
-         <id>sakai-maven</id>
-         <name>Sakai Maven Repo</name>
-         <layout>default</layout>
-               <url>http://source.sakaiproject.org/maven2</url>
-         <snapshots>
-           <enabled>false</enabled>
-         </snapshots>
-      </repository>
-      <repository>
-         <id>default</id>
-         <name>Maven Repository Switchboard</name>
-         <layout>default</layout>
-               <url>http://repo1.maven.org/maven2</url>
-         <snapshots>
-           <enabled>false</enabled>
-         </snapshots>
-      </repository>
-   </repositories>
+    <repositories>
+        <repository>
+            <id>sakai-maven</id>
+            <name>Sakai Maven Repo</name>
+            <layout>default</layout>
+            <url>http://source.sakaiproject.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>default</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
-   <distributionManagement>
-      <repository>
-         <id>Sakai-Maven2</id>
-         <name>Sakaiproject Maven 2 repository</name>
-         <url>file://source.sakaiproject.org/maven2/</url>
-      </repository>
-      <site>
-         <id>local site</id>
-         <url>file:./site/</url>
-      </site>
-   </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>Sakai-Maven2</id>
+            <name>Sakaiproject Maven 2 repository</name>
+            <url>file://source.sakaiproject.org/maven2/</url>
+        </repository>
+        <site>
+            <id>local site</id>
+            <url>file:./site/</url>
+        </site>
+    </distributionManagement>
 
-   <issueManagement>
-      <system>JIRA</system>
-      <url>http://jira.sakaiproject.org/jira/</url>
-   </issueManagement>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://jira.sakaiproject.org/jira/</url>
+    </issueManagement>
 
-   <ciManagement>
-      <system>Continuum</system>
-      <url>http://saffron.caret.cam.ac.uk/continuum</url>
-      <notifiers>
-         <notifier>
-            <type>mail</type>
-            <sendOnError>true</sendOnError>
-            <sendOnFailure>true</sendOnFailure>
-            <sendOnSuccess>false</sendOnSuccess>
-            <sendOnWarning>false</sendOnWarning>
-            <configuration>
-               <address>aaron@caret.cam.ac.uk</address>
-            </configuration>
-         </notifier>
-      </notifiers>
-   </ciManagement>
+    <ciManagement>
+        <system>Continuum</system>
+        <url>http://saffron.caret.cam.ac.uk/continuum</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError>true</sendOnError>
+                <sendOnFailure>true</sendOnFailure>
+                <sendOnSuccess>false</sendOnSuccess>
+                <sendOnWarning>false</sendOnWarning>
+                <configuration>
+                    <address>aaron@caret.cam.ac.uk</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
 
-   <!-- define the license -->
-   <licenses>
-      <license>
-         <name>Educational Community License, Version 1.0</name>
-         <url>http://www.opensource.org/licenses/ecl1.php</url>
-         <distribution>repo</distribution>
-      </license>
-   </licenses>
+    <!-- define the license -->
+    <licenses>
+        <license>
+            <name>Educational Community License, Version 1.0</name>
+            <url>http://www.opensource.org/licenses/ecl1.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-   <!-- define source code repository location -->
-   <scm>
+    <!-- define source code repository location -->
+    <scm>
       <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</connection>
       <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</developerConnection>
       <url>https://source.sakaiproject.org/viewsvn/caret/hierarchy/trunk?root=contrib</url>
-   </scm>
+    </scm>
 
-   <!-- define javadocs and jxr docs -->
-   <reporting>
-      <plugins>
-         <plugin>
-            <!-- javadocs -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-               <debug>true</debug>
-               <links>
-                  <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-               </links>
-               <breakiterator>true</breakiterator>
-               <verbose>true</verbose>
-            </configuration>
-         </plugin>
-         <plugin>
-            <!-- junit test reports -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <!-- unit test coverage reporting -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.0</version>
-         </plugin>
-         <plugin>
-            <!-- Code analysis report -->
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <configuration>
-               <targetjdk>1.5</targetjdk>
-               <rulesets>
-                  <ruleset>/rulesets/basic.xml</ruleset>
-                  <ruleset>/rulesets/codesize.xml</ruleset>
-                  <ruleset>/rulesets/design.xml</ruleset>
-                  <ruleset>/rulesets/finalizers.xml</ruleset>
-                  <ruleset>/rulesets/imports.xml</ruleset>
-                  <ruleset>/rulesets/logging-java.xml</ruleset>
-                  <ruleset>/rulesets/migrating.xml</ruleset>
-                  <ruleset>/rulesets/strings.xml</ruleset>
-                  <!-- <ruleset>/rulesets/typeresolution.xml</ruleset> Causes a screen buffer and thus a failure when building on servers -AZ -->
-                  <ruleset>/rulesets/unusedcode.xml</ruleset>
-               </rulesets>
-               <format>xml</format>
-               <linkXref>true</linkXref>
-               <sourceEncoding>utf-8</sourceEncoding>
-               <minimumTokens>100</minimumTokens>
-            </configuration>
-         </plugin>
-         <plugin>
-            <!-- Changelog report -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>changelog-maven-plugin</artifactId>
-            <configuration>
-               <type>range</type>
-               <range>90</range><!-- days -->
-            </configuration>
-         </plugin>
-         <plugin>
-            <!-- TODO tags report -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>taglist-maven-plugin</artifactId>
-            <configuration>
-               <tags>
-                  <tag>TODO</tag>
-                  <tag>FIXME</tag>
-                  <tag>@deprecated</tag>
-               </tags>
-            </configuration>
-         </plugin>
-         <plugin>
-            <!-- jdepend code analysis -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jdepend-maven-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <!-- jxr source code cross linking -->
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jxr-maven-plugin</artifactId>
-            <configuration>
-               <linkJavadoc>true</linkJavadoc>
-               <javadocDir>apidocs</javadocDir>
-            </configuration>
-         </plugin>
-      </plugins>
-   </reporting>
+    <!-- handles the management of all related dependencies -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                 <groupId>org.sakaiproject.hierarchy</groupId>
+                 <artifactId>hierarchy-api</artifactId>
+                 <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                 <groupId>org.sakaiproject.hierarchy</groupId>
+                 <artifactId>hierarchy-impl</artifactId>
+                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                 <groupId>org.sakaiproject.hierarchy</groupId>
+                 <artifactId>hierarchy-pack</artifactId>
+                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+            </dependency>
+            <dependency>
+                 <groupId>org.sakaiproject.hierarchy</groupId>
+                 <artifactId>hierarchy-ddl-generator</artifactId>
+                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-   <!-- No build for a base project -->
-   <build />
+    <!-- define javadocs and jxr docs -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <!-- javadocs -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <debug>true</debug>
+                    <links>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+                    </links>
+                    <breakiterator>true</breakiterator>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- junit test reports -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <!-- unit test coverage reporting -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.0</version>
+            </plugin>
+            <plugin>
+                <!-- Code analysis report -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetjdk>1.5</targetjdk>
+                    <rulesets>
+                        <ruleset>/rulesets/basic.xml</ruleset>
+                        <ruleset>/rulesets/codesize.xml</ruleset>
+                        <ruleset>/rulesets/design.xml</ruleset>
+                        <ruleset>/rulesets/finalizers.xml</ruleset>
+                        <ruleset>/rulesets/imports.xml</ruleset>
+                        <ruleset>/rulesets/logging-java.xml</ruleset>
+                        <ruleset>/rulesets/migrating.xml</ruleset>
+                        <ruleset>/rulesets/strings.xml</ruleset>
+                        <!-- <ruleset>/rulesets/typeresolution.xml</ruleset> Causes a screen buffer and thus a failure when building on servers -AZ -->
+                        <ruleset>/rulesets/unusedcode.xml</ruleset>
+                    </rulesets>
+                    <format>xml</format>
+                    <linkXref>true</linkXref>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <minimumTokens>100</minimumTokens>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- Changelog report -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>changelog-maven-plugin</artifactId>
+                <configuration>
+                    <type>range</type>
+                    <range>90</range><!-- days -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- TODO tags report -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <configuration>
+                    <tags>
+                        <tag>TODO</tag>
+                        <tag>FIXME</tag>
+                        <tag>@deprecated</tag>
+                    </tags>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- jdepend code analysis -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <!-- jxr source code cross linking -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jxr-maven-plugin</artifactId>
+                <configuration>
+                    <linkJavadoc>true</linkJavadoc>
+                    <javadocDir>apidocs</javadocDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <!-- No build for a base project -->
+    <build />
 
 </project>
