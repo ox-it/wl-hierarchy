@@ -15,7 +15,7 @@
         to maintain the hierarchical structure and to provide methods to manipulate it and
         query it
     </description>
-    <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+    <version>1.2.0</version><!--hierarchy.version-->
 
     <!-- Sakai master pom is parent -->
     <parent>
@@ -115,9 +115,9 @@
 
     <!-- define source code repository location -->
     <scm>
-      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</connection>
-      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</developerConnection>
-      <url>https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</url>
+      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</connection>
+      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</developerConnection>
+      <url>https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</url>
     </scm>
 
     <!-- handles the management of all related dependencies -->
@@ -126,19 +126,19 @@
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-api</artifactId>
-                 <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                 <version>1.2.0</version><!--hierarchy.version-->
                 <scope>provided</scope>
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-impl</artifactId>
-                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <version>1.2.0</version><!--hierarchy.version-->
                 <scope>runtime</scope>
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-pack</artifactId>
-                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <version>1.2.0</version><!--hierarchy.version-->
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
