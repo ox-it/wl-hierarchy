@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <name>Sakai Hierarchy</name>
     <groupId>org.sakaiproject</groupId>
@@ -17,7 +15,7 @@
         to maintain the hierarchical structure and to provide methods to manipulate it and
         query it
     </description>
-    <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+    <version>1.2.0</version><!--hierarchy.version-->
 
     <!-- Sakai master pom is parent -->
     <parent>
@@ -138,9 +136,9 @@
 
     <!-- define source code repository location -->
     <scm>
-      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</connection>
-      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</developerConnection>
-      <url>https://source.sakaiproject.org/viewsvn/caret/hierarchy/trunk?root=contrib</url>
+      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</connection>
+      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</developerConnection>
+      <url>https://source.sakaiproject.org/viewsvn/caret/hierarchy/trunk?root=contrib/tags/1.2.0?root=contrib</url>
     </scm>
 
     <!-- handles the management of all related dependencies -->
@@ -149,19 +147,19 @@
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-api</artifactId>
-                 <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                 <version>1.2.0</version><!--hierarchy.version-->
                 <scope>provided</scope>
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-impl</artifactId>
-                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <version>1.2.0</version><!--hierarchy.version-->
                 <scope>runtime</scope>
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-pack</artifactId>
-                <version>1.2.0-SNAPSHOT</version><!--hierarchy.version-->
+                <version>1.2.0</version><!--hierarchy.version-->
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
