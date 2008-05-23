@@ -6,16 +6,12 @@
 
    <!-- Bring in the hibernate related beans -->
    <import resource="spring-hibernate.xml" />
-
+   <import resource="sakai-hibernate.xml" />
 
    <!-- Public beans -->
    <bean id="org.sakaiproject.hierarchy.HierarchyService" 
          class="org.sakaiproject.hierarchy.impl.HierarchyServiceImpl" init-method="init">
       <property name="dao" ref="org.sakaiproject.hierarchy.dao.HierarchyDao" />
    </bean>
-
-
-   <!-- Private beans -->
-
 
 </beans>

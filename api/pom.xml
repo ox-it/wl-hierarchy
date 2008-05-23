@@ -25,6 +25,13 @@
 
     <build>
         <resources>
+            <!-- HBM files -->
+            <resource>
+                <directory>${basedir}/src/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
             <!-- include the readme.txt file and the java source files -->
             <resource>
                 <directory>${basedir}</directory>
