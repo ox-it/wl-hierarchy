@@ -115,9 +115,9 @@
 
     <!-- define source code repository location -->
     <scm>
-      <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</connection>
-      <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</developerConnection>
-      <url>https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.0</url>
+        <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</connection>
+        <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/trunk</developerConnection>
+        <url>https://source.sakaiproject.org/contrib/caret/hierarchy/trunk/?root=contrib</url>
     </scm>
 
     <!-- handles the management of all related dependencies -->
