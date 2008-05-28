@@ -27,6 +27,7 @@
       <dependency>
          <groupId>org.sakaiproject.hierarchy</groupId>
          <artifactId>hierarchy-impl</artifactId>
+         <scope>runtime</scope>
       </dependency>
 
    </dependencies>
