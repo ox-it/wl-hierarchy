@@ -10,6 +10,7 @@
             <list>
                 <value>org/sakaiproject/hierarchy/dao/hbm/HierarchyPersistentNode.hbm.xml</value>
                 <value>org/sakaiproject/hierarchy/dao/hbm/HierarchyNodeMetaData.hbm.xml</value>
+                <value>org/sakaiproject/hierarchy/dao/hbm/HierarchyNodePermission.hbm.xml</value>
             </list>
         </constructor-arg>
     </bean>
@@ -23,6 +24,7 @@
             <list>
                 <value>org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode</value>
                 <value>org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData</value>
+                <value>org.sakaiproject.hierarchy.dao.model.HierarchyNodePermission</value>
             </list>
         </property>
     </bean>

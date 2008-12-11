@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import org.sakaiproject.genericdao.api.GenericDao;
 import org.sakaiproject.hierarchy.dao.model.HierarchyNodeMetaData;
+import org.sakaiproject.hierarchy.dao.model.HierarchyNodePermission;
 import org.sakaiproject.hierarchy.dao.model.HierarchyPersistentNode;
 import org.sakaiproject.hierarchy.impl.utils.HierarchyImplUtils;
 import org.sakaiproject.hierarchy.model.HierarchyNode;
@@ -85,6 +86,10 @@ public class TestDataPreload {
    public final static String INVALID_HIERARCHY = "hierarchy-invalid";
    public final static String INVALID_NODE_ID = "invalid-nodeID";
 
+   public final static String PERM_ONE = "permission.one";
+   public final static String PERM_TWO = "permission.two";
+   public final static String PERM_THREE = "permission.three";
+
    // testing data objects here
    public HierarchyPersistentNode pNode1 = new HierarchyPersistentNode(null, null, toCode("2,3,4"), toCode("2,3,4,5,6,7,8") );
    public HierarchyPersistentNode pNode2 = new HierarchyPersistentNode(toCode("1"), toCode("1"), null, null );
@@ -122,6 +127,19 @@ public class TestDataPreload {
    public HierarchyNode node10;
    public HierarchyNode node11;
 
+   public HierarchyNodePermission nodePerm1 ;
+   public HierarchyNodePermission nodePerm2 ;
+   public HierarchyNodePermission nodePerm3 ;
+   public HierarchyNodePermission nodePerm4 ;
+   public HierarchyNodePermission nodePerm5 ;
+   public HierarchyNodePermission nodePerm6 ;
+   public HierarchyNodePermission nodePerm7 ;
+   public HierarchyNodePermission nodePerm8 ;
+   public HierarchyNodePermission nodePerm9 ;
+   public HierarchyNodePermission nodePerm10;
+   public HierarchyNodePermission nodePerm11;
+   public HierarchyNodePermission nodePerm12;
+   public HierarchyNodePermission nodePerm13;
 
    public boolean preloaded = false;
    /**
@@ -164,6 +182,34 @@ public class TestDataPreload {
       node9 = HierarchyImplUtils.makeNode(pNode9, meta9);
       node10 = HierarchyImplUtils.makeNode(pNode10, meta10);
       node11 = HierarchyImplUtils.makeNode(pNode11, meta11);
+
+      nodePerm1  = new HierarchyNodePermission(MAINT_USER_ID, pNode2.getId().toString(), PERM_ONE);
+      nodePerm2  = new HierarchyNodePermission(USER_ID, pNode3.getId().toString(), PERM_TWO);
+      nodePerm3  = new HierarchyNodePermission(MAINT_USER_ID, pNode3.getId().toString(), PERM_TWO);
+      nodePerm4  = new HierarchyNodePermission(MAINT_USER_ID, pNode4.getId().toString(), PERM_ONE);
+      nodePerm5  = new HierarchyNodePermission(MAINT_USER_ID, pNode5.getId().toString(), PERM_TWO);
+      nodePerm6  = new HierarchyNodePermission(ACCESS_USER_ID, pNode5.getId().toString(), PERM_ONE);
+      nodePerm7  = new HierarchyNodePermission(MAINT_USER_ID, pNode6.getId().toString(), PERM_ONE);
+      nodePerm8  = new HierarchyNodePermission(USER_ID, pNode6.getId().toString(), PERM_TWO);
+      nodePerm9  = new HierarchyNodePermission(MAINT_USER_ID, pNode7.getId().toString(), PERM_ONE);
+      nodePerm10 = new HierarchyNodePermission(ACCESS_USER_ID, pNode7.getId().toString(), PERM_ONE);
+      nodePerm11 = new HierarchyNodePermission(MAINT_USER_ID, pNode8.getId().toString(), PERM_ONE);
+      nodePerm12 = new HierarchyNodePermission(ACCESS_USER_ID, pNode8.getId().toString(), PERM_TWO);
+      nodePerm13 = new HierarchyNodePermission(MAINT_USER_ID, pNode2.getId().toString(), PERM_TWO);
+
+      dao.save(nodePerm1);
+      dao.save(nodePerm2);
+      dao.save(nodePerm3);
+      dao.save(nodePerm4);
+      dao.save(nodePerm5);
+      dao.save(nodePerm6);
+      dao.save(nodePerm7);
+      dao.save(nodePerm8);
+      dao.save(nodePerm9);
+      dao.save(nodePerm10);
+      dao.save(nodePerm11);
+      dao.save(nodePerm12);
+      dao.save(nodePerm13);
 
       preloaded = true;
    }
