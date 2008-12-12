@@ -17,7 +17,7 @@
     <parent>
         <artifactId>hierarchy</artifactId>
         <groupId>org.sakaiproject</groupId>
-        <version>1.2.2-SNAPSHOT</version><!--hierarchy.version-->
+        <version>1.2.2</version><!--hierarchy.version-->
     </parent>
 
     <dependencies>
