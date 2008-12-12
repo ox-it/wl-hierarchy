@@ -533,12 +533,12 @@ public class HierarchyServiceImpl implements HierarchyService {
     }
 
     public HierarchyNode addParentRelation(String nodeId, String parentNodeId) {
-        // TODO Not implemented yet
+        // TODO Not implemented yet - not sure we even want to allow this
         throw new RuntimeException("This method is not implemented yet");
     }
 
     public HierarchyNode removeParentRelation(String nodeId, String parentNodeId) {
-        // TODO Not implemented yet
+        // TODO Not implemented yet - not sure this is even a good idea
         throw new RuntimeException("This method is not implemented yet");
     }
 

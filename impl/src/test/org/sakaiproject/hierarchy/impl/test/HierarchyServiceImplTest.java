@@ -852,7 +852,7 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#addParentRelation(java.lang.String, java.lang.String)}.
-     */
+     *//**
     public void testAddParentRelation() {
         // add new parents
 
@@ -873,14 +873,16 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
         // cannot use null node id (exception)
 
         fail("Not yet implemented");
-    }
+    }**/
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#removeParentRelation(java.lang.String, java.lang.String)}.
-     */
+     *//**
     public void testRemoveParentRelation() {
+        // cannot remove all parents (must leave at least one)
+
         fail("Not yet implemented");
-    }
+    }**/
 
 
     /**
