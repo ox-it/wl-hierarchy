@@ -1332,6 +1332,52 @@ public class HierarchyServiceImplTest extends AbstractTransactionalSpringContext
         }
     }
 
+    public void testGetUsersAndPermsForNodes() {
+        Map<String, Map<String, Set<String>>> map = null;
+
+        map = hierarchyService.getUsersAndPermsForNodes(tdp.node3.id);
+        assertNotNull(map);
+        assertEquals(1, map.size());
+        Map<String, Set<String>> userPerms = map.get(tdp.node3.id);
+        assertEquals(2, userPerms.size());
+        assertEquals(userPerms.get(TestDataPreload.USER_ID).size(), 1);
+        assertEquals(userPerms.get(TestDataPreload.MAINT_USER_ID).size(), 1);
+
+        try {
+            hierarchyService.getUsersAndPermsForNodes((String[])null);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e.getMessage());
+        }
+        try {
+            hierarchyService.getUsersAndPermsForNodes();
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e.getMessage());
+        }
+    }
+
+    public void testGetNodesAndPermsForUser() {
+        Map<String, Map<String, Set<String>>> map = null;
+
+        map = hierarchyService.getNodesAndPermsForUser(TestDataPreload.ACCESS_USER_ID);
+        assertNotNull(map);
+        assertEquals(1, map.size());
+        assertEquals(3, map.get(TestDataPreload.ACCESS_USER_ID).size());
+
+        try {
+            hierarchyService.getNodesAndPermsForUser((String[])null);
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e.getMessage());
+        }
+        try {
+            hierarchyService.getNodesAndPermsForUser();
+            fail("Should have thrown exception");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e.getMessage());
+        }
+    }
 
     /**
      * Test method for {@link org.sakaiproject.hierarchy.impl.HierarchyServiceImpl#assignUserNodePerm(java.lang.String, java.lang.String, java.lang.String, boolean)}.

@@ -785,7 +785,55 @@ public class HierarchyServiceImpl implements HierarchyService {
         return perms;
     }
 
+    public Map<String, Map<String, Set<String>>> getUsersAndPermsForNodes(String... nodeIds) {
+        if (nodeIds == null || nodeIds.length == 0) {
+            throw new IllegalArgumentException("Invalid arguments to getUsersAndPermsForNodes, no arguments can be null or blank: nodeIds="+nodeIds);
+        }
+        Map<String, Map<String, Set<String>>> m = new HashMap<String, Map<String,Set<String>>>();
+        for (String nodeId : nodeIds) {
+            m.put(nodeId, new HashMap<String, Set<String>>());
+        }
+        List<HierarchyNodePermission> nodePerms = dao.findBySearch(HierarchyNodePermission.class, 
+                new Search("nodeId", nodeIds));
+        // nodeId -> (map of userId -> Set(permission))
+        for (HierarchyNodePermission nodePerm : nodePerms) {
+            String nodeId = nodePerm.getNodeId();
+            if (! m.containsKey(nodeId)) {
+                continue; // this should not really happen but better safe than sorry
+            }
+            String userId = nodePerm.getUserId();
+            if (! m.get(nodeId).containsKey(userId) ) {
+                m.get(nodeId).put(userId, new HashSet<String>() );
+            }
+            m.get(nodeId).get(userId).add( nodePerm.getPermission() );
+        }
+        return m;
+    }
 
+    public Map<String, Map<String, Set<String>>> getNodesAndPermsForUser(String... userIds) {
+        if (userIds == null || userIds.length == 0) {
+            throw new IllegalArgumentException("Invalid arguments to getNodesAndPermsForUser, no arguments can be null or blank: userIds="+userIds);
+        }
+        Map<String, Map<String, Set<String>>> m = new HashMap<String, Map<String,Set<String>>>();
+        for (String userId : userIds) {
+            m.put(userId, new HashMap<String, Set<String>>());
+        }
+        List<HierarchyNodePermission> nodePerms = dao.findBySearch(HierarchyNodePermission.class, 
+                new Search("userId", userIds));
+        // userId -> (map of nodeId -> Set(permission))
+        for (HierarchyNodePermission nodePerm : nodePerms) {
+            String userId = nodePerm.getUserId();
+            if (! m.containsKey(userId)) {
+                continue; // this should not really happen but better safe than sorry
+            }
+            String nodeId = nodePerm.getNodeId();
+            if (! m.get(userId).containsKey(nodeId) ) {
+                m.get(userId).put(nodeId, new HashSet<String>() );
+            }
+            m.get(userId).get(nodeId).add( nodePerm.getPermission() );
+        }
+        return m;
+    }
 
     // PRIVATE
 
