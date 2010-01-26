@@ -15,7 +15,7 @@
         to maintain the hierarchical structure and to provide methods to manipulate it and
         query it
     </description>
-    <version>1.2.1</version><!--hierarchy.version-->
+    <version>1.2.4</version><!--hierarchy.version-->
 
     <!-- Sakai master pom is parent -->
     <parent>
@@ -81,6 +81,27 @@
         </repository>
     </repositories>
 
+    <repositories>
+        <repository>
+            <id>sakai-maven</id>
+            <name>Sakai Maven Repo</name>
+            <layout>default</layout>
+            <url>http://source.sakaiproject.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>default</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <repository>
             <id>Sakai-Maven2</id>
@@ -126,9 +147,9 @@
 
     <!-- define source code repository location -->
     <scm>
-        <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.1</connection>
-        <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.1</developerConnection>
-        <url>https://source.sakaiproject.org/contrib/caret/hierarchy/tags/1.2.1?root=contrib</url>
+        <connection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/hierarchy-1.2.4</connection>
+        <developerConnection>scm:svn:https://source.sakaiproject.org/contrib/caret/hierarchy/tags/hierarchy-1.2.4</developerConnection>
+        <url>https://source.sakaiproject.org/contrib/caret/hierarchy/tags/hierarchy-1.2.4?root=contrib</url>
     </scm>
 
     <!-- handles the management of all related dependencies -->
@@ -137,13 +158,21 @@
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-api</artifactId>
+<<<<<<< HEAD
                  <version>1.2.1</version><!--hierarchy.version-->
+=======
+                 <version>1.2.4</version><!--hierarchy.version-->
+>>>>>>> mirror/tags/hierarchy-1.2.4
                 <scope>provided</scope>
             </dependency>
             <dependency>
                  <groupId>org.sakaiproject.hierarchy</groupId>
                  <artifactId>hierarchy-impl</artifactId>
+<<<<<<< HEAD
                 <version>1.2.1</version><!--hierarchy.version-->
+=======
+                <version>1.2.4</version><!--hierarchy.version-->
+>>>>>>> mirror/tags/hierarchy-1.2.4
             </dependency>
         </dependencies>
     </dependencyManagement>

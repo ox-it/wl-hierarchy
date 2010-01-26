@@ -19,7 +19,7 @@ import org.sakaiproject.hierarchy.model.HierarchyNode;
  * 
  * @author Aaron Zeckoski (aaronz@vt.edu)
  */
-public interface HierarchyService extends HierarchyNodeReader, HierarchyNodeWriter, HierarchyTokens {
+public interface HierarchyService extends HierarchyNodeReader, HierarchyNodeWriter, HierarchyTokens, HierarchyPermissions {
 
    /**
     * Creates a new hierarchy with the unique id specified, exception if this id is already used
